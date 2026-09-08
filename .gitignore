@@ -1,0 +1,24 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.env
+.env.*
+!.env.example
+*.db
+*.db-*
+models/*.joblib
+data/processed/*
+frontend/node_modules/
+frontend/dist/
+infra/.terraform/
+*.tfstate*
+*.tfplan
+*.tfvars
+!*.example.tfvars
+# Preserve supplied source locally; do not redistribute without verified license.
+dataset/
+F1_Race_Strategist_Scope_Presentation.pptx
+MASTER_BUILD_PROMPT.md
+README_PACKAGE.md
+f1-race-analytics.md

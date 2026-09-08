@@ -1,0 +1,1672 @@
+{
+  "format_version": 1,
+  "null_tokens": [
+    "",
+    "\\N"
+  ],
+  "tables": {
+    "circuits": {
+      "file": "circuits.csv",
+      "sha256": "8a2ac67a0946ac238ddeaa4a212a1f3969f0108527b0213e7a38b3a5c3cba6eb",
+      "rows": 77,
+      "columns": {
+        "circuitId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 77
+        },
+        "circuitRef": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 77
+        },
+        "name": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 77
+        },
+        "location": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 75
+        },
+        "country": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 35
+        },
+        "lat": {
+          "inferred_type": "float",
+          "missing": 0,
+          "distinct_non_null": 77
+        },
+        "lng": {
+          "inferred_type": "float",
+          "missing": 0,
+          "distinct_non_null": 77
+        },
+        "alt": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 66
+        },
+        "url": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 77
+        }
+      },
+      "primary_key": [
+        "circuitId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "circuitId",
+        "circuitRef",
+        "name",
+        "lat",
+        "lng",
+        "url"
+      ],
+      "foreign_keys": [],
+      "year_range": null,
+      "rows_by_year": {},
+      "suspicious_values": []
+    },
+    "constructors": {
+      "file": "constructors.csv",
+      "sha256": "ae423f6f2d6cd74d5cd594eac0bdec7e1e9be2cda3097eb69f870294a225618c",
+      "rows": 212,
+      "columns": {
+        "constructorId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 212
+        },
+        "constructorRef": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 212
+        },
+        "name": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 212
+        },
+        "nationality": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 24
+        },
+        "url": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 175
+        }
+      },
+      "primary_key": [
+        "constructorId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "constructorId",
+        "constructorRef",
+        "name"
+      ],
+      "foreign_keys": [],
+      "year_range": null,
+      "rows_by_year": {},
+      "suspicious_values": []
+    },
+    "drivers": {
+      "file": "drivers.csv",
+      "sha256": "6a894569cb031dd65fb5f113f57b235100966653eaedd9310503dc2e94afae6b",
+      "rows": 861,
+      "columns": {
+        "driverId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 861
+        },
+        "driverRef": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 861
+        },
+        "number": {
+          "inferred_type": "integer",
+          "missing": 802,
+          "distinct_non_null": 48
+        },
+        "code": {
+          "inferred_type": "text",
+          "missing": 757,
+          "distinct_non_null": 97
+        },
+        "forename": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 478
+        },
+        "surname": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 802
+        },
+        "dob": {
+          "inferred_type": "date",
+          "missing": 0,
+          "distinct_non_null": 843
+        },
+        "nationality": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 43
+        },
+        "url": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 861
+        }
+      },
+      "primary_key": [
+        "driverId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "driverId",
+        "driverRef",
+        "url"
+      ],
+      "foreign_keys": [],
+      "year_range": null,
+      "rows_by_year": {},
+      "suspicious_values": []
+    },
+    "races": {
+      "file": "races.csv",
+      "sha256": "4839d035abc603fa88fa08fa976a86d76cff35f3e94cb767d25f735a5a3376ef",
+      "rows": 1125,
+      "columns": {
+        "raceId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 1125
+        },
+        "year": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 75
+        },
+        "round": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 24
+        },
+        "circuitId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 77
+        },
+        "name": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 54
+        },
+        "date": {
+          "inferred_type": "date",
+          "missing": 0,
+          "distinct_non_null": 1125
+        },
+        "time": {
+          "inferred_type": "text",
+          "missing": 731,
+          "distinct_non_null": 34
+        },
+        "url": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 1125
+        },
+        "fp1_date": {
+          "inferred_type": "date",
+          "missing": 1035,
+          "distinct_non_null": 90
+        },
+        "fp1_time": {
+          "inferred_type": "text",
+          "missing": 1057,
+          "distinct_non_null": 20
+        },
+        "fp2_date": {
+          "inferred_type": "date",
+          "missing": 1035,
+          "distinct_non_null": 90
+        },
+        "fp2_time": {
+          "inferred_type": "text",
+          "missing": 1057,
+          "distinct_non_null": 19
+        },
+        "fp3_date": {
+          "inferred_type": "date",
+          "missing": 1053,
+          "distinct_non_null": 72
+        },
+        "fp3_time": {
+          "inferred_type": "text",
+          "missing": 1072,
+          "distinct_non_null": 18
+        },
+        "quali_date": {
+          "inferred_type": "date",
+          "missing": 1035,
+          "distinct_non_null": 90
+        },
+        "quali_time": {
+          "inferred_type": "text",
+          "missing": 1057,
+          "distinct_non_null": 15
+        },
+        "sprint_date": {
+          "inferred_type": "date",
+          "missing": 1107,
+          "distinct_non_null": 18
+        },
+        "sprint_time": {
+          "inferred_type": "text",
+          "missing": 1110,
+          "distinct_non_null": 12
+        }
+      },
+      "primary_key": [
+        "raceId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "raceId",
+        "date",
+        "url"
+      ],
+      "foreign_keys": [
+        {
+          "column": "year",
+          "references": "seasons.year",
+          "orphan_values": []
+        },
+        {
+          "column": "circuitId",
+          "references": "circuits.circuitId",
+          "orphan_values": []
+        }
+      ],
+      "year_range": [
+        1950,
+        2024
+      ],
+      "rows_by_year": {
+        "1950": 7,
+        "1951": 8,
+        "1952": 8,
+        "1953": 9,
+        "1954": 9,
+        "1955": 7,
+        "1956": 8,
+        "1957": 8,
+        "1958": 11,
+        "1959": 9,
+        "1960": 10,
+        "1961": 8,
+        "1962": 9,
+        "1963": 10,
+        "1964": 10,
+        "1965": 10,
+        "1966": 9,
+        "1967": 11,
+        "1968": 12,
+        "1969": 11,
+        "1970": 13,
+        "1971": 11,
+        "1972": 12,
+        "1973": 15,
+        "1974": 15,
+        "1975": 14,
+        "1976": 16,
+        "1977": 17,
+        "1978": 16,
+        "1979": 15,
+        "1980": 14,
+        "1981": 15,
+        "1982": 16,
+        "1983": 15,
+        "1984": 16,
+        "1985": 16,
+        "1986": 16,
+        "1987": 16,
+        "1988": 16,
+        "1989": 16,
+        "1990": 16,
+        "1991": 16,
+        "1992": 16,
+        "1993": 16,
+        "1994": 16,
+        "1995": 17,
+        "1996": 16,
+        "1997": 17,
+        "1998": 16,
+        "1999": 16,
+        "2000": 17,
+        "2001": 17,
+        "2002": 17,
+        "2003": 16,
+        "2004": 18,
+        "2005": 19,
+        "2006": 18,
+        "2007": 17,
+        "2008": 18,
+        "2009": 17,
+        "2010": 19,
+        "2011": 19,
+        "2012": 20,
+        "2013": 19,
+        "2014": 19,
+        "2015": 19,
+        "2016": 21,
+        "2017": 20,
+        "2018": 21,
+        "2019": 21,
+        "2020": 17,
+        "2021": 22,
+        "2022": 22,
+        "2023": 22,
+        "2024": 24
+      },
+      "suspicious_values": []
+    },
+    "seasons": {
+      "file": "seasons.csv",
+      "sha256": "9562d2374cced42e24988fb2325cca5c82455815a5f5d40f6a6f5262a36106dc",
+      "rows": 75,
+      "columns": {
+        "year": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 75
+        },
+        "url": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 75
+        }
+      },
+      "primary_key": [
+        "year"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "year",
+        "url"
+      ],
+      "foreign_keys": [],
+      "year_range": [
+        1950,
+        2024
+      ],
+      "rows_by_year": {
+        "1950": 1,
+        "1951": 1,
+        "1952": 1,
+        "1953": 1,
+        "1954": 1,
+        "1955": 1,
+        "1956": 1,
+        "1957": 1,
+        "1958": 1,
+        "1959": 1,
+        "1960": 1,
+        "1961": 1,
+        "1962": 1,
+        "1963": 1,
+        "1964": 1,
+        "1965": 1,
+        "1966": 1,
+        "1967": 1,
+        "1968": 1,
+        "1969": 1,
+        "1970": 1,
+        "1971": 1,
+        "1972": 1,
+        "1973": 1,
+        "1974": 1,
+        "1975": 1,
+        "1976": 1,
+        "1977": 1,
+        "1978": 1,
+        "1979": 1,
+        "1980": 1,
+        "1981": 1,
+        "1982": 1,
+        "1983": 1,
+        "1984": 1,
+        "1985": 1,
+        "1986": 1,
+        "1987": 1,
+        "1988": 1,
+        "1989": 1,
+        "1990": 1,
+        "1991": 1,
+        "1992": 1,
+        "1993": 1,
+        "1994": 1,
+        "1995": 1,
+        "1996": 1,
+        "1997": 1,
+        "1998": 1,
+        "1999": 1,
+        "2000": 1,
+        "2001": 1,
+        "2002": 1,
+        "2003": 1,
+        "2004": 1,
+        "2005": 1,
+        "2006": 1,
+        "2007": 1,
+        "2008": 1,
+        "2009": 1,
+        "2010": 1,
+        "2011": 1,
+        "2012": 1,
+        "2013": 1,
+        "2014": 1,
+        "2015": 1,
+        "2016": 1,
+        "2017": 1,
+        "2018": 1,
+        "2019": 1,
+        "2020": 1,
+        "2021": 1,
+        "2022": 1,
+        "2023": 1,
+        "2024": 1
+      },
+      "suspicious_values": []
+    },
+    "status": {
+      "file": "status.csv",
+      "sha256": "c36b1287f2421a288c38b0ce875d6ed04ff26bbda3e06db3d99e12197ea894aa",
+      "rows": 139,
+      "columns": {
+        "statusId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 139
+        },
+        "status": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 139
+        }
+      },
+      "primary_key": [
+        "statusId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "statusId",
+        "status"
+      ],
+      "foreign_keys": [],
+      "year_range": null,
+      "rows_by_year": {},
+      "suspicious_values": []
+    },
+    "results": {
+      "file": "results.csv",
+      "sha256": "a2392658044286800a0a946138067d9823f39e59147eeef0cbdda858ff172441",
+      "rows": 26759,
+      "columns": {
+        "resultId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 26759
+        },
+        "raceId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 1125
+        },
+        "driverId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 861
+        },
+        "constructorId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 211
+        },
+        "number": {
+          "inferred_type": "integer",
+          "missing": 6,
+          "distinct_non_null": 129
+        },
+        "grid": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 35
+        },
+        "position": {
+          "inferred_type": "integer",
+          "missing": 10953,
+          "distinct_non_null": 33
+        },
+        "positionText": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 39
+        },
+        "positionOrder": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 39
+        },
+        "points": {
+          "inferred_type": "float",
+          "missing": 0,
+          "distinct_non_null": 39
+        },
+        "laps": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 172
+        },
+        "time": {
+          "inferred_type": "text",
+          "missing": 19079,
+          "distinct_non_null": 7410
+        },
+        "milliseconds": {
+          "inferred_type": "integer",
+          "missing": 19079,
+          "distinct_non_null": 7638
+        },
+        "fastestLap": {
+          "inferred_type": "integer",
+          "missing": 18507,
+          "distinct_non_null": 80
+        },
+        "rank": {
+          "inferred_type": "integer",
+          "missing": 18249,
+          "distinct_non_null": 25
+        },
+        "fastestLapTime": {
+          "inferred_type": "text",
+          "missing": 18507,
+          "distinct_non_null": 7473
+        },
+        "fastestLapSpeed": {
+          "inferred_type": "float",
+          "missing": 18507,
+          "distinct_non_null": 7724
+        },
+        "statusId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 137
+        }
+      },
+      "primary_key": [
+        "resultId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "resultId"
+      ],
+      "foreign_keys": [
+        {
+          "column": "raceId",
+          "references": "races.raceId",
+          "orphan_values": []
+        },
+        {
+          "column": "driverId",
+          "references": "drivers.driverId",
+          "orphan_values": []
+        },
+        {
+          "column": "constructorId",
+          "references": "constructors.constructorId",
+          "orphan_values": []
+        },
+        {
+          "column": "statusId",
+          "references": "status.statusId",
+          "orphan_values": []
+        }
+      ],
+      "year_range": [
+        1950,
+        2024
+      ],
+      "rows_by_year": {
+        "1950": 160,
+        "1951": 179,
+        "1952": 215,
+        "1953": 246,
+        "1954": 230,
+        "1955": 180,
+        "1956": 190,
+        "1957": 171,
+        "1958": 241,
+        "1959": 195,
+        "1960": 223,
+        "1961": 220,
+        "1962": 223,
+        "1963": 254,
+        "1964": 207,
+        "1965": 205,
+        "1966": 166,
+        "1967": 205,
+        "1968": 233,
+        "1969": 177,
+        "1970": 294,
+        "1971": 263,
+        "1972": 309,
+        "1973": 357,
+        "1974": 436,
+        "1975": 363,
+        "1976": 434,
+        "1977": 477,
+        "1978": 471,
+        "1979": 403,
+        "1980": 383,
+        "1981": 449,
+        "1982": 465,
+        "1983": 424,
+        "1984": 430,
+        "1985": 406,
+        "1986": 412,
+        "1987": 419,
+        "1988": 495,
+        "1989": 620,
+        "1990": 542,
+        "1991": 539,
+        "1992": 478,
+        "1993": 412,
+        "1994": 444,
+        "1995": 418,
+        "1996": 340,
+        "1997": 376,
+        "1998": 349,
+        "1999": 352,
+        "2000": 373,
+        "2001": 374,
+        "2002": 362,
+        "2003": 320,
+        "2004": 360,
+        "2005": 376,
+        "2006": 396,
+        "2007": 374,
+        "2008": 368,
+        "2009": 340,
+        "2010": 456,
+        "2011": 456,
+        "2012": 480,
+        "2013": 418,
+        "2014": 407,
+        "2015": 378,
+        "2016": 462,
+        "2017": 400,
+        "2018": 420,
+        "2019": 420,
+        "2020": 340,
+        "2021": 440,
+        "2022": 440,
+        "2023": 440,
+        "2024": 479
+      },
+      "suspicious_values": [
+        {
+          "duplicate_driver_race": {
+            "('540', '229')": 2,
+            "('717', '373')": 2,
+            "('733', '465')": 2,
+            "('742', '475')": 2,
+            "('745', '418')": 2,
+            "('746', '475')": 2,
+            "('766', '541')": 2,
+            "('770', '479')": 2,
+            "('774', '566')": 2,
+            "('776', '581')": 2,
+            "('777', '501')": 2,
+            "('777', '578')": 2,
+            "('779', '356')": 2,
+            "('780', '479')": 2,
+            "('780', '581')": 2,
+            "('780', '475')": 2,
+            "('783', '501')": 2,
+            "('784', '579')": 2,
+            "('785', '579')": 2,
+            "('785', '608')": 2,
+            "('787', '475')": 2,
+            "('788', '624')": 2,
+            "('788', '475')": 2,
+            "('788', '501')": 2,
+            "('789', '606')": 2,
+            "('789', '581')": 2,
+            "('791', '579')": 2,
+            "('791', '554')": 2,
+            "('791', '608')": 2,
+            "('792', '642')": 2,
+            "('792', '501')": 3,
+            "('792', '577')": 2,
+            "('792', '644')": 2,
+            "('792', '427')": 3,
+            "('792', '475')": 2,
+            "('792', '554')": 3,
+            "('792', '648')": 2,
+            "('792', '633')": 2,
+            "('792', '496')": 2,
+            "('793', '554')": 2,
+            "('793', '607')": 2,
+            "('795', '554')": 2,
+            "('797', '501')": 2,
+            "('797', '608')": 2,
+            "('800', '518')": 2,
+            "('800', '611')": 2,
+            "('800', '612')": 3,
+            "('800', '659')": 2,
+            "('800', '556')": 2,
+            "('800', '509')": 2,
+            "('800', '529')": 2,
+            "('800', '593')": 2,
+            "('801', '498')": 2,
+            "('803', '647')": 2,
+            "('804', '578')": 2,
+            "('806', '498')": 2,
+            "('809', '509')": 2,
+            "('809', '518')": 2,
+            "('809', '555')": 2,
+            "('809', '520')": 2,
+            "('809', '521')": 3,
+            "('809', '702')": 2,
+            "('809', '512')": 2,
+            "('809', '612')": 3,
+            "('810', '498')": 2,
+            "('811', '579')": 2,
+            "('814', '647')": 2,
+            "('814', '633')": 2,
+            "('815', '579')": 2,
+            "('815', '697')": 2,
+            "('817', '642')": 2,
+            "('820', '501')": 2,
+            "('823', '759')": 2,
+            "('828', '786')": 2,
+            "('828', '647')": 2,
+            "('828', '579')": 2,
+            "('831', '642')": 2,
+            "('835', '529')": 2,
+            "('838', '627')": 2,
+            "('839', '579')": 2,
+            "('839', '647')": 2,
+            "('800', '653')": 2,
+            "('800', '613')": 2,
+            "('800', '702')": 2,
+            "('800', '730')": 2
+          }
+        },
+        {
+          "nonpositive_grid": 1638
+        }
+      ]
+    },
+    "qualifying": {
+      "file": "qualifying.csv",
+      "sha256": "49c4ff9ae0be93d5f850f56c553d5e264914c7ba0c4d583462f3de06aebed3cc",
+      "rows": 10494,
+      "columns": {
+        "qualifyId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 10494
+        },
+        "raceId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 494
+        },
+        "driverId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 172
+        },
+        "constructorId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 47
+        },
+        "number": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 58
+        },
+        "position": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 28
+        },
+        "q1": {
+          "inferred_type": "text",
+          "missing": 156,
+          "distinct_non_null": 9146
+        },
+        "q2": {
+          "inferred_type": "text",
+          "missing": 4647,
+          "distinct_non_null": 5473
+        },
+        "q3": {
+          "inferred_type": "text",
+          "missing": 6865,
+          "distinct_non_null": 3470
+        }
+      },
+      "primary_key": [
+        "qualifyId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "qualifyId"
+      ],
+      "foreign_keys": [
+        {
+          "column": "raceId",
+          "references": "races.raceId",
+          "orphan_values": []
+        },
+        {
+          "column": "driverId",
+          "references": "drivers.driverId",
+          "orphan_values": []
+        },
+        {
+          "column": "constructorId",
+          "references": "constructors.constructorId",
+          "orphan_values": []
+        }
+      ],
+      "year_range": [
+        1994,
+        2024
+      ],
+      "rows_by_year": {
+        "1994": 392,
+        "1995": 418,
+        "1996": 148,
+        "1997": 220,
+        "1998": 153,
+        "1999": 65,
+        "2000": 88,
+        "2001": 22,
+        "2002": 42,
+        "2003": 320,
+        "2004": 360,
+        "2005": 376,
+        "2006": 396,
+        "2007": 374,
+        "2008": 368,
+        "2009": 340,
+        "2010": 456,
+        "2011": 452,
+        "2012": 476,
+        "2013": 418,
+        "2014": 405,
+        "2015": 374,
+        "2016": 457,
+        "2017": 398,
+        "2018": 420,
+        "2019": 418,
+        "2020": 340,
+        "2021": 439,
+        "2022": 440,
+        "2023": 440,
+        "2024": 479
+      },
+      "suspicious_values": []
+    },
+    "constructor_results": {
+      "file": "constructor_results.csv",
+      "sha256": "8f1ebc0ce822bc02326b9bf13616f22a81514a6d35e5b744fd6f627b9ef99634",
+      "rows": 12625,
+      "columns": {
+        "constructorResultsId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 12625
+        },
+        "raceId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 1060
+        },
+        "constructorId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 175
+        },
+        "points": {
+          "inferred_type": "float",
+          "missing": 0,
+          "distinct_non_null": 61
+        },
+        "status": {
+          "inferred_type": "text",
+          "missing": 12608,
+          "distinct_non_null": 1
+        }
+      },
+      "primary_key": [
+        "constructorResultsId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "constructorResultsId"
+      ],
+      "foreign_keys": [
+        {
+          "column": "raceId",
+          "references": "races.raceId",
+          "orphan_values": []
+        },
+        {
+          "column": "constructorId",
+          "references": "constructors.constructorId",
+          "orphan_values": []
+        }
+      ],
+      "year_range": [
+        1958,
+        2024
+      ],
+      "rows_by_year": {
+        "1958": 62,
+        "1959": 68,
+        "1960": 73,
+        "1961": 58,
+        "1962": 77,
+        "1963": 116,
+        "1964": 85,
+        "1965": 87,
+        "1966": 86,
+        "1967": 103,
+        "1968": 124,
+        "1969": 69,
+        "1970": 125,
+        "1971": 108,
+        "1972": 116,
+        "1973": 157,
+        "1974": 211,
+        "1975": 216,
+        "1976": 239,
+        "1977": 253,
+        "1978": 274,
+        "1979": 237,
+        "1980": 203,
+        "1981": 251,
+        "1982": 259,
+        "1983": 229,
+        "1984": 237,
+        "1985": 232,
+        "1986": 210,
+        "1987": 238,
+        "1988": 288,
+        "1989": 320,
+        "1990": 294,
+        "1991": 285,
+        "1992": 240,
+        "1993": 206,
+        "1994": 224,
+        "1995": 209,
+        "1996": 170,
+        "1997": 188,
+        "1998": 176,
+        "1999": 176,
+        "2000": 187,
+        "2001": 187,
+        "2002": 183,
+        "2003": 160,
+        "2004": 180,
+        "2005": 188,
+        "2006": 198,
+        "2007": 187,
+        "2008": 184,
+        "2009": 170,
+        "2010": 228,
+        "2011": 228,
+        "2012": 239,
+        "2013": 209,
+        "2014": 204,
+        "2015": 193,
+        "2016": 231,
+        "2017": 200,
+        "2018": 210,
+        "2019": 210,
+        "2020": 170,
+        "2021": 220,
+        "2022": 220,
+        "2023": 220,
+        "2024": 240
+      },
+      "suspicious_values": []
+    },
+    "constructor_standings": {
+      "file": "constructor_standings.csv",
+      "sha256": "9f07b1b9f235625165f62c6fcd6b1938cd7daa6f7e4a580f9937c6268056de9b",
+      "rows": 13391,
+      "columns": {
+        "constructorStandingsId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 13391
+        },
+        "raceId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 1061
+        },
+        "constructorId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 160
+        },
+        "points": {
+          "inferred_type": "float",
+          "missing": 0,
+          "distinct_non_null": 579
+        },
+        "position": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 22
+        },
+        "positionText": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 23
+        },
+        "wins": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 22
+        }
+      },
+      "primary_key": [
+        "constructorStandingsId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "constructorStandingsId"
+      ],
+      "foreign_keys": [
+        {
+          "column": "raceId",
+          "references": "races.raceId",
+          "orphan_values": []
+        },
+        {
+          "column": "constructorId",
+          "references": "constructors.constructorId",
+          "orphan_values": []
+        }
+      ],
+      "year_range": [
+        1958,
+        2024
+      ],
+      "rows_by_year": {
+        "1958": 92,
+        "1959": 94,
+        "1960": 111,
+        "1961": 77,
+        "1962": 115,
+        "1963": 150,
+        "1964": 112,
+        "1965": 159,
+        "1966": 115,
+        "1967": 181,
+        "1968": 187,
+        "1969": 94,
+        "1970": 135,
+        "1971": 121,
+        "1972": 126,
+        "1973": 167,
+        "1974": 240,
+        "1975": 247,
+        "1976": 296,
+        "1977": 285,
+        "1978": 299,
+        "1979": 251,
+        "1980": 210,
+        "1981": 252,
+        "1982": 272,
+        "1983": 232,
+        "1984": 238,
+        "1985": 257,
+        "1986": 212,
+        "1987": 244,
+        "1988": 288,
+        "1989": 320,
+        "1990": 304,
+        "1991": 302,
+        "1992": 223,
+        "1993": 197,
+        "1994": 224,
+        "1995": 213,
+        "1996": 173,
+        "1997": 195,
+        "1998": 168,
+        "1999": 169,
+        "2000": 179,
+        "2001": 186,
+        "2002": 182,
+        "2003": 156,
+        "2004": 179,
+        "2005": 190,
+        "2006": 202,
+        "2007": 187,
+        "2008": 193,
+        "2009": 169,
+        "2010": 228,
+        "2011": 226,
+        "2012": 239,
+        "2013": 209,
+        "2014": 209,
+        "2015": 189,
+        "2016": 231,
+        "2017": 200,
+        "2018": 210,
+        "2019": 210,
+        "2020": 170,
+        "2021": 220,
+        "2022": 220,
+        "2023": 220,
+        "2024": 240
+      },
+      "suspicious_values": []
+    },
+    "driver_standings": {
+      "file": "driver_standings.csv",
+      "sha256": "58397ed38d29f71316ba272a2ffd5bd00b6174774d919ce079ae4d3cfb27befb",
+      "rows": 34863,
+      "columns": {
+        "driverStandingsId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 34863
+        },
+        "raceId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 1125
+        },
+        "driverId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 854
+        },
+        "points": {
+          "inferred_type": "float",
+          "missing": 0,
+          "distinct_non_null": 442
+        },
+        "position": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 108
+        },
+        "positionText": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 109
+        },
+        "wins": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 20
+        }
+      },
+      "primary_key": [
+        "driverStandingsId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "driverStandingsId"
+      ],
+      "foreign_keys": [
+        {
+          "column": "raceId",
+          "references": "races.raceId",
+          "orphan_values": []
+        },
+        {
+          "column": "driverId",
+          "references": "drivers.driverId",
+          "orphan_values": []
+        }
+      ],
+      "year_range": [
+        1950,
+        2024
+      ],
+      "rows_by_year": {
+        "1950": 419,
+        "1951": 513,
+        "1952": 590,
+        "1953": 671,
+        "1954": 683,
+        "1955": 429,
+        "1956": 479,
+        "1957": 463,
+        "1958": 696,
+        "1959": 622,
+        "1960": 672,
+        "1961": 311,
+        "1962": 361,
+        "1963": 388,
+        "1964": 306,
+        "1965": 437,
+        "1966": 232,
+        "1967": 363,
+        "1968": 401,
+        "1969": 268,
+        "1970": 446,
+        "1971": 392,
+        "1972": 403,
+        "1973": 505,
+        "1974": 675,
+        "1975": 532,
+        "1976": 649,
+        "1977": 729,
+        "1978": 602,
+        "1979": 451,
+        "1980": 472,
+        "1981": 546,
+        "1982": 581,
+        "1983": 479,
+        "1984": 487,
+        "1985": 490,
+        "1986": 460,
+        "1987": 445,
+        "1988": 520,
+        "1989": 679,
+        "1990": 618,
+        "1991": 591,
+        "1992": 415,
+        "1993": 388,
+        "1994": 591,
+        "1995": 468,
+        "1996": 339,
+        "1997": 396,
+        "1998": 333,
+        "1999": 325,
+        "2000": 361,
+        "2001": 383,
+        "2002": 344,
+        "2003": 314,
+        "2004": 385,
+        "2005": 471,
+        "2006": 422,
+        "2007": 384,
+        "2008": 376,
+        "2009": 364,
+        "2010": 476,
+        "2011": 494,
+        "2012": 488,
+        "2013": 420,
+        "2014": 427,
+        "2015": 403,
+        "2016": 491,
+        "2017": 453,
+        "2018": 420,
+        "2019": 420,
+        "2020": 358,
+        "2021": 450,
+        "2022": 467,
+        "2023": 462,
+        "2024": 519
+      },
+      "suspicious_values": []
+    },
+    "lap_times": {
+      "file": "lap_times.csv",
+      "sha256": "70a772924f67682701acf1a6f26e8225ffd1b9f50844b2f9fb42ce311333cc33",
+      "rows": 589081,
+      "columns": {
+        "raceId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 544
+        },
+        "driverId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 143
+        },
+        "lap": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 87
+        },
+        "position": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 24
+        },
+        "time": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 75806
+        },
+        "milliseconds": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 75806
+        }
+      },
+      "primary_key": [
+        "raceId",
+        "driverId",
+        "lap"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [],
+      "foreign_keys": [
+        {
+          "column": "raceId",
+          "references": "races.raceId",
+          "orphan_values": []
+        },
+        {
+          "column": "driverId",
+          "references": "drivers.driverId",
+          "orphan_values": []
+        }
+      ],
+      "year_range": [
+        1996,
+        2024
+      ],
+      "rows_by_year": {
+        "1996": 14431,
+        "1997": 17206,
+        "1998": 16175,
+        "1999": 15804,
+        "2000": 17977,
+        "2001": 17357,
+        "2002": 17350,
+        "2003": 16043,
+        "2004": 18608,
+        "2005": 19204,
+        "2006": 19920,
+        "2007": 19563,
+        "2008": 19449,
+        "2009": 17186,
+        "2010": 22534,
+        "2011": 24008,
+        "2012": 25343,
+        "2013": 22779,
+        "2014": 21021,
+        "2015": 19855,
+        "2016": 24513,
+        "2017": 20307,
+        "2018": 22246,
+        "2019": 23625,
+        "2020": 18400,
+        "2021": 23688,
+        "2022": 23529,
+        "2023": 24386,
+        "2024": 26574
+      },
+      "suspicious_values": []
+    },
+    "pit_stops": {
+      "file": "pit_stops.csv",
+      "sha256": "70cff48b96416d46b8f6f162e778fcee45582b8fa85e9ec4a5e2c7b60bead75c",
+      "rows": 11371,
+      "columns": {
+        "raceId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 285
+        },
+        "driverId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 76
+        },
+        "stop": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 14
+        },
+        "lap": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 74
+        },
+        "time": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 8227
+        },
+        "duration": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 7604
+        },
+        "milliseconds": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 7604
+        }
+      },
+      "primary_key": [
+        "raceId",
+        "driverId",
+        "stop"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [],
+      "foreign_keys": [
+        {
+          "column": "raceId",
+          "references": "races.raceId",
+          "orphan_values": []
+        },
+        {
+          "column": "driverId",
+          "references": "drivers.driverId",
+          "orphan_values": []
+        }
+      ],
+      "year_range": [
+        2011,
+        2024
+      ],
+      "rows_by_year": {
+        "2011": 1114,
+        "2012": 946,
+        "2013": 951,
+        "2014": 816,
+        "2015": 741,
+        "2016": 989,
+        "2017": 694,
+        "2018": 536,
+        "2019": 650,
+        "2020": 594,
+        "2021": 798,
+        "2022": 805,
+        "2023": 912,
+        "2024": 825
+      },
+      "suspicious_values": []
+    },
+    "sprint_results": {
+      "file": "sprint_results.csv",
+      "sha256": "4a20b577098bafd2683c4f4ac1bb1cf4b2e8cc6a13c91c16878c7b2b21a24647",
+      "rows": 360,
+      "columns": {
+        "resultId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 360
+        },
+        "raceId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 18
+        },
+        "driverId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 31
+        },
+        "constructorId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 12
+        },
+        "number": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 33
+        },
+        "grid": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 21
+        },
+        "position": {
+          "inferred_type": "integer",
+          "missing": 15,
+          "distinct_non_null": 20
+        },
+        "positionText": {
+          "inferred_type": "text",
+          "missing": 0,
+          "distinct_non_null": 23
+        },
+        "positionOrder": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 20
+        },
+        "points": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 9
+        },
+        "laps": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 14
+        },
+        "time": {
+          "inferred_type": "text",
+          "missing": 20,
+          "distinct_non_null": 340
+        },
+        "milliseconds": {
+          "inferred_type": "integer",
+          "missing": 20,
+          "distinct_non_null": 340
+        },
+        "fastestLap": {
+          "inferred_type": "integer",
+          "missing": 9,
+          "distinct_non_null": 23
+        },
+        "fastestLapTime": {
+          "inferred_type": "text",
+          "missing": 9,
+          "distinct_non_null": 350
+        },
+        "statusId": {
+          "inferred_type": "integer",
+          "missing": 0,
+          "distinct_non_null": 8
+        }
+      },
+      "primary_key": [
+        "resultId"
+      ],
+      "duplicate_primary_keys": 0,
+      "null_primary_keys": 0,
+      "single_column_key_candidates": [
+        "resultId"
+      ],
+      "foreign_keys": [
+        {
+          "column": "raceId",
+          "references": "races.raceId",
+          "orphan_values": []
+        },
+        {
+          "column": "driverId",
+          "references": "drivers.driverId",
+          "orphan_values": []
+        },
+        {
+          "column": "constructorId",
+          "references": "constructors.constructorId",
+          "orphan_values": []
+        },
+        {
+          "column": "statusId",
+          "references": "status.statusId",
+          "orphan_values": []
+        }
+      ],
+      "year_range": [
+        2021,
+        2024
+      ],
+      "rows_by_year": {
+        "2021": 60,
+        "2022": 60,
+        "2023": 120,
+        "2024": 120
+      },
+      "suspicious_values": [
+        {
+          "nonpositive_grid": 11
+        }
+      ]
+    }
+  },
+  "total_rows": 701433,
+  "limitations": [
+    "No weather, tyre compound, fuel load, telemetry, or live updates.",
+    "Coverage start does not imply complete coverage; inspect rows_by_year.",
+    "Grid 0 is a pit-lane/unknown/nonstandard start, not pole position.",
+    "Early shared-drive results can violate driver/race uniqueness; resultId is the source grain.",
+    "Final classified position can include nonfinishers; DNF is not equivalent to null position.",
+    "Pit duration includes pit-lane transit and interruptions, not necessarily stationary service time.",
+    "Retrospectively maintained source: no point-in-time version history for corrections/grid changes.",
+    "Source package supplies no license or download receipt; redistribution provenance is unverified."
+  ]
+}
