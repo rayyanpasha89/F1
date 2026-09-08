@@ -1,0 +1,7 @@
+# ADR 004 — Read-only SQL boundary
+
+Accepted 2026-09-08. SQL from an LLM is untrusted. Parse with SQLGlot and allow a single read-only SELECT/CTE tree. Restrict tables, function calls, joins and expression count. A separate database connection enforces read-only access independently of the prompt and parser. SQLite uses mode=ro, query_only, an authorizer, a wall-clock deadline and an opcode budget; the connection is explicitly closed. Returned rows are capped at 200 and truncation is reported. Raw lap/pit queries are rejected in favor of aggregation.
+
+PostgreSQL execution code sets read-only transactions and statement/lock timeouts. A deployment must additionally provide a dedicated SELECT-only database role; this path has not yet been tested against live PostgreSQL. SQLite safety behavior was exercised against real and synthetic databases. Safe query failures omit database internals; generated SQL itself is intentionally visible in eventual chat responses.
+
+Validation and successful execution cannot prove semantic correctness. The remaining NL2SQL work requires an actual configured model, a fixed question/answer benchmark, join correctness checks, grounding/refusal routing and live integration. No LLM accuracy or end-to-end chat benchmark is claimed at this checkpoint. Provider credentials/model configuration are missing from the process environment; integration is paused under the user's explicit stop condition.

@@ -33,3 +33,9 @@ Executed training-only out-of-fold sigmoid calibration and clean H3/H4 ablations
 ## 2026-09-08 — Final evaluation and explainable inference
 
 Executed reserved 2022–2024 evaluation after calibration-selection commit. Reported probability-score gains and the slight top-three hit-rate decline honestly. Verified SHAP reconstruction across held-out rows and API inference. Added race prediction UI with baseline comparison, all model factors and explicit reference units. Twenty-two Python tests, three frontend tests and production build passed. Browser loaded 20 Monaco predictions and a real Leclerc 76.4% explanation; inspected the full-page screenshot and observed no browser errors. Earlier training/selection races are refused by the prediction API. No AWS resources created.
+
+## 2026-09-08 — SQL safety foundation and configuration stop
+
+Implemented single-statement AST validation, schema/function restrictions, explicit joins, aggregated lap/pit policy, SQLite read-only URI/authorizer, capped results and timed/opcode-bounded execution. Added PostgreSQL read-only execution code, not yet live-tested. Fixed a syntax error caught in the new parametrized tests before proceeding. All 52 Python tests passed. Documented the implemented boundary and remaining semantic/LLM work in ADR 004.
+
+Checked only presence (not values) of OPENAI_API_KEY, ANTHROPIC_API_KEY and BEDROCK_MODEL_ID in the process environment; none is configured. No provider integration is yet configured. Pausing LLM work under the user's explicit missing-credential stop condition, and updating README to accurately reflect implemented features and outstanding work. No AWS profiles/resources inspected or mutated. This is an intermediate checkpoint, not definition-of-done completion.
