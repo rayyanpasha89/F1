@@ -82,3 +82,18 @@ def test_expensive_query_interrupted_and_error_is_safe(tmp_path):
         )
     with pytest.raises(QueryFailed):
         sqlite_query(p, "SELECT nonexistent FROM results")
+
+
+def test_boolean_conditions_are_operators_not_arbitrary_functions():
+    sql = "SELECT COUNT(*) FROM races WHERE (year=2023 OR year=2024) AND round > 1"
+    assert validate_sql(sql)
+    if Path("database/f1.db").exists():
+        assert sqlite_query("database/f1.db", sql)["rows"][0][0] > 0
+
+
+def test_every_reference_query_is_supported_by_sql_policy():
+    import json
+
+    for case in json.loads(Path("tests/nl2sql/questions.json").read_text()):
+        if "gold_sql" in case:
+            assert validate_sql(case["gold_sql"])

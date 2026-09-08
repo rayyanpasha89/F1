@@ -92,7 +92,7 @@ def validate_sql(sql, dialect="sqlite"):
         raise UnsafeQuery("Joins require explicit keys and are limited to eight.")
     for function in tree.find_all(exp.Func):
         # CASE/IF are structural expressions, not arbitrary database function calls.
-        if isinstance(function, (exp.Case, exp.If)):
+        if isinstance(function, (exp.Case, exp.If, exp.And, exp.Or)):
             continue
         name = (
             function.name.upper()
