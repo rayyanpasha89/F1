@@ -1,0 +1,16 @@
+{
+  "circuits": 77,
+  "constructors": 212,
+  "drivers": 861,
+  "seasons": 75,
+  "status": 139,
+  "races": 1125,
+  "constructor_results": 12625,
+  "constructor_standings": 13391,
+  "driver_standings": 34863,
+  "lap_times": 589081,
+  "pit_stops": 11371,
+  "qualifying": 10494,
+  "results": 26759,
+  "sprint_results": 360
+}

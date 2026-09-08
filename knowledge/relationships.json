@@ -1,0 +1,117 @@
+[
+  {
+    "table": "races",
+    "column": "year",
+    "references": "seasons.year"
+  },
+  {
+    "table": "races",
+    "column": "circuit_id",
+    "references": "circuits.circuit_id"
+  },
+  {
+    "table": "results",
+    "column": "race_id",
+    "references": "races.race_id"
+  },
+  {
+    "table": "results",
+    "column": "driver_id",
+    "references": "drivers.driver_id"
+  },
+  {
+    "table": "results",
+    "column": "constructor_id",
+    "references": "constructors.constructor_id"
+  },
+  {
+    "table": "results",
+    "column": "status_id",
+    "references": "status.status_id"
+  },
+  {
+    "table": "qualifying",
+    "column": "race_id",
+    "references": "races.race_id"
+  },
+  {
+    "table": "qualifying",
+    "column": "driver_id",
+    "references": "drivers.driver_id"
+  },
+  {
+    "table": "qualifying",
+    "column": "constructor_id",
+    "references": "constructors.constructor_id"
+  },
+  {
+    "table": "constructor_results",
+    "column": "race_id",
+    "references": "races.race_id"
+  },
+  {
+    "table": "constructor_results",
+    "column": "constructor_id",
+    "references": "constructors.constructor_id"
+  },
+  {
+    "table": "constructor_standings",
+    "column": "race_id",
+    "references": "races.race_id"
+  },
+  {
+    "table": "constructor_standings",
+    "column": "constructor_id",
+    "references": "constructors.constructor_id"
+  },
+  {
+    "table": "driver_standings",
+    "column": "race_id",
+    "references": "races.race_id"
+  },
+  {
+    "table": "driver_standings",
+    "column": "driver_id",
+    "references": "drivers.driver_id"
+  },
+  {
+    "table": "lap_times",
+    "column": "race_id",
+    "references": "races.race_id"
+  },
+  {
+    "table": "lap_times",
+    "column": "driver_id",
+    "references": "drivers.driver_id"
+  },
+  {
+    "table": "pit_stops",
+    "column": "race_id",
+    "references": "races.race_id"
+  },
+  {
+    "table": "pit_stops",
+    "column": "driver_id",
+    "references": "drivers.driver_id"
+  },
+  {
+    "table": "sprint_results",
+    "column": "race_id",
+    "references": "races.race_id"
+  },
+  {
+    "table": "sprint_results",
+    "column": "driver_id",
+    "references": "drivers.driver_id"
+  },
+  {
+    "table": "sprint_results",
+    "column": "constructor_id",
+    "references": "constructors.constructor_id"
+  },
+  {
+    "table": "sprint_results",
+    "column": "status_id",
+    "references": "status.status_id"
+  }
+]

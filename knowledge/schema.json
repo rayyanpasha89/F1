@@ -1,0 +1,819 @@
+{
+  "circuits": {
+    "columns": {
+      "circuit_id": {
+        "source": "circuitId",
+        "type": "integer",
+        "nullable": false
+      },
+      "circuit_ref": {
+        "source": "circuitRef",
+        "type": "text",
+        "nullable": false
+      },
+      "name": {
+        "source": "name",
+        "type": "text",
+        "nullable": false
+      },
+      "location": {
+        "source": "location",
+        "type": "text",
+        "nullable": false
+      },
+      "country": {
+        "source": "country",
+        "type": "text",
+        "nullable": false
+      },
+      "lat": {
+        "source": "lat",
+        "type": "float",
+        "nullable": false
+      },
+      "lng": {
+        "source": "lng",
+        "type": "float",
+        "nullable": false
+      },
+      "alt": {
+        "source": "alt",
+        "type": "integer",
+        "nullable": false
+      },
+      "url": {
+        "source": "url",
+        "type": "text",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "circuit_id"
+    ],
+    "foreign_keys": []
+  },
+  "constructors": {
+    "columns": {
+      "constructor_id": {
+        "source": "constructorId",
+        "type": "integer",
+        "nullable": false
+      },
+      "constructor_ref": {
+        "source": "constructorRef",
+        "type": "text",
+        "nullable": false
+      },
+      "name": {
+        "source": "name",
+        "type": "text",
+        "nullable": false
+      },
+      "nationality": {
+        "source": "nationality",
+        "type": "text",
+        "nullable": false
+      },
+      "url": {
+        "source": "url",
+        "type": "text",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "constructor_id"
+    ],
+    "foreign_keys": []
+  },
+  "drivers": {
+    "columns": {
+      "driver_id": {
+        "source": "driverId",
+        "type": "integer",
+        "nullable": false
+      },
+      "driver_ref": {
+        "source": "driverRef",
+        "type": "text",
+        "nullable": false
+      },
+      "number": {
+        "source": "number",
+        "type": "integer",
+        "nullable": true
+      },
+      "code": {
+        "source": "code",
+        "type": "text",
+        "nullable": true
+      },
+      "forename": {
+        "source": "forename",
+        "type": "text",
+        "nullable": false
+      },
+      "surname": {
+        "source": "surname",
+        "type": "text",
+        "nullable": false
+      },
+      "dob": {
+        "source": "dob",
+        "type": "text",
+        "nullable": false
+      },
+      "nationality": {
+        "source": "nationality",
+        "type": "text",
+        "nullable": false
+      },
+      "url": {
+        "source": "url",
+        "type": "text",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "driver_id"
+    ],
+    "foreign_keys": []
+  },
+  "races": {
+    "columns": {
+      "race_id": {
+        "source": "raceId",
+        "type": "integer",
+        "nullable": false
+      },
+      "year": {
+        "source": "year",
+        "type": "integer",
+        "nullable": false
+      },
+      "round": {
+        "source": "round",
+        "type": "integer",
+        "nullable": false
+      },
+      "circuit_id": {
+        "source": "circuitId",
+        "type": "integer",
+        "nullable": false
+      },
+      "name": {
+        "source": "name",
+        "type": "text",
+        "nullable": false
+      },
+      "date": {
+        "source": "date",
+        "type": "text",
+        "nullable": false
+      },
+      "time": {
+        "source": "time",
+        "type": "text",
+        "nullable": true
+      },
+      "url": {
+        "source": "url",
+        "type": "text",
+        "nullable": false
+      },
+      "fp1_date": {
+        "source": "fp1_date",
+        "type": "text",
+        "nullable": true
+      },
+      "fp1_time": {
+        "source": "fp1_time",
+        "type": "text",
+        "nullable": true
+      },
+      "fp2_date": {
+        "source": "fp2_date",
+        "type": "text",
+        "nullable": true
+      },
+      "fp2_time": {
+        "source": "fp2_time",
+        "type": "text",
+        "nullable": true
+      },
+      "fp3_date": {
+        "source": "fp3_date",
+        "type": "text",
+        "nullable": true
+      },
+      "fp3_time": {
+        "source": "fp3_time",
+        "type": "text",
+        "nullable": true
+      },
+      "quali_date": {
+        "source": "quali_date",
+        "type": "text",
+        "nullable": true
+      },
+      "quali_time": {
+        "source": "quali_time",
+        "type": "text",
+        "nullable": true
+      },
+      "sprint_date": {
+        "source": "sprint_date",
+        "type": "text",
+        "nullable": true
+      },
+      "sprint_time": {
+        "source": "sprint_time",
+        "type": "text",
+        "nullable": true
+      }
+    },
+    "primary_key": [
+      "race_id"
+    ],
+    "foreign_keys": [
+      {
+        "column": "year",
+        "references": "seasons.year"
+      },
+      {
+        "column": "circuit_id",
+        "references": "circuits.circuit_id"
+      }
+    ]
+  },
+  "seasons": {
+    "columns": {
+      "year": {
+        "source": "year",
+        "type": "integer",
+        "nullable": false
+      },
+      "url": {
+        "source": "url",
+        "type": "text",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "year"
+    ],
+    "foreign_keys": []
+  },
+  "status": {
+    "columns": {
+      "status_id": {
+        "source": "statusId",
+        "type": "integer",
+        "nullable": false
+      },
+      "status": {
+        "source": "status",
+        "type": "text",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "status_id"
+    ],
+    "foreign_keys": []
+  },
+  "results": {
+    "columns": {
+      "result_id": {
+        "source": "resultId",
+        "type": "integer",
+        "nullable": false
+      },
+      "race_id": {
+        "source": "raceId",
+        "type": "integer",
+        "nullable": false
+      },
+      "driver_id": {
+        "source": "driverId",
+        "type": "integer",
+        "nullable": false
+      },
+      "constructor_id": {
+        "source": "constructorId",
+        "type": "integer",
+        "nullable": false
+      },
+      "number": {
+        "source": "number",
+        "type": "integer",
+        "nullable": true
+      },
+      "grid": {
+        "source": "grid",
+        "type": "integer",
+        "nullable": false
+      },
+      "position": {
+        "source": "position",
+        "type": "integer",
+        "nullable": true
+      },
+      "position_text": {
+        "source": "positionText",
+        "type": "text",
+        "nullable": false
+      },
+      "position_order": {
+        "source": "positionOrder",
+        "type": "integer",
+        "nullable": false
+      },
+      "points": {
+        "source": "points",
+        "type": "float",
+        "nullable": false
+      },
+      "laps": {
+        "source": "laps",
+        "type": "integer",
+        "nullable": false
+      },
+      "time": {
+        "source": "time",
+        "type": "text",
+        "nullable": true
+      },
+      "milliseconds": {
+        "source": "milliseconds",
+        "type": "integer",
+        "nullable": true
+      },
+      "fastest_lap": {
+        "source": "fastestLap",
+        "type": "integer",
+        "nullable": true
+      },
+      "rank": {
+        "source": "rank",
+        "type": "integer",
+        "nullable": true
+      },
+      "fastest_lap_time": {
+        "source": "fastestLapTime",
+        "type": "text",
+        "nullable": true
+      },
+      "fastest_lap_speed": {
+        "source": "fastestLapSpeed",
+        "type": "float",
+        "nullable": true
+      },
+      "status_id": {
+        "source": "statusId",
+        "type": "integer",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "result_id"
+    ],
+    "foreign_keys": [
+      {
+        "column": "race_id",
+        "references": "races.race_id"
+      },
+      {
+        "column": "driver_id",
+        "references": "drivers.driver_id"
+      },
+      {
+        "column": "constructor_id",
+        "references": "constructors.constructor_id"
+      },
+      {
+        "column": "status_id",
+        "references": "status.status_id"
+      }
+    ]
+  },
+  "qualifying": {
+    "columns": {
+      "qualify_id": {
+        "source": "qualifyId",
+        "type": "integer",
+        "nullable": false
+      },
+      "race_id": {
+        "source": "raceId",
+        "type": "integer",
+        "nullable": false
+      },
+      "driver_id": {
+        "source": "driverId",
+        "type": "integer",
+        "nullable": false
+      },
+      "constructor_id": {
+        "source": "constructorId",
+        "type": "integer",
+        "nullable": false
+      },
+      "number": {
+        "source": "number",
+        "type": "integer",
+        "nullable": false
+      },
+      "position": {
+        "source": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      "q1": {
+        "source": "q1",
+        "type": "text",
+        "nullable": true
+      },
+      "q2": {
+        "source": "q2",
+        "type": "text",
+        "nullable": true
+      },
+      "q3": {
+        "source": "q3",
+        "type": "text",
+        "nullable": true
+      }
+    },
+    "primary_key": [
+      "qualify_id"
+    ],
+    "foreign_keys": [
+      {
+        "column": "race_id",
+        "references": "races.race_id"
+      },
+      {
+        "column": "driver_id",
+        "references": "drivers.driver_id"
+      },
+      {
+        "column": "constructor_id",
+        "references": "constructors.constructor_id"
+      }
+    ]
+  },
+  "constructor_results": {
+    "columns": {
+      "constructor_results_id": {
+        "source": "constructorResultsId",
+        "type": "integer",
+        "nullable": false
+      },
+      "race_id": {
+        "source": "raceId",
+        "type": "integer",
+        "nullable": false
+      },
+      "constructor_id": {
+        "source": "constructorId",
+        "type": "integer",
+        "nullable": false
+      },
+      "points": {
+        "source": "points",
+        "type": "float",
+        "nullable": false
+      },
+      "status": {
+        "source": "status",
+        "type": "text",
+        "nullable": true
+      }
+    },
+    "primary_key": [
+      "constructor_results_id"
+    ],
+    "foreign_keys": [
+      {
+        "column": "race_id",
+        "references": "races.race_id"
+      },
+      {
+        "column": "constructor_id",
+        "references": "constructors.constructor_id"
+      }
+    ]
+  },
+  "constructor_standings": {
+    "columns": {
+      "constructor_standings_id": {
+        "source": "constructorStandingsId",
+        "type": "integer",
+        "nullable": false
+      },
+      "race_id": {
+        "source": "raceId",
+        "type": "integer",
+        "nullable": false
+      },
+      "constructor_id": {
+        "source": "constructorId",
+        "type": "integer",
+        "nullable": false
+      },
+      "points": {
+        "source": "points",
+        "type": "float",
+        "nullable": false
+      },
+      "position": {
+        "source": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      "position_text": {
+        "source": "positionText",
+        "type": "text",
+        "nullable": false
+      },
+      "wins": {
+        "source": "wins",
+        "type": "integer",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "constructor_standings_id"
+    ],
+    "foreign_keys": [
+      {
+        "column": "race_id",
+        "references": "races.race_id"
+      },
+      {
+        "column": "constructor_id",
+        "references": "constructors.constructor_id"
+      }
+    ]
+  },
+  "driver_standings": {
+    "columns": {
+      "driver_standings_id": {
+        "source": "driverStandingsId",
+        "type": "integer",
+        "nullable": false
+      },
+      "race_id": {
+        "source": "raceId",
+        "type": "integer",
+        "nullable": false
+      },
+      "driver_id": {
+        "source": "driverId",
+        "type": "integer",
+        "nullable": false
+      },
+      "points": {
+        "source": "points",
+        "type": "float",
+        "nullable": false
+      },
+      "position": {
+        "source": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      "position_text": {
+        "source": "positionText",
+        "type": "text",
+        "nullable": false
+      },
+      "wins": {
+        "source": "wins",
+        "type": "integer",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "driver_standings_id"
+    ],
+    "foreign_keys": [
+      {
+        "column": "race_id",
+        "references": "races.race_id"
+      },
+      {
+        "column": "driver_id",
+        "references": "drivers.driver_id"
+      }
+    ]
+  },
+  "lap_times": {
+    "columns": {
+      "race_id": {
+        "source": "raceId",
+        "type": "integer",
+        "nullable": false
+      },
+      "driver_id": {
+        "source": "driverId",
+        "type": "integer",
+        "nullable": false
+      },
+      "lap": {
+        "source": "lap",
+        "type": "integer",
+        "nullable": false
+      },
+      "position": {
+        "source": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      "time": {
+        "source": "time",
+        "type": "text",
+        "nullable": false
+      },
+      "milliseconds": {
+        "source": "milliseconds",
+        "type": "integer",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "race_id",
+      "driver_id",
+      "lap"
+    ],
+    "foreign_keys": [
+      {
+        "column": "race_id",
+        "references": "races.race_id"
+      },
+      {
+        "column": "driver_id",
+        "references": "drivers.driver_id"
+      }
+    ]
+  },
+  "pit_stops": {
+    "columns": {
+      "race_id": {
+        "source": "raceId",
+        "type": "integer",
+        "nullable": false
+      },
+      "driver_id": {
+        "source": "driverId",
+        "type": "integer",
+        "nullable": false
+      },
+      "stop": {
+        "source": "stop",
+        "type": "integer",
+        "nullable": false
+      },
+      "lap": {
+        "source": "lap",
+        "type": "integer",
+        "nullable": false
+      },
+      "time": {
+        "source": "time",
+        "type": "text",
+        "nullable": false
+      },
+      "duration": {
+        "source": "duration",
+        "type": "text",
+        "nullable": false
+      },
+      "milliseconds": {
+        "source": "milliseconds",
+        "type": "integer",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "race_id",
+      "driver_id",
+      "stop"
+    ],
+    "foreign_keys": [
+      {
+        "column": "race_id",
+        "references": "races.race_id"
+      },
+      {
+        "column": "driver_id",
+        "references": "drivers.driver_id"
+      }
+    ]
+  },
+  "sprint_results": {
+    "columns": {
+      "result_id": {
+        "source": "resultId",
+        "type": "integer",
+        "nullable": false
+      },
+      "race_id": {
+        "source": "raceId",
+        "type": "integer",
+        "nullable": false
+      },
+      "driver_id": {
+        "source": "driverId",
+        "type": "integer",
+        "nullable": false
+      },
+      "constructor_id": {
+        "source": "constructorId",
+        "type": "integer",
+        "nullable": false
+      },
+      "number": {
+        "source": "number",
+        "type": "integer",
+        "nullable": false
+      },
+      "grid": {
+        "source": "grid",
+        "type": "integer",
+        "nullable": false
+      },
+      "position": {
+        "source": "position",
+        "type": "integer",
+        "nullable": true
+      },
+      "position_text": {
+        "source": "positionText",
+        "type": "text",
+        "nullable": false
+      },
+      "position_order": {
+        "source": "positionOrder",
+        "type": "integer",
+        "nullable": false
+      },
+      "points": {
+        "source": "points",
+        "type": "integer",
+        "nullable": false
+      },
+      "laps": {
+        "source": "laps",
+        "type": "integer",
+        "nullable": false
+      },
+      "time": {
+        "source": "time",
+        "type": "text",
+        "nullable": true
+      },
+      "milliseconds": {
+        "source": "milliseconds",
+        "type": "integer",
+        "nullable": true
+      },
+      "fastest_lap": {
+        "source": "fastestLap",
+        "type": "integer",
+        "nullable": true
+      },
+      "fastest_lap_time": {
+        "source": "fastestLapTime",
+        "type": "text",
+        "nullable": true
+      },
+      "status_id": {
+        "source": "statusId",
+        "type": "integer",
+        "nullable": false
+      }
+    },
+    "primary_key": [
+      "result_id"
+    ],
+    "foreign_keys": [
+      {
+        "column": "race_id",
+        "references": "races.race_id"
+      },
+      {
+        "column": "driver_id",
+        "references": "drivers.driver_id"
+      },
+      {
+        "column": "constructor_id",
+        "references": "constructors.constructor_id"
+      },
+      {
+        "column": "status_id",
+        "references": "status.status_id"
+      }
+    ]
+  }
+}
