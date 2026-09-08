@@ -17,3 +17,7 @@ Implemented season/race navigation, final recorded standings, qualifying, separa
 ## 2026-09-08 — Historical frontend
 
 Implemented real API-backed React season, race, driver and constructor views with URL navigation, loading/error/empty states and responsive timing tables. Production build passed and three API-client tests passed. Browser verification loaded the 2024 standings, followed the Monaco weekend, checked 20 result rows, switched to qualifying and opened Charles Leclerc's profile. Inspected desktop and 390px screenshots; mobile document width remained 390px and tables scroll internally. No Vite overlay or browser errors were observed. Initial browser attempt failed because development servers had stopped between user turns; restarting them resolved it. No model or chat claims were added to this milestone.
+
+## 2026-09-08 — Measured baseline and GitHub connection
+
+Executed grid-only logistic regression on 2010–2018 with 2019–2021 validation. Saved actual metrics (log loss 0.246224, top-three hit rate 0.716667), the local model and experiment registry. Seventeen tests passed, including outcome mutation invariance, temporal separation, deterministic training and metric semantics. Final test not evaluated. User announced a GitHub F1 repository; found and verified empty `rayyanpasha89/F1`, connected origin and pushed the four earlier commits without rewriting history.
