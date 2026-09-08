@@ -9,6 +9,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 from backend.database import make_engine
+from backend.ml.predictor import Predictor, PredictionUnavailable
 from backend.services.analytics import Analytics, NotFound
 
 logger = logging.getLogger(__name__)
@@ -21,6 +22,7 @@ class Rows(BaseModel):
 def create_app(engine=None):
     db = engine or make_engine()
     analytics = Analytics(db)
+    predictor = Predictor(db)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -43,6 +45,15 @@ def create_app(engine=None):
                 "detail": "Database unavailable; verify ingestion and connection configuration."
             },
         )
+
+    @app.exception_handler(PredictionUnavailable)
+    async def prediction_error(request: Request, exc: PredictionUnavailable):
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+
+    @app.get("/api/predictions/{race_id}")
+    def prediction(race_id: int):
+        analytics.race(race_id)
+        return predictor.predict(race_id)
 
     @app.get("/api/health")
     def health():

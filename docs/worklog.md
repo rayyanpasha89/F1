@@ -29,3 +29,7 @@ Added date-batched history generation and driver/team/circuit/career features. T
 ## 2026-09-08 — Calibration selection frozen
 
 Executed training-only out-of-fold sigmoid calibration and clean H3/H4 ablations. Calibration slightly improved validation log loss (0.209557). Recent podium rate alone did not beat career podium rate; circuit history modestly improved the controlled team-feature comparison. Documented both results without claiming universal hypothesis success. Selection is now frozen before opening the final test. Added SHAP dependency for genuine tree explanations; explanations have not yet been claimed as verified.
+
+## 2026-09-08 — Final evaluation and explainable inference
+
+Executed reserved 2022–2024 evaluation after calibration-selection commit. Reported probability-score gains and the slight top-three hit-rate decline honestly. Verified SHAP reconstruction across held-out rows and API inference. Added race prediction UI with baseline comparison, all model factors and explicit reference units. Twenty-two Python tests, three frontend tests and production build passed. Browser loaded 20 Monaco predictions and a real Leclerc 76.4% explanation; inspected the full-page screenshot and observed no browser errors. Earlier training/selection races are refused by the prediction API. No AWS resources created.

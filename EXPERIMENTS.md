@@ -32,3 +32,7 @@ Executed `python -m scripts.check_calibration`. Sigmoid calibration was fitted o
 Clean H3 ablation: grid + recent podium rate gives log loss 0.229013 versus grid + career rate 0.228719. Thus recent podium rate alone did NOT beat career rate on this validation period. Additional recent finish/nonfinish signals in EXP-002 account for a different comparison. Clean H4 ablation: team feature set 0.226373 versus same set + circuit history 0.225183, modest support for circuit history in this configuration. These are descriptive validation comparisons with no confidence intervals.
 
 Final selected artifact: EXP-007 boosting with training-OOF sigmoid calibration, fit years 2010–2018 and selection years 2019–2021. Test remains unopened in this commit. The selected parameters are frozen in `reports/model_selection.json` before final evaluation.
+
+## Final test — frozen model evaluation
+
+Executed `python -m scripts.evaluate_final` after selection was committed. Test 2022–2024: calibrated boosting log loss 0.219846 vs baseline 0.249898, Brier 0.069285 vs 0.073811, ROC-AUC 0.935364 vs 0.913827. Top-three hit rate 0.647059 is slightly below baseline 0.651961; exact podium set is equal at 0.161765. The model remains selected under the predeclared validation log-loss rule. Full per-season, calibration, provenance and SHAP summaries are saved in `reports/`. This test is now consumed and must not be described as untouched in later tuning.

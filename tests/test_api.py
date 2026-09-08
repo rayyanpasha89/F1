@@ -63,3 +63,15 @@ def test_bad_input_and_safe_database_error(client):
         response = empty.get("/api/health")
         assert response.status_code == 503
         assert "SELECT" not in response.text
+
+
+def test_real_prediction_endpoint_and_training_era_refusal(client):
+    if not Path("models/podium_model.joblib").exists():
+        pytest.skip("Trained artifact required")
+    race_id = client.get("/api/races?year=2024").json()["data"][-1]["race_id"]
+    response = client.get(f"/api/predictions/{race_id}")
+    assert response.status_code == 200
+    assert len(response.json()["predictions"]) == 20
+    earlier = client.get("/api/races?year=2018").json()["data"][0]["race_id"]
+    assert client.get(f"/api/predictions/{earlier}").status_code == 422
+    assert client.get("/api/predictions/-1").status_code == 404

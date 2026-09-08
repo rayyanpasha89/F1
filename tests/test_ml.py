@@ -106,3 +106,32 @@ def test_features_ignore_input_order_and_handle_debutants():
         "position_order",
         "podium",
     }
+
+
+def test_real_shap_explanations_reconstruct_model_probability():
+    import pytest
+    from pathlib import Path
+    from scipy.special import expit
+    from backend.database import make_engine
+    from backend.ml.predictor import Predictor, PredictionUnavailable
+
+    if not Path("models/podium_model.joblib").exists() or not Path("database/f1.db").exists():
+        pytest.skip("Trained artifacts required")
+    predictor = Predictor(make_engine())
+    frame = predictor.frame()
+    race_id = int(frame.loc[frame.year == 2024, "race_id"].iloc[-1])
+    result = predictor.predict(race_id)
+    assert len(result["predictions"]) == 20
+    for row in result["predictions"]:
+        assert 0 <= row["probability"] <= 1
+        assert (
+            abs(
+                expit(
+                    row["base_log_odds"] + sum(f["log_odds_contribution"] for f in row["factors"])
+                )
+                - row["probability"]
+            )
+            < 1e-7
+        )
+    with pytest.raises(PredictionUnavailable):
+        predictor.predict(int(frame.loc[frame.year == 2018, "race_id"].iloc[0]))

@@ -1,0 +1,68 @@
+{
+  "test": [
+    {
+      "lower": 0.0,
+      "upper": 0.1,
+      "count": 950,
+      "mean_probability": 0.01497163508124082,
+      "observed_rate": 0.014736842105263158
+    },
+    {
+      "lower": 0.1,
+      "upper": 0.2,
+      "count": 83,
+      "mean_probability": 0.14173221435809646,
+      "observed_rate": 0.18072289156626506
+    },
+    {
+      "lower": 0.2,
+      "upper": 0.30000000000000004,
+      "count": 47,
+      "mean_probability": 0.2553303155119024,
+      "observed_rate": 0.2978723404255319
+    },
+    {
+      "lower": 0.30000000000000004,
+      "upper": 0.4,
+      "count": 56,
+      "mean_probability": 0.3497187878765899,
+      "observed_rate": 0.375
+    },
+    {
+      "lower": 0.4,
+      "upper": 0.5,
+      "count": 49,
+      "mean_probability": 0.44435951893412057,
+      "observed_rate": 0.3469387755102041
+    },
+    {
+      "lower": 0.5,
+      "upper": 0.6,
+      "count": 40,
+      "mean_probability": 0.5563609463638206,
+      "observed_rate": 0.55
+    },
+    {
+      "lower": 0.6000000000000001,
+      "upper": 0.7000000000000001,
+      "count": 28,
+      "mean_probability": 0.6421968359017969,
+      "observed_rate": 0.5714285714285714
+    },
+    {
+      "lower": 0.7000000000000001,
+      "upper": 0.8,
+      "count": 61,
+      "mean_probability": 0.741143944076382,
+      "observed_rate": 0.8032786885245902
+    },
+    {
+      "lower": 0.8,
+      "upper": 0.9,
+      "count": 45,
+      "mean_probability": 0.848002050895007,
+      "observed_rate": 0.8
+    }
+  ],
+  "ece": 0.014594834418321843
+}
