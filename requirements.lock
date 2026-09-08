@@ -11,7 +11,9 @@ httpx==0.28.1
 idna==3.19
 iniconfig==2.3.0
 joblib==1.6.0
+llvmlite==0.49.0
 narwhals==2.25.0
+numba==0.67.0
 numpy==2.4.6
 packaging==26.3
 pandas==2.3.3
@@ -27,11 +29,14 @@ pytz==2026.3.post1
 ruff==0.16.6
 scikit-learn==1.9.0
 scipy==1.17.1
+shap==0.51.0
 six==1.17.0
+slicer==0.0.8
 SQLAlchemy==2.0.52
 sqlglot==28.10.1
 starlette==1.6.0
 threadpoolctl==3.6.0
+tqdm==4.70.0
 typing-inspection==0.4.4
 typing_extensions==4.16.0
 tzdata==2026.3

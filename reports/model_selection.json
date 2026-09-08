@@ -21,6 +21,10 @@
     2022,
     2024
   ],
-  "selection_rule": "Lowest validation log loss, Brier tie-breaker; test not evaluated",
-  "frozen_at": "2026-09-08T10:34:13.980358+00:00"
+  "calibration": {
+    "slope": 1.1117370012197019,
+    "intercept": 0.16146366373559082,
+    "method": "temporal training OOF sigmoid"
+  },
+  "selection_frozen_at": "2026-09-08T10:35:42.927103+00:00"
 }

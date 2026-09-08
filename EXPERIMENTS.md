@@ -24,3 +24,11 @@ Executed `python -m scripts.compare_models`; detailed metrics and timestamps are
 | EXP-009 | Gradient boosting / full | 2014–2018 | 0.211740 |
 
 All use validation 2019–2021. H2: adding constructor form reduced log loss slightly (EXP-002 → 003). H3: recent-driver features beat grid + career on log loss, but not on Brier; evidence depends on the metric and is not a clean single-feature comparison. H4: full features add both circuit and career, so EXP-003 → 004 does not isolate circuit alone; a circuit-only ablation remains necessary. Modern shorter training did not improve the tested full models. EXP-007 is selected before final-test evaluation; calibration checks may still select a transformed version using validation only. No hypothesis significance test or causal conclusion is claimed.
+
+## Calibration and isolated hypotheses — before final test
+
+Executed `python -m scripts.check_calibration`. Sigmoid calibration was fitted on training-only temporal out-of-fold margins (fit through 2014 → 2015–2016; fit through 2016 → 2017–2018). The deployment base model remains fit on 2010–2018. Validation log loss improved slightly from 0.209820 to 0.209557, so sigmoid calibration was selected. The small difference should not be overstated. Parameters, reliability bins and timestamps are in `reports/calibration_selection.json`.
+
+Clean H3 ablation: grid + recent podium rate gives log loss 0.229013 versus grid + career rate 0.228719. Thus recent podium rate alone did NOT beat career rate on this validation period. Additional recent finish/nonfinish signals in EXP-002 account for a different comparison. Clean H4 ablation: team feature set 0.226373 versus same set + circuit history 0.225183, modest support for circuit history in this configuration. These are descriptive validation comparisons with no confidence intervals.
+
+Final selected artifact: EXP-007 boosting with training-OOF sigmoid calibration, fit years 2010–2018 and selection years 2019–2021. Test remains unopened in this commit. The selected parameters are frozen in `reports/model_selection.json` before final evaluation.

@@ -1,0 +1,186 @@
+{
+  "executed_at": "2026-09-08T10:35:42.927103+00:00",
+  "training_oof_years": [
+    [
+      2015,
+      2016
+    ],
+    [
+      2017,
+      2018
+    ]
+  ],
+  "validation_years": [
+    2019,
+    2021
+  ],
+  "slope": 1.1117370012197019,
+  "intercept": 0.16146366373559082,
+  "raw": {
+    "rows": 1200,
+    "races": 60,
+    "positive_rate": 0.15,
+    "precision": 0.754601226993865,
+    "recall": 0.6833333333333333,
+    "f1": 0.717201166180758,
+    "roc_auc": 0.9395261437908498,
+    "log_loss": 0.20982020295680906,
+    "brier_score": 0.06244382242533594,
+    "top3_hit_rate": 0.7277777777777777,
+    "exact_podium_set_rate": 0.38333333333333336,
+    "ece_10_bins": 0.013432270907483692,
+    "calibration_bins": [
+      {
+        "lower": 0.0,
+        "upper": 0.1,
+        "count": 878,
+        "mean_probability": 0.01927277520689101,
+        "observed_rate": 0.018223234624145785
+      },
+      {
+        "lower": 0.1,
+        "upper": 0.2,
+        "count": 68,
+        "mean_probability": 0.14169258074315297,
+        "observed_rate": 0.16176470588235295
+      },
+      {
+        "lower": 0.2,
+        "upper": 0.30000000000000004,
+        "count": 25,
+        "mean_probability": 0.25515593728029445,
+        "observed_rate": 0.2
+      },
+      {
+        "lower": 0.30000000000000004,
+        "upper": 0.4,
+        "count": 41,
+        "mean_probability": 0.34695631093877966,
+        "observed_rate": 0.36585365853658536
+      },
+      {
+        "lower": 0.4,
+        "upper": 0.5,
+        "count": 25,
+        "mean_probability": 0.447169399186785,
+        "observed_rate": 0.4
+      },
+      {
+        "lower": 0.5,
+        "upper": 0.6,
+        "count": 39,
+        "mean_probability": 0.552562483381093,
+        "observed_rate": 0.717948717948718
+      },
+      {
+        "lower": 0.6000000000000001,
+        "upper": 0.7000000000000001,
+        "count": 33,
+        "mean_probability": 0.6629842943552131,
+        "observed_rate": 0.7575757575757576
+      },
+      {
+        "lower": 0.7000000000000001,
+        "upper": 0.8,
+        "count": 53,
+        "mean_probability": 0.7434143044428598,
+        "observed_rate": 0.7358490566037735
+      },
+      {
+        "lower": 0.8,
+        "upper": 0.9,
+        "count": 38,
+        "mean_probability": 0.8296542030208051,
+        "observed_rate": 0.8157894736842105
+      }
+    ]
+  },
+  "sigmoid": {
+    "rows": 1200,
+    "races": 60,
+    "positive_rate": 0.15,
+    "precision": 0.7441860465116279,
+    "recall": 0.7111111111111111,
+    "f1": 0.7272727272727273,
+    "roc_auc": 0.9395261437908498,
+    "log_loss": 0.2095571154139735,
+    "brier_score": 0.06217250144651866,
+    "top3_hit_rate": 0.7277777777777777,
+    "exact_podium_set_rate": 0.38333333333333336,
+    "ece_10_bins": 0.0204065222619551,
+    "calibration_bins": [
+      {
+        "lower": 0.0,
+        "upper": 0.1,
+        "count": 883,
+        "mean_probability": 0.01573683968697201,
+        "observed_rate": 0.01812004530011325
+      },
+      {
+        "lower": 0.1,
+        "upper": 0.2,
+        "count": 62,
+        "mean_probability": 0.13944803991040902,
+        "observed_rate": 0.1774193548387097
+      },
+      {
+        "lower": 0.2,
+        "upper": 0.30000000000000004,
+        "count": 24,
+        "mean_probability": 0.25684434656923066,
+        "observed_rate": 0.16666666666666666
+      },
+      {
+        "lower": 0.30000000000000004,
+        "upper": 0.4,
+        "count": 32,
+        "mean_probability": 0.34908452528263006,
+        "observed_rate": 0.375
+      },
+      {
+        "lower": 0.4,
+        "upper": 0.5,
+        "count": 27,
+        "mean_probability": 0.4404622142579092,
+        "observed_rate": 0.3333333333333333
+      },
+      {
+        "lower": 0.5,
+        "upper": 0.6,
+        "count": 29,
+        "mean_probability": 0.5546016213496107,
+        "observed_rate": 0.6896551724137931
+      },
+      {
+        "lower": 0.6000000000000001,
+        "upper": 0.7000000000000001,
+        "count": 32,
+        "mean_probability": 0.6490172089606587,
+        "observed_rate": 0.75
+      },
+      {
+        "lower": 0.7000000000000001,
+        "upper": 0.8,
+        "count": 51,
+        "mean_probability": 0.756538854658955,
+        "observed_rate": 0.6470588235294118
+      },
+      {
+        "lower": 0.8,
+        "upper": 0.9,
+        "count": 58,
+        "mean_probability": 0.8519403460828405,
+        "observed_rate": 0.8620689655172413
+      },
+      {
+        "lower": 0.9,
+        "upper": 1.0,
+        "count": 2,
+        "mean_probability": 0.9121257649423373,
+        "observed_rate": 0.5
+      }
+    ]
+  },
+  "selected_sigmoid": true,
+  "test_status": "not evaluated"
+}
