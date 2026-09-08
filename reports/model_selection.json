@@ -1,0 +1,26 @@
+{
+  "features": [
+    "grid_position",
+    "driver_recent_podium",
+    "driver_recent_finish",
+    "driver_recent_dnf",
+    "constructor_recent_podium",
+    "driver_circuit_podium",
+    "driver_career_podium"
+  ],
+  "experiment_id": "EXP-007",
+  "training_years": [
+    2010,
+    2018
+  ],
+  "selection_years": [
+    2019,
+    2021
+  ],
+  "inference_years": [
+    2022,
+    2024
+  ],
+  "selection_rule": "Lowest validation log loss, Brier tie-breaker; test not evaluated",
+  "frozen_at": "2026-09-08T10:34:13.980358+00:00"
+}

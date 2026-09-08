@@ -21,3 +21,7 @@ Implemented real API-backed React season, race, driver and constructor views wit
 ## 2026-09-08 — Measured baseline and GitHub connection
 
 Executed grid-only logistic regression on 2010–2018 with 2019–2021 validation. Saved actual metrics (log loss 0.246224, top-three hit rate 0.716667), the local model and experiment registry. Seventeen tests passed, including outcome mutation invariance, temporal separation, deterministic training and metric semantics. Final test not evaluated. User announced a GitHub F1 repository; found and verified empty `rayyanpasha89/F1`, connected origin and pushed the four earlier commits without rewriting history.
+
+## 2026-09-08 — Historical features and model comparison
+
+Added date-batched history generation and driver/team/circuit/career features. Twenty tests passed, including future and same-date outcome mutation, teammate leakage, shuffled input order, and debutant defaults. Executed eight additional experiments using only 2019–2021 validation for selection. Gradient boosting EXP-007 obtained validation log loss 0.209820 versus baseline 0.246224. Wrote actual experiment records and froze this provisional selection before final-test access. Identified that circuit contribution still needs a separate ablation; no isolated H4 success is claimed yet.

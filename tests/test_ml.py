@@ -58,3 +58,51 @@ def test_top_three_metric_definition():
     assert score["top3_hit_rate"] == 1
     assert score["exact_podium_set_rate"] == 1
     assert sum(b["count"] for b in score["calibration_bins"]) == 6
+
+
+def test_same_race_and_future_outcome_mutations_leave_past_features_unchanged():
+    from backend.ml.features import build_features, FEATURE_SETS
+
+    source = fixture_frame()
+    a = build_features(source)
+    source.loc[source.year >= 2022, ["position", "position_order", "points"]] = [20, 20, 0]
+    source.loc[source.year >= 2022, "status_name"] = "Engine"
+    b = build_features(source)
+    cols = FEATURE_SETS["full"]
+    pd.testing.assert_frame_equal(a.loc[a.year <= 2022, cols], b.loc[b.year <= 2022, cols])
+    assert not a.loc[a.year == 2023, "driver_recent_podium"].equals(
+        b.loc[b.year == 2023, "driver_recent_podium"]
+    )
+
+
+def test_teammate_and_same_day_outcomes_do_not_leak():
+    from backend.ml.features import build_features, FEATURE_SETS
+
+    source = fixture_frame()
+    source.loc[source.year == 2021, "date"] = "2020-03-01"
+    a = build_features(source)
+    changed = source.copy()
+    changed.loc[changed.year == 2020, "position"] = 20
+    b = build_features(changed)
+    pd.testing.assert_frame_equal(
+        a.loc[a.date <= "2020-03-01", FEATURE_SETS["full"]],
+        b.loc[b.date <= "2020-03-01", FEATURE_SETS["full"]],
+    )
+
+
+def test_features_ignore_input_order_and_handle_debutants():
+    from backend.ml.features import build_features, FEATURE_SETS
+
+    source = fixture_frame()
+    a = build_features(source)
+    b = build_features(source.sample(frac=1, random_state=2))
+    pd.testing.assert_frame_equal(a, b)
+    assert np.isfinite(a[FEATURE_SETS["full"]].to_numpy()).all()
+    assert a.iloc[0].history_races == 0
+    assert not set(FEATURE_SETS["full"]) & {
+        "position",
+        "points",
+        "status_name",
+        "position_order",
+        "podium",
+    }
