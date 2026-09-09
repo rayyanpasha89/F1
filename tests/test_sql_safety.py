@@ -97,3 +97,14 @@ def test_every_reference_query_is_supported_by_sql_policy():
     for case in json.loads(Path("tests/nl2sql/questions.json").read_text()):
         if "gold_sql" in case:
             assert validate_sql(case["gold_sql"])
+
+
+def test_detail_cte_must_feed_an_aggregated_final_result():
+    valid = "WITH p AS (SELECT race_id,milliseconds FROM pit_stops) SELECT race_id,AVG(milliseconds) FROM p GROUP BY race_id"
+    assert validate_sql(valid)
+    with pytest.raises(UnsafeQuery):
+        validate_sql("WITH p AS (SELECT * FROM pit_stops) SELECT * FROM p")
+    with pytest.raises(UnsafeQuery):
+        validate_sql(
+            "WITH p AS (SELECT * FROM pit_stops) SELECT p.*, (SELECT COUNT(*) FROM races) FROM p"
+        )

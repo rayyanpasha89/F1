@@ -61,3 +61,7 @@ The test command preceding commit 3760daa failed because the synthetic two-row r
 ## 2026-09-09 — Third benchmark and verified sprint semantics
 
 Run 03 passed 39/40 checks (29/30 analytics and 10/10 refusals); all 30 analytics queries executed. The remaining failure used constructor_results.points for explicitly sprint-excluded points. Investigated the source: all 180 constructor/race rows with sprint records in 2021–2024 equal main-race plus sprint points. Added this verified semantic distinction to grounding/routing and a regression test. Preserved Run 03 without rewriting its failed answer. This fixed-suite iteration is development evaluation, not an unseen generalization estimate.
+
+## 2026-09-09 — Fourth benchmark and aggregated CTE support
+
+Run 04 retained 39/40 checks, with the sprint-excluded points answer now correct. One otherwise valid deep pit-stop query was rejected because it selected detail in a CTE before aggregating in the outer SELECT. Updated the policy to allow this bounded pattern while continuing to reject raw final outputs and scalar-subquery attempts to disguise raw dumps. Added regression tests; all 33 SQL safety tests passed. Run 04 remains preserved with its rejection.

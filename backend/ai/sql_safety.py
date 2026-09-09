@@ -101,12 +101,15 @@ def validate_sql(sql, dialect="sqlite"):
         )
         if name not in ALLOWED_FUNCTIONS:
             raise UnsafeQuery(f"Function {name} is outside the supported analytics functions.")
+    outer_aggregates = isinstance(tree, exp.Select) and any(
+        agg.find_ancestor(exp.Select) is tree for agg in tree.find_all(exp.AggFunc)
+    )
     for select in tree.find_all(exp.Select):
         direct_tables = [
             t for t in select.find_all(exp.Table) if t.find_ancestor(exp.Select) is select
         ]
         if any(t.name in {"lap_times", "pit_stops"} for t in direct_tables):
-            if not any(
+            if not outer_aggregates and not any(
                 expression.find(exp.AggFunc) or isinstance(expression, exp.AggFunc)
                 for expression in select.expressions
             ):
