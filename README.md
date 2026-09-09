@@ -1,16 +1,18 @@
 # F1 Race Strategist
 
-An academic Formula 1 intelligence application with historical dashboards and genuine, explainable podium predictions. Built progressively with tested Git milestones. **In development: LLM chat and AWS deployment are not complete.**
+An academic Formula 1 intelligence application with historical dashboards and genuine, explainable podium predictions. Built progressively with tested Git milestones. **Local application and live Bedrock chat are verified. AWS deployment is in progress; see `docs/worklog.md` for the current checkpoint.**
 
 ## Implemented
 
 - Audited 14-table CSV snapshot: 701,433 rows, 1950–2024; source checksums, missingness, key checks and yearly coverage.
-- Transactional SQLite ingestion with SQLAlchemy metadata, enforced relationships and indexes.
+- Transactional SQLite/PostgreSQL ingestion with SQLAlchemy metadata, enforced relationships and indexes; both engines verified with the supplied data.
 - FastAPI season/race endpoints, recorded standings, driver/constructor profiles, qualifying, grid, results and pit summaries.
 - React historical navigation with responsive tables and loading/error/empty states; real API data throughout.
 - Measured grid-only logistic baseline and feature/model experiments with chronological validation.
 - Frozen calibrated gradient boosting predictor for historical 2022–2024 races, with actual SHAP explanations and baseline comparison.
-- SQL safety foundation: parser policy, read-only SQLite execution, row caps, timeouts and destructive-query rejection. This is not yet an LLM chat system.
+- Bedrock `openai.gpt-oss-120b` chat with separate intent/SQL stages, database-derived entity grounding, visible executed SQL, genuine prediction routing and unsupported-data refusals.
+- Parser policy, read-only database access, 200-row caps, query timeouts, destructive-query rejection and optional chat access code.
+- Four executed reproducibility notebooks, fixed 40-question live benchmark and passing GitHub Python/frontend CI.
 
 ## Local setup
 
@@ -45,6 +47,8 @@ uvicorn backend.main:app --host 127.0.0.1 --port 8000
 npm run dev --prefix frontend
 ```
 
+Copy `.env.example` to `.env` and supply the AWS Bedrock Mantle key/base URL/project ID for chat; credentials stay server-side. The model is `openai.gpt-oss-120b`. Set `CHAT_ACCESS_CODE` to protect billable calls when sharing the app. PostgreSQL chat additionally requires `SQL_READONLY_DATABASE_URL` pointing to a SELECT-only role.
+
 Open `http://127.0.0.1:5173`. FastAPI documentation is at `http://127.0.0.1:8000/docs`. Vite proxies `/api` to the local backend. Data are historical; there is no live feed. Select 2024, open Monaco, compare results/grid/qualifying, then select a driver in the probability panel to see SHAP factors. Predictions for pre-2022 races are intentionally unavailable because those years overlap fit/selection.
 
 ## Tests and evidence
@@ -57,11 +61,11 @@ npm test --prefix frontend
 npm run build --prefix frontend
 ```
 
-At this checkpoint, 52 Python tests and 3 frontend tests pass. Some source/model integration tests skip when local artifacts are absent; a lightweight clone-only test run is not full data/ML verification. Two upstream TestClient deprecation warnings are recorded. Browser checks exercised standings → Monaco → qualifying → driver profile and the real prediction panel, including a 390px viewport.
+At this checkpoint, 67 Python tests and 5 frontend tests pass; three additional opt-in PostgreSQL integration tests passed against the isolated local database. Some source/model integration tests skip when local artifacts are absent; a lightweight clone-only test run is not full data/ML verification. Five upstream TestClient/SHAP deprecation warnings are recorded. Browser checks exercised standings → Monaco → qualifying → driver profile and the real prediction panel, including a 390px viewport.
 
 ## Architecture
 
-CSV → validated relational storage → FastAPI analytics / chronological feature pipeline → frozen ML model → React views. The SQL safety module will sit between the future schema-grounded LLM generator and a separate read-only connection. Production ML logic lives in Python modules, not notebooks. Model artifacts must be locally generated or trusted: joblib files are not safe to load from untrusted uploads.
+CSV → validated relational storage → FastAPI analytics / chronological feature pipeline → frozen ML model → React views. Statistics route through schema/terminology-grounded Bedrock SQL generation, parser validation and a separate read-only connection. Prediction/explanation questions call the frozen model directly. Unsupported requests return a capability-based refusal. Factual answers are rendered from executed rows or model outputs, not invented narrative statistics. Production ML logic lives in Python modules, not notebooks. Model artifacts must be locally generated or trusted: joblib files are not safe to load from untrusted uploads.
 
 The executable schema is `backend/database.py` with committed `knowledge/schema.json`; SQL DDL is in `database/schema.sql`. Backend queries are centralized in `backend/services/analytics.py`. Dataset details: `docs/data_audit.md`. Decisions: `docs/decisions/`. Engineering history: `docs/worklog.md`. AI disclosure: `AI_ASSISTANCE.md`.
 
@@ -82,6 +86,15 @@ Probability scores improved; top-three hit rate did not. No universal superiorit
 
 The dataset lacks weather, tyres and telemetry. Coverage of qualifying/laps/pits varies. Historical results include repeated driver/race records; final standings cannot be replaced by simple points sums. Historical grids may reflect later corrections; original point-in-time provenance is unavailable. Independent podium probabilities need not sum to three. No betting or live race functionality is implemented.
 
-Still pending: configured LLM provider/model and live NL2SQL integration; 30–50-question benchmark; grounded chat routing/UI; executed evidence notebooks; CI; PostgreSQL runtime verification; containerization; Terraform; AWS deployment and cloud verification; final adversarial review. No chat benchmark, cloud deployment or completed-project claim is made.
+The fixed NL2SQL suite contains 30 analytics questions and 10 refusal cases. Live run 05 passed 40/40 after four preserved diagnostic/development runs; mean latency across all cases was 3.707 seconds. This is an iteratively used development suite, not an unseen generalization estimate. Answer scoring checks row multisets and positional columns with numerical tolerance; it does not score row ordering. Join-table/key checks are structural proxies. Full reports preserve failures and generated SQL. Reproduce with a new output path (billable):
 
-AWS is the only production target: S3/CloudFront, ECR/ECS Fargate, RDS PostgreSQL, Secrets Manager and CloudWatch. No AWS resources have been created or queried during these milestones. The intended non-Naaz account must be verified using explicit `--profile default` identity/configuration checks before any AWS mutation. First infrastructure deployment requires a concrete Terraform plan and cost review. The Naaz account must never be used.
+```sh
+python -m scripts.benchmark_nl2sql --output reports/nl2sql_new_run.json
+python -m scripts.execute_notebooks
+```
+
+Chat has two concurrent slots, six requests/minute per client and 200/day per process. Limits reset on restart; behind the internal load balancer clients may share a limit. The access code is the primary demo access control, not individual user authentication. Browser chat history lives in session storage; the code stays in memory. Model-supplied assumptions are displayed as assumptions, not validated facts.
+
+## AWS
+
+Terraform defines dedicated S3/CloudFront, internal ALB, ECR/ECS Fargate, private RDS PostgreSQL, Secrets Manager, CodeBuild and CloudWatch resources. Account is explicitly restricted to confirmed non-Naaz **148356747273**, profile **default**, region **eu-north-1**. The first reviewed plan has 49 additions and no changes/deletions; infrastructure creation is in progress. Do not infer cloud readiness from these definitions. Deployment procedure, rough $55–75/month dev cost, persistent charges, TLS boundaries, rollback and state limitations are in `docs/deployment.md` and ADR 005. Cloud verification and final adversarial review remain pending.

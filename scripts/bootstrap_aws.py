@@ -101,7 +101,7 @@ def main():
         database="f1",
         query=tls,
     ).render_as_string(hide_password=False)
-    runtime.update(DATABASE_URL=reader, NL2SQL_DATABASE_URL=reader)
+    runtime.update(DATABASE_URL=reader, SQL_READONLY_DATABASE_URL=reader)
     sm.put_secret_value(SecretId=os.environ["F1_RUNTIME_SECRET"], SecretString=json.dumps(runtime))
     reader_engine = make_engine(reader)
     with reader_engine.connect() as conn:

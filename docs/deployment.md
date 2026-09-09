@@ -38,7 +38,7 @@ Pricing references: https://aws.amazon.com/fargate/pricing/ and https://aws.amaz
 
 Build input must be a clean committed Git archive with only trusted `models/*.joblib` added. Never package `.env`, state or raw CSVs into the image. Upload the separately audited source ZIP privately. Populate runtime secret from `.env` through the SDK without printing values, including a random `CHAT_ACCESS_CODE`. CodeBuild pushes the Git-SHA tag only after model import succeeds. Update Terraform image_tag, keeping desired_count=0; run bootstrap task and inspect its exit status/counts before setting desired_count=1. Bootstrap never drops tables; a populated database with wrong counts stops for investigation.
 
-Both DATABASE_URL and NL2SQL_DATABASE_URL must use the SELECT-only reader and `sslmode=verify-full` with the RDS CA bundle. OPENAI_API_KEY, OPENAI_BASE_URL, OPENAI_PROJECT_ID and OPENAI_MODEL are ECS secret references. Region is explicit. Upload frontend production assets, invalidate CloudFront, then verify health, analytics, predictions, statistics with visible SQL and unsupported refusal.
+Both DATABASE_URL and SQL_READONLY_DATABASE_URL must use the SELECT-only reader and `sslmode=verify-full` with the RDS CA bundle. OPENAI_API_KEY, OPENAI_BASE_URL, OPENAI_PROJECT_ID and OPENAI_MODEL are ECS secret references. Region is explicit. Upload frontend production assets, invalidate CloudFront, then verify health, analytics, predictions, statistics with visible SQL and unsupported refusal.
 
 ## Rollback and operations
 
