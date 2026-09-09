@@ -130,7 +130,7 @@ resource "aws_db_instance" "project" {
 
   identifier                      = local.name
   engine                          = "postgres"
-  engine_version                  = "16"
+  engine_version                  = "16.15"
   instance_class                  = "db.t4g.micro"
   allocated_storage               = 20
   max_allocated_storage           = 30

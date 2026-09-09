@@ -61,7 +61,7 @@ npm test --prefix frontend
 npm run build --prefix frontend
 ```
 
-At this checkpoint, 67 Python tests and 5 frontend tests pass; three additional opt-in PostgreSQL integration tests passed against the isolated local database. Some source/model integration tests skip when local artifacts are absent; a lightweight clone-only test run is not full data/ML verification. Five upstream TestClient/SHAP deprecation warnings are recorded. Browser checks exercised standings → Monaco → qualifying → driver profile and the real prediction panel, including a 390px viewport.
+At this checkpoint, 72 Python tests and 5 frontend tests pass; three additional opt-in PostgreSQL integration tests passed against the isolated local database. Some source/model integration tests skip when local artifacts are absent; a lightweight clone-only test run is not full data/ML verification. Five upstream TestClient/SHAP deprecation warnings are recorded. Browser checks exercised standings → Monaco → qualifying → driver profile and the real prediction panel, including a 390px viewport.
 
 ## Architecture
 
