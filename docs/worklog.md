@@ -57,3 +57,7 @@ Run 02: all 30 analytics SQL queries executed and all 10 refusals passed; 24/30 
 ### Correction to the grounding milestone
 
 The test command preceding commit 3760daa failed because the synthetic two-row races fixture lacked the newly required entity tables. The shell sequence continued to commit despite that failure; this was an execution-workflow error, not a passing-test milestone. No history was rewritten. Added empty synthetic entity tables to the fixture and reran the full suite: all 62 Python tests passed. Subsequent commits are issued in separate tool calls after inspecting test results to prevent fall-through. The live application database already had these tables.
+
+## 2026-09-09 — Third benchmark and verified sprint semantics
+
+Run 03 passed 39/40 checks (29/30 analytics and 10/10 refusals); all 30 analytics queries executed. The remaining failure used constructor_results.points for explicitly sprint-excluded points. Investigated the source: all 180 constructor/race rows with sprint records in 2021–2024 equal main-race plus sprint points. Added this verified semantic distinction to grounding/routing and a regression test. Preserved Run 03 without rewriting its failed answer. This fixed-suite iteration is development evaluation, not an unseen generalization estimate.

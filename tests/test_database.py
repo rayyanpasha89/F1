@@ -47,3 +47,26 @@ def test_ingestion_does_not_overwrite():
         pytest.skip("Local source required")
     with pytest.raises(ValueError, match="not empty"):
         ingest(make_engine(), Path("dataset"))
+
+
+def test_constructor_results_include_sprint_points_in_supplied_snapshot():
+    if not Path("database/f1.db").exists():
+        pytest.skip("Source integration requires ingestion")
+    with make_engine().connect() as conn:
+        race_points = conn.scalar(
+            text(
+                "SELECT SUM(points) FROM results JOIN races USING(race_id) WHERE constructor_id=6 AND year=2024"
+            )
+        )
+        sprint_points = conn.scalar(
+            text(
+                "SELECT SUM(points) FROM sprint_results JOIN races USING(race_id) WHERE constructor_id=6 AND year=2024"
+            )
+        )
+        constructor_points = conn.scalar(
+            text(
+                "SELECT SUM(points) FROM constructor_results JOIN races USING(race_id) WHERE constructor_id=6 AND year=2024"
+            )
+        )
+        assert sprint_points > 0
+        assert constructor_points == race_points + sprint_points
