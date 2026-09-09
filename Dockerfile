@@ -1,3 +1,10 @@
+FROM node:22-bookworm-slim AS frontend
+WORKDIR /web
+COPY frontend/package*.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
 FROM python:3.11-slim-bookworm
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 MPLCONFIGDIR=/tmp/matplotlib
 WORKDIR /app
@@ -11,6 +18,8 @@ COPY knowledge knowledge
 COPY scripts scripts
 COPY reports/data_audit.json reports/data_audit.json
 COPY models/*.joblib models/
+COPY --from=frontend /web/dist /app/web
+ENV WEB_DIST=/app/web
 USER app
 EXPOSE 8000
 CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-proxy-headers"]

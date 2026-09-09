@@ -6,3 +6,6 @@
 !scripts/**
 !reports/data_audit.json
 !models/*.joblib
+!frontend/**
+frontend/node_modules/
+frontend/dist/

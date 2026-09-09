@@ -132,6 +132,10 @@ def create_app(engine=None):
     def profile(kind: Literal["drivers", "constructors"], identifier: int, year: int | None = None):
         return analytics.profile(kind, identifier, year)
 
+    if os.environ.get("WEB_DIST"):
+        from backend.web import mount_web
+
+        mount_web(app, os.environ["WEB_DIST"])
     return app
 
 
