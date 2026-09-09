@@ -108,3 +108,16 @@ def test_detail_cte_must_feed_an_aggregated_final_result():
         validate_sql(
             "WITH p AS (SELECT * FROM pit_stops) SELECT p.*, (SELECT COUNT(*) FROM races) FROM p"
         )
+
+
+@pytest.mark.parametrize(
+    "sql",
+    [
+        "SELECT p.*, (SELECT COUNT(*) FROM races) FROM pit_stops p",
+        "SELECT p.*, COUNT(*) OVER () FROM pit_stops p",
+        "WITH p AS (SELECT * FROM pit_stops) SELECT p.*, COUNT(*) OVER () FROM p",
+    ],
+)
+def test_scalar_and_window_aggregates_do_not_disguise_raw_details(sql):
+    with pytest.raises(UnsafeQuery):
+        validate_sql(sql)
