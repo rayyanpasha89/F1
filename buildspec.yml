@@ -1,0 +1,14 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - test -n "$IMAGE_TAG"
+      - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin "${ECR_URL%%/*}"
+  build:
+    commands:
+      - docker build --tag "$ECR_URL:$IMAGE_TAG" .
+      - docker run --rm "$ECR_URL:$IMAGE_TAG" python -c "from backend.ml.predictor import load_artifacts; load_artifacts(); print('Model artifact import verified')"
+  post_build:
+    commands:
+      - test "$CODEBUILD_BUILD_SUCCEEDING" = 1
+      - docker push "$ECR_URL:$IMAGE_TAG"

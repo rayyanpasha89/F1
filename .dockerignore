@@ -1,0 +1,8 @@
+*
+!Dockerfile
+!requirements.runtime.lock
+!backend/**
+!knowledge/**
+!scripts/**
+!reports/data_audit.json
+!models/*.joblib
