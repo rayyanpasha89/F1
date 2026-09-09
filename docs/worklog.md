@@ -53,3 +53,7 @@ Executed all 40 fixed questions against Bedrock. Run 01 recorded 21/40 answer ch
 ## 2026-09-09 — Second live benchmark and semantic grounding
 
 Run 02: all 30 analytics SQL queries executed and all 10 refusals passed; 24/30 analytics matched the strict reference result shape, for 34/40 total. The six failures were one incorrect exact entity-name match (Monaco), two singular-superlative queries returning whole rankings, and three responses with extra label/ID columns. Some underlying values were right despite failing the fixed shape contract. Preserved both reports. Added database-derived entity-label retrieval and generic instructions for singular rankings, requested columns, complete GROUP BY columns and chronological ordering by date/round rather than race_id. No case-specific answer mappings were added.
+
+### Correction to the grounding milestone
+
+The test command preceding commit 3760daa failed because the synthetic two-row races fixture lacked the newly required entity tables. The shell sequence continued to commit despite that failure; this was an execution-workflow error, not a passing-test milestone. No history was rewritten. Added empty synthetic entity tables to the fixture and reran the full suite: all 62 Python tests passed. Subsequent commits are issued in separate tool calls after inspecting test results to prevent fall-through. The live application database already had these tables.

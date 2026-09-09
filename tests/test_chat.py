@@ -33,6 +33,15 @@ def test_statistics_answer_comes_from_executed_rows(tmp_path):
 
     path = tmp_path / "f1.db"
     with sqlite3.connect(path) as conn:
+        conn.execute(
+            "CREATE TABLE drivers(driver_id INTEGER,driver_ref TEXT,forename TEXT,surname TEXT)"
+        )
+        conn.execute(
+            "CREATE TABLE constructors(constructor_id INTEGER,constructor_ref TEXT,name TEXT)"
+        )
+        conn.execute(
+            "CREATE TABLE circuits(circuit_id INTEGER,circuit_ref TEXT,name TEXT,country TEXT)"
+        )
         conn.execute("CREATE TABLE races(race_id INTEGER,year INTEGER)")
         conn.executemany("INSERT INTO races VALUES(?,2024)", [(1,), (2,)])
     service = ChatService(
