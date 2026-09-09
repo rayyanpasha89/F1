@@ -1,0 +1,44 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "bytes": 407
+  },
+  {
+    "path": "/races/1128",
+    "status": 200,
+    "bytes": 407
+  },
+  {
+    "path": "/api/health",
+    "status": 200,
+    "bytes": 64
+  },
+  {
+    "path": "/api/seasons",
+    "status": 200,
+    "bytes": 1873
+  },
+  {
+    "path": "/api/standings/drivers/2024",
+    "status": 200,
+    "bytes": 4513
+  },
+  {
+    "path": "/api/races/1128/qualifying",
+    "status": 200,
+    "bytes": 4061
+  },
+  {
+    "path": "/api/profiles/drivers/844?year=2024",
+    "status": 200,
+    "bytes": 14903
+  },
+  {
+    "path": "/api/predictions/1128",
+    "status": 200,
+    "bytes": 16972,
+    "prediction_count": 20,
+    "leader": 844
+  }
+]

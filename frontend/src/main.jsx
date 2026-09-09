@@ -16,6 +16,7 @@ import '@fontsource/barlow-condensed/700.css';
 import './style.css';
 import { useApi } from './api';
 import Predictions from './Predictions';
+import DriverComparison from './DriverComparison';
 import StrategistChat from './StrategistChat';
 
 const fmt = (value) =>
@@ -310,6 +311,7 @@ function Race() {
               </p>
             </aside>
           </div>
+          <DriverComparison key={`comparison-${id}`} raceId={id} />
           <Predictions key={id} raceId={id} year={r.year} />
         </>
       )}
@@ -356,7 +358,31 @@ function Profile() {
           </p>
           <section>
             <div className="section-heading">
-              <h2>{year} results & recent form</h2>
+              <h2>Recent form · {year}</h2>
+              <span>Latest {p.recent_form.races} recorded race weekends</span>
+            </div>
+            <div className="stat-strip">
+              <div>
+                <b>{fmt(p.recent_form.race_points)}</b>
+                <span>Race points</span>
+              </div>
+              <div>
+                <b>{fmt(p.recent_form.podium_races)}</b>
+                <span>Races with a podium</span>
+              </div>
+              <div>
+                <b>{fmt(p.recent_form.average_classification)}</b>
+                <span>Average classification per entry</span>
+              </div>
+            </div>
+            <p className="caption">
+              Descriptive results for the selected season, including completed races. The prediction
+              model uses only earlier history.
+            </p>
+          </section>
+          <section>
+            <div className="section-heading">
+              <h2>{year} race results</h2>
               <span>Most recent first</span>
             </div>
             <Table

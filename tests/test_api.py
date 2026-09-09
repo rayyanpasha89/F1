@@ -43,6 +43,20 @@ def test_profiles_and_empty_coverage(client):
     assert client.get(f"/api/races/{race_id}/pit-stops").json() == {"data": []}
 
 
+def test_comparison_uses_only_earlier_form_and_valid_entrants(client):
+    result = client.get("/api/races/1128/comparison?driver_a=844&driver_b=830")
+    assert result.status_code == 200
+    data = result.json()
+    assert len(data["drivers"]) == 2
+    for driver in data["drivers"]:
+        assert driver["recent_starts"] == 5
+        assert all(r["date"] < data["race"]["date"] for r in driver["recent_races"])
+        assert all(r["race_id"] != 1128 for r in driver["recent_races"])
+        assert driver["recent_race_points"] == sum(r["points"] for r in driver["recent_races"])
+    assert client.get("/api/races/1128/comparison?driver_a=844&driver_b=844").status_code == 422
+    assert client.get("/api/races/1128/comparison?driver_a=844&driver_b=999999").status_code == 404
+
+
 @pytest.mark.parametrize(
     "url",
     [

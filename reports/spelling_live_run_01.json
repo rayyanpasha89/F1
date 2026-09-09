@@ -1,0 +1,301 @@
+{
+  "cases": [
+    {
+      "question": "How many race winns does Lewis Hamliton have?",
+      "expected": [
+        [
+          105
+        ]
+      ],
+      "passed": true,
+      "elapsed_seconds": 4.919,
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "wins: 105",
+        "result": {
+          "columns": [
+            "wins"
+          ],
+          "rows": [
+            [
+              105
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(DISTINCT r.race_id) AS wins FROM results AS r JOIN drivers AS d ON r.driver_id = d.driver_id WHERE LOWER(d.driver_ref) = 'hamilton' AND r.position = 1",
+          "elapsed_ms": 7.745
+        },
+        "sql": "SELECT COUNT(DISTINCT r.race_id) AS wins FROM results AS r JOIN drivers AS d ON r.driver_id = d.driver_id WHERE LOWER(d.driver_ref) = 'hamilton' AND r.position = 1",
+        "assumptions": [
+          "The driver_ref for Lewis Hamilton is stored as 'hamilton' in the drivers table.",
+          "A race win is indicated by results.position = 1 (the integer column).",
+          "Counting distinct race_id ensures each win is counted once even if duplicate result rows exist."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2023.363,
+            "usage": {
+              "completion_tokens": 206,
+              "prompt_tokens": 414,
+              "total_tokens": 620
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2852.362,
+            "usage": {
+              "completion_tokens": 352,
+              "prompt_tokens": 2664,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 48
+              },
+              "total_tokens": 3016
+            }
+          }
+        ],
+        "elapsed_ms": 4917.968,
+        "corrections": [
+          {
+            "original": "Hamliton",
+            "corrected": "hamilton"
+          }
+        ],
+        "interpreted_question": "How many race winns does Lewis hamilton have?"
+      }
+    },
+    {
+      "question": "How many podiums does Charles Leclrec have at Moncao?",
+      "expected": [
+        [
+          1
+        ]
+      ],
+      "passed": true,
+      "elapsed_seconds": 6.428,
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "podiums: 1",
+        "result": {
+          "columns": [
+            "podiums"
+          ],
+          "rows": [
+            [
+              1
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(*) AS podiums FROM results AS r JOIN drivers AS d ON r.driver_id = d.driver_id JOIN races AS ra ON r.race_id = ra.race_id JOIN circuits AS c ON ra.circuit_id = c.circuit_id WHERE d.driver_ref = 'leclerc' AND c.circuit_id = 6 AND NOT r.position IS NULL AND r.position BETWEEN 1 AND 3",
+          "elapsed_ms": 1.278
+        },
+        "sql": "SELECT COUNT(*) AS podiums FROM results AS r JOIN drivers AS d ON r.driver_id = d.driver_id JOIN races AS ra ON r.race_id = ra.race_id JOIN circuits AS c ON ra.circuit_id = c.circuit_id WHERE d.driver_ref = 'leclerc' AND c.circuit_id = 6 AND NOT r.position IS NULL AND r.position BETWEEN 1 AND 3",
+        "assumptions": [
+          "driver_ref 'leclerc' uniquely identifies Charles Leclerc (driver_id 844).",
+          "circuit_id 6 corresponds to the Monaco circuit (Circuit de Monaco).",
+          "Podium finishes are defined as a classified finishing position of 1, 2, or 3 in the results table.",
+          "Only main race results are considered; sprint results are excluded."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1970.268,
+            "usage": {
+              "completion_tokens": 216,
+              "prompt_tokens": 415,
+              "total_tokens": 631
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 4418.024,
+            "usage": {
+              "completion_tokens": 595,
+              "prompt_tokens": 3356,
+              "total_tokens": 3951
+            }
+          }
+        ],
+        "elapsed_ms": 6427.73,
+        "corrections": [
+          {
+            "original": "Leclrec",
+            "corrected": "leclerc"
+          },
+          {
+            "original": "Moncao",
+            "corrected": "monaco"
+          }
+        ],
+        "interpreted_question": "How many podiums does Charles leclerc have at monaco?"
+      }
+    },
+    {
+      "question": "How many wins did Michael Schumcher get for Ferarri?",
+      "expected": [
+        [
+          72
+        ]
+      ],
+      "passed": true,
+      "elapsed_seconds": 5.395,
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "win_count: 72",
+        "result": {
+          "columns": [
+            "win_count"
+          ],
+          "rows": [
+            [
+              72
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(*) AS win_count FROM results AS r JOIN drivers AS d ON r.driver_id = d.driver_id JOIN constructors AS c ON r.constructor_id = c.constructor_id WHERE d.driver_id = 30 AND c.constructor_id = 6 AND r.position = 1",
+          "elapsed_ms": 2.43
+        },
+        "sql": "SELECT COUNT(*) AS win_count FROM results AS r JOIN drivers AS d ON r.driver_id = d.driver_id JOIN constructors AS c ON r.constructor_id = c.constructor_id WHERE d.driver_id = 30 AND c.constructor_id = 6 AND r.position = 1",
+        "assumptions": [
+          "Michael Schumacher is identified by driver_id = 30.",
+          "Ferrari is identified by constructor_id = 6.",
+          "A win is defined as a result with position = 1."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2246.418,
+            "usage": {
+              "completion_tokens": 215,
+              "prompt_tokens": 414,
+              "total_tokens": 629
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 3109.166,
+            "usage": {
+              "completion_tokens": 371,
+              "prompt_tokens": 2979,
+              "total_tokens": 3350
+            }
+          }
+        ],
+        "elapsed_ms": 5394.467,
+        "corrections": [
+          {
+            "original": "Schumcher",
+            "corrected": "schumacher"
+          },
+          {
+            "original": "Ferarri",
+            "corrected": "ferrari"
+          }
+        ],
+        "interpreted_question": "How many wins did Michael schumacher get for ferrari?"
+      }
+    },
+    {
+      "question": "How many race wins does Max Verstapen have?",
+      "expected": [
+        [
+          63
+        ]
+      ],
+      "passed": true,
+      "elapsed_seconds": 4.882,
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "wins: 63",
+        "result": {
+          "columns": [
+            "wins"
+          ],
+          "rows": [
+            [
+              63
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(*) AS wins FROM results AS r JOIN drivers AS d ON r.driver_id = d.driver_id WHERE d.driver_id = 830 AND r.position = 1",
+          "elapsed_ms": 3.306
+        },
+        "sql": "SELECT COUNT(*) AS wins FROM results AS r JOIN drivers AS d ON r.driver_id = d.driver_id WHERE d.driver_id = 830 AND r.position = 1",
+        "assumptions": [
+          "All seasons from 1950 to 2024 are included.",
+          "Driver Max Verstappen is uniquely identified by driver_id = 830."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1733.353,
+            "usage": {
+              "completion_tokens": 150,
+              "prompt_tokens": 412,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 368
+              },
+              "total_tokens": 562
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 3115.036,
+            "usage": {
+              "completion_tokens": 351,
+              "prompt_tokens": 2676,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 256
+              },
+              "total_tokens": 3027
+            }
+          }
+        ],
+        "elapsed_ms": 4881.78,
+        "corrections": [
+          {
+            "original": "Verstapen",
+            "corrected": "verstappen"
+          }
+        ],
+        "interpreted_question": "How many race wins does Max verstappen have?"
+      }
+    },
+    {
+      "question": "How many wins did Schumacher have?",
+      "expected": null,
+      "passed": true,
+      "elapsed_seconds": 0.021,
+      "response": {
+        "intent": "clarify",
+        "answer": "Which name did you mean? Michael Schumacher, Mick Schumacher, Ralf Schumacher. Please ask again with the full name.",
+        "suggestions": [
+          "Michael Schumacher",
+          "Mick Schumacher",
+          "Ralf Schumacher"
+        ],
+        "corrections": []
+      }
+    },
+    {
+      "question": "Who performs best at Monaco in wet wether?",
+      "expected": null,
+      "passed": true,
+      "elapsed_seconds": 0.0,
+      "response": {
+        "intent": "unsupported",
+        "answer": "The supplied dataset does not contain reliable weather, tyre, fuel, telemetry or betting information. This question cannot be answered from it."
+      }
+    }
+  ],
+  "passed": 6,
+  "total": 6,
+  "scope": "Targeted development test, not unseen accuracy"
+}

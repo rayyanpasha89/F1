@@ -38,6 +38,7 @@ def test_ingested_counts_and_api_queries(pg):
         assert a.race_table(1128, kind)
     assert a.profile("drivers", 844, 2024)["results"]
     assert a.profile("constructors", 6, 2024)["results"]
+    assert len(a.comparison(1128, 844, 830)["drivers"]) == 2
 
 
 def test_postgres_features_equal_sqlite_features(pg):
@@ -61,3 +62,19 @@ def test_select_only_role_enforced_independently_of_parser(pg):
     with pytest.raises(DBAPIError), reader.begin() as conn:
         conn.execute(text("CREATE TABLE forbidden(id integer)"))
     reader.dispose()
+
+
+def test_production_startup_rejects_writable_credentials(pg, monkeypatch):
+    from fastapi.testclient import TestClient
+    from sqlalchemy.engine import make_url
+    from backend.main import create_app
+
+    reader_url = os.getenv("F1_TEST_READER_URL")
+    if not reader_url:
+        pytest.skip("Reader role required")
+    monkeypatch.setenv("F1_REQUIRE_READONLY", "1")
+    with pytest.raises(RuntimeError, match="SELECT-only"), TestClient(create_app(pg)):
+        pass
+    url = make_url(reader_url).update_query_dict({"options": "-c default_transaction_read_only=on"})
+    with TestClient(create_app(make_engine(url))) as client:
+        assert client.get("/api/health").status_code == 200

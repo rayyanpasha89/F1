@@ -1,3 +1,43 @@
+# AWS deployment
+
+## Active Lightsail deployment
+
+The dev application is reachable at https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/ . Initial public smoke checks passed for frontend, deep links, health, seasons, standings, qualifying, profiles and all 20 Monaco podium probabilities. Subsequent product improvements require their own build and verification; see the worklog for the released commit.
+
+The user authorized Lightsail after CloudFront required account verification and RDS rejected seven-day backup retention on the account plan. Terraform under `infra/lightsail/` manages the small container service, its narrowly scoped ECR pull policy, and an encrypted PostgreSQL 16 database through a CloudFormation resource. Database deletion/replacement is retained. This account is 148356747273, CLI default profile, region eu-north-1. Never use the Naaz configuration.
+
+React and FastAPI share one HTTPS origin. The database remains private; a real container TCP probe succeeded without public database mode. Strict ingestion loaded 701,433 rows and verified all 14 counts. The bootstrap container uses a short-lived presigned source URL and a temporary master credential, then the master password is rotated. Application containers receive only SELECT-only database credentials, with TLS `verify-full`. Production startup independently rejects writable credentials.
+
+Lightsail does not accept ECS secret references or task roles. The operator retrieves the F1 runtime secret from Secrets Manager and passes approved values as Lightsail environment variables. Principals allowed to inspect deployment configuration can view those values; limit that access. No long-lived AWS access keys are placed in containers. The bootstrap deployment's now-rotated master credential remains in deployment history; preserve this distinction when reviewing security.
+
+## Build and release
+
+From the repository root, with a clean tested commit and locally generated trusted model artifacts:
+
+```sh
+python -m scripts.release_aws build --terraform /absolute/path/to/terraform
+# Wait for the reported CodeBuild ID to succeed.
+python -m scripts.release_lightsail deploy --terraform /absolute/path/to/terraform
+```
+
+Both stages explicitly check STS and the default profile before AWS mutations. ECR image tags are Git commit SHAs. Never archive `.env` or Terraform state. `scripts/bootstrap_lightsail.py` is the one-off ingestion routine, invoked inside the private service with the bootstrap URL, reader password and presigned source URL supplied through environment. It verifies CSV hashes and refuses to repair a nonempty inconsistent database. Do not rerun ingestion against unrelated data.
+
+For rollback, deploy a previously verified existing image through the Lightsail API after the same account checks; do not restore or delete the database as an application rollback. Terraform creation and application image releases are separate operations. Production environment includes `DATABASE_URL`, `SQL_READONLY_DATABASE_URL`, `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_PROJECT_ID`, `OPENAI_MODEL`, `CHAT_ACCESS_CODE` and `F1_REQUIRE_READONLY=1`.
+
+## Logging and costs
+
+Lightsail retains continuous container stdout/stderr. CodeBuild writes to CloudWatch `/f1/dev/build`. Export an operator snapshot of the web container logs into `/f1/dev/api` with:
+
+```sh
+python -m scripts.release_lightsail logs
+```
+
+This is a bounded snapshot of the first returned log page, not automatic continuous CloudWatch forwarding. CloudWatch retention is 14 days. Do not place access codes in URLs or logs. Chat budgets are per-process and reset after restart, so they are not a durable billing cap.
+
+The small container service is approximately $15/month and the micro PostgreSQL bundle approximately $15/month, plus Bedrock and incidental storage/logging. Previously created ALB and supporting resources still incur charges; no destructive cleanup was authorized. The original architecture and its retained resources are documented below for traceability. Do not apply or destroy that stack casually.
+
+## Original architecture, partially provisioned
+
 # AWS development deployment
 
 Infrastructure is in `infra/`. Deployment is not yet verified. See worklog for actual execution status.

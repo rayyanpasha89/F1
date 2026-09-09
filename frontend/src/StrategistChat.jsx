@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMatch } from 'react-router-dom';
 import { request, useApi } from './api';
+import QueryChart from './QueryChart';
 function saved() {
   try {
     return JSON.parse(sessionStorage.getItem('f1-chat') || '[]').slice(-12);
@@ -89,6 +90,13 @@ export default function StrategistChat() {
             {messages.map((m, i) => (
               <article className="chat-message" key={i}>
                 <h3>{m.question}</h3>
+                {m.response.corrections?.length > 0 && (
+                  <p className="caption">
+                    Interpreted spelling:{' '}
+                    {m.response.corrections.map((c) => `${c.original} → ${c.corrected}`).join(', ')}
+                    .
+                  </p>
+                )}
                 <p>{m.response.answer}</p>
                 {m.response.assumptions?.length > 0 && (
                   <p className="caption">Assumptions: {m.response.assumptions.join(' ')}</p>
@@ -121,6 +129,7 @@ export default function StrategistChat() {
                     </table>
                   </div>
                 )}
+                {m.response.result && <QueryChart result={m.response.result} />}
                 {m.response.sql && (
                   <details className="sql">
                     <summary>Inspect generated SQL</summary>

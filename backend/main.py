@@ -36,6 +36,19 @@ def create_app(engine=None):
 
     @asynccontextmanager
     async def lifespan(app):
+        if os.environ.get("F1_REQUIRE_READONLY") == "1":
+            with db.connect() as conn:
+                readonly = conn.scalar(text("SHOW default_transaction_read_only")) == "on"
+                writable = conn.scalar(
+                    text("""SELECT EXISTS(
+                    SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+                    WHERE n.nspname='public' AND c.relkind IN ('r','p') AND (
+                        has_table_privilege(current_user, c.oid, 'INSERT,UPDATE,DELETE,TRUNCATE')
+                    )) OR has_schema_privilege(current_user, 'public', 'CREATE')""")
+                )
+            if not readonly or writable:
+                raise RuntimeError("Production database credentials must be SELECT-only")
+            logger.warning("Production PostgreSQL reader privileges verified")
         yield
         db.dispose()
 
@@ -115,6 +128,14 @@ def create_app(engine=None):
     @app.get("/api/races/{race_id}")
     def race(race_id: int):
         return analytics.race(race_id)
+
+    @app.get("/api/races/{race_id}/comparison")
+    def comparison(race_id: int, driver_a: int = Query(gt=0), driver_b: int = Query(gt=0)):
+        if driver_a == driver_b:
+            return JSONResponse(
+                status_code=422, content={"detail": "Choose two different drivers."}
+            )
+        return analytics.comparison(race_id, driver_a, driver_b)
 
     @app.get("/api/races/{race_id}/{kind}", response_model=Rows)
     def race_table(race_id: int, kind: Literal["results", "qualifying", "pit-stops", "grid"]):

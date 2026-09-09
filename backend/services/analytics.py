@@ -99,6 +99,65 @@ class Analytics:
             year=year,
         )
 
+    def comparison(self, race_id, driver_a, driver_b):
+        race = self.race(race_id)
+        entrants = {r["driver_id"]: r for r in self.race_table(race_id, "results")}
+        if driver_a == driver_b:
+            raise ValueError("Choose two different drivers")
+        if driver_a not in entrants or driver_b not in entrants:
+            raise NotFound("Both drivers must have an entry in this race")
+        qualifying = {r["driver_id"]: r for r in self.race_table(race_id, "qualifying")}
+        drivers = []
+        for identifier in [driver_a, driver_b]:
+            prior = self.rows(
+                """SELECT x.position, x.position_order, x.points, r.name AS race_name, r.date,
+                r.race_id FROM results x JOIN races r USING(race_id)
+                WHERE x.driver_id=:driver_id AND r.date<:date
+                ORDER BY r.date DESC, r.round DESC LIMIT 5""",
+                driver_id=identifier,
+                date=race["date"],
+            )
+            circuit = self.one(
+                """SELECT COUNT(*) AS starts,
+                SUM(CASE WHEN x.position BETWEEN 1 AND 3 THEN 1 ELSE 0 END) AS podiums
+                FROM results x JOIN races r USING(race_id)
+                WHERE x.driver_id=:driver_id AND r.circuit_id=:circuit_id AND r.date<:date""",
+                driver_id=identifier,
+                circuit_id=race["circuit_id"],
+                date=race["date"],
+            )
+            entry = entrants[identifier]
+            drivers.append(
+                {
+                    "driver_id": identifier,
+                    "driver_name": entry["driver_name"],
+                    "constructor_name": entry["constructor_name"],
+                    "grid": entry["grid"],
+                    "qualifying_position": qualifying.get(identifier, {}).get("position"),
+                    "recent_starts": len(prior),
+                    "recent_podiums": sum(1 for r in prior if r["position"] in (1, 2, 3)),
+                    "recent_race_points": sum(r["points"] or 0 for r in prior),
+                    "recent_average_classification": sum(r["position_order"] for r in prior)
+                    / len(prior)
+                    if prior
+                    else None,
+                    "circuit_starts": circuit["starts"],
+                    "circuit_podiums": circuit["podiums"] or 0,
+                    "recent_races": prior,
+                    "recorded_finish": entry["position_text"],
+                    "recorded_points": entry["points"],
+                }
+            )
+        return {
+            "race": race,
+            "drivers": drivers,
+            "notes": [
+                "Recent form uses up to five earlier driver appearances, excluding the selected race and same-day records.",
+                "Circuit history includes all earlier seasons. Qualifying and grid are recorded historical snapshots.",
+                "Recorded finishes are post-race context and are not model inputs.",
+            ],
+        }
+
     def profile(self, kind, identifier, year=None):
         table, key, label = {
             "drivers": ("drivers", "driver_id", "e.forename || ' ' || e.surname"),
@@ -143,6 +202,16 @@ class Analytics:
             id=identifier,
             year=year,
         )
+        recent_ids = list(dict.fromkeys(row["race_id"] for row in results))[:5]
+        recent = [row for row in results if row["race_id"] in recent_ids]
+        form = {
+            "races": len(recent_ids),
+            "race_points": sum(row["points"] or 0 for row in recent),
+            "podium_races": len({row["race_id"] for row in recent if row["position"] in (1, 2, 3)}),
+            "average_classification": sum(row["position_order"] for row in recent) / len(recent)
+            if recent
+            else None,
+        }
         return {
             "entity": entity,
             "career": career,
@@ -150,6 +219,7 @@ class Analytics:
             "associates": associates,
             "circuits": circuits,
             "year": year,
+            "recent_form": form,
             "notes": [
                 "Race points exclude sprints and are not official championship totals.",
                 "Podium races count distinct races with a podium; team double podiums count once.",

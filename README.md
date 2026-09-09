@@ -1,12 +1,13 @@
 # F1 Race Strategist
 
-An academic Formula 1 intelligence application with historical dashboards and genuine, explainable podium predictions. Built progressively with tested Git milestones. **Local application and live Bedrock chat are verified. AWS deployment is in progress; see `docs/worklog.md` for the current checkpoint.**
+An academic Formula 1 intelligence application with historical dashboards and genuine, explainable podium predictions. Built progressively with tested Git milestones. **The AWS dev application is live on [Lightsail](https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/). See `docs/worklog.md` for release and verification checkpoints.**
 
 ## Implemented
 
 - Audited 14-table CSV snapshot: 701,433 rows, 1950–2024; source checksums, missingness, key checks and yearly coverage.
 - Transactional SQLite/PostgreSQL ingestion with SQLAlchemy metadata, enforced relationships and indexes; both engines verified with the supplied data.
 - FastAPI season/race endpoints, recorded standings, driver/constructor profiles, qualifying, grid, results and pit summaries.
+- Race driver comparisons with earlier form and circuit history, profile recent-form summaries, conservative chat spelling repair and ambiguity clarification, and charts from suitable executed query results.
 - React historical navigation with responsive tables and loading/error/empty states; real API data throughout.
 - Measured grid-only logistic baseline and feature/model experiments with chronological validation.
 - Frozen calibrated gradient boosting predictor for historical 2022–2024 races, with actual SHAP explanations and baseline comparison.
