@@ -111,3 +111,15 @@ def test_entity_grounding_comes_from_database_labels():
 
     context = entity_context(TinyAnalytics(), "What is the Monaco circuit called?")
     assert context["circuits"][0]["name"] == "A changed Monaco label"
+
+
+def test_chat_limits_reset_and_bound_requests():
+    from backend.ai.limits import ChatLimiter
+
+    limiter = ChatLimiter(per_minute=2, daily=3)
+    assert limiter.allow("a", now=100)
+    assert limiter.allow("a", now=101)
+    assert not limiter.allow("a", now=102)
+    assert limiter.allow("a", now=170)
+    assert not limiter.allow("b", now=171)
+    assert limiter.allow("a", now=86400)

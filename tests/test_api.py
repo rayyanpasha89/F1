@@ -75,3 +75,25 @@ def test_real_prediction_endpoint_and_training_era_refusal(client):
     earlier = client.get("/api/races?year=2018").json()["data"][0]["race_id"]
     assert client.get(f"/api/predictions/{earlier}").status_code == 422
     assert client.get("/api/predictions/-1").status_code == 404
+
+
+def test_chat_unsupported_path_without_live_llm(client):
+    response = client.post("/api/chat", json={"question": "Who performs best in wet races?"})
+    assert response.status_code == 200
+    assert response.json()["intent"] == "unsupported"
+    assert "sql" not in response.json()
+    assert client.post("/api/chat", json={"question": "x"}).status_code == 422
+
+
+def test_configured_chat_access_code_is_enforced(client, monkeypatch):
+    monkeypatch.setenv("CHAT_ACCESS_CODE", "unit-test-access")
+    assert client.get("/api/chat/config").json()["requires_access_code"] is True
+    assert client.post("/api/chat", json={"question": "Is weather available?"}).status_code == 401
+    assert (
+        client.post(
+            "/api/chat",
+            headers={"x-chat-access-code": "unit-test-access"},
+            json={"question": "Is weather available?"},
+        ).status_code
+        == 200
+    )

@@ -1,12 +1,104 @@
-import React,{useState} from 'react';
-import {useApi} from './api';
-const labels={grid_position:'Starting grid',driver_recent_podium:'Recent podium rate',driver_recent_finish:'Recent average classification',driver_recent_dnf:'Recent nonfinish rate',constructor_recent_podium:'Constructor recent podium rate',driver_circuit_podium:'Circuit podium history',driver_career_podium:'Career podium history'};
-export default function Predictions({raceId,year}){
- const prediction=useApi(`/predictions/${raceId}`);const drivers=useApi(`/races/${raceId}/grid`);const [chosen,setChosen]=useState(null);
- if(year<2022)return <section className="prediction-panel"><h2>Podium model</h2><p>The evaluated model covers 2022–2024. Earlier races overlap training or model selection.</p></section>;
- if(prediction.loading||drivers.loading)return <p role="status">Calculating podium probabilities…</p>;
- if(prediction.error||drivers.error)return <p role="alert">{prediction.error||drivers.error}</p>;
- const names=Object.fromEntries(drivers.data.data.map(d=>[d.driver_id,d.driver_name]));
- const rows=prediction.data.predictions;const active=rows.find(d=>d.driver_id===chosen)||rows[0];
- return <section className="prediction-panel"><div className="section-heading"><div><p className="eyebrow">Before lights out</p><h2>Podium probabilities</h2></div><span>Historical backtest · {year}</span></div><p className="caption">Select a driver to inspect the model’s reasoning. Predictions use the recorded starting grid and earlier race history.</p><div className="prediction-layout"><div className="probability-list">{rows.map((d,i)=><button key={d.driver_id} className={active?.driver_id===d.driver_id?'selected':''} onClick={()=>setChosen(d.driver_id)} aria-pressed={active?.driver_id===d.driver_id}><span className="prediction-rank">{i+1}</span><span className="probability-name">{names[d.driver_id]}<span className="probability-track"><span style={{width:`${d.probability*100}%`}}/></span></span><b>{(d.probability*100).toFixed(1)}%</b></button>)}</div>{active&&<aside className="explanation"><p className="eyebrow">Model explanation</p><h3>{names[active.driver_id]}</h3><div className="probability-big">{(active.probability*100).toFixed(1)}<small>%</small></div><p>Grid-only baseline: {(active.baseline_probability*100).toFixed(1)}%</p><h4>Contributions to this prediction</h4>{active.factors.map(f=><div className="factor" key={f.feature}><span>{labels[f.feature]||f.feature}<small>Input: {f.value.toFixed(3)}</small></span><b className={f.log_odds_contribution>=0?'positive':'negative'}>{f.log_odds_contribution>=0?'+':''}{f.log_odds_contribution.toFixed(3)}</b></div>)}<p className="caption">SHAP contributions are in log-odds relative to the model’s reference prediction. Positive contributions raise the score; they do not establish cause.</p><details><summary>Evaluation & limitations</summary><p className="caption">Independent probabilities need not sum to three. Model trained on 2010–2018; selection used 2019–2021. Test scores and baseline comparisons are recorded in the project’s evaluation report. Historical grids may reflect later corrections.</p></details></aside>}</div></section>;
+import React, { useState } from 'react';
+import { useApi } from './api';
+const labels = {
+  grid_position: 'Starting grid',
+  driver_recent_podium: 'Recent podium rate',
+  driver_recent_finish: 'Recent average classification',
+  driver_recent_dnf: 'Recent nonfinish rate',
+  constructor_recent_podium: 'Constructor recent podium rate',
+  driver_circuit_podium: 'Circuit podium history',
+  driver_career_podium: 'Career podium history',
+};
+export default function Predictions({ raceId, year }) {
+  const prediction = useApi(`/predictions/${raceId}`);
+  const drivers = useApi(`/races/${raceId}/grid`);
+  const [chosen, setChosen] = useState(null);
+  if (year < 2022)
+    return (
+      <section className="prediction-panel">
+        <h2>Podium model</h2>
+        <p>
+          The evaluated model covers 2022–2024. Earlier races overlap training or model selection.
+        </p>
+      </section>
+    );
+  if (prediction.loading || drivers.loading)
+    return <p role="status">Calculating podium probabilities…</p>;
+  if (prediction.error || drivers.error)
+    return <p role="alert">{prediction.error || drivers.error}</p>;
+  const names = Object.fromEntries(drivers.data.data.map((d) => [d.driver_id, d.driver_name]));
+  const rows = prediction.data.predictions;
+  const active = rows.find((d) => d.driver_id === chosen) || rows[0];
+  return (
+    <section className="prediction-panel">
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow">Before lights out</p>
+          <h2>Podium probabilities</h2>
+        </div>
+        <span>Historical backtest · {year}</span>
+      </div>
+      <p className="caption">
+        Select a driver to inspect the model’s reasoning. Predictions use the recorded starting grid
+        and earlier race history.
+      </p>
+      <div className="prediction-layout">
+        <div className="probability-list">
+          {rows.map((d, i) => (
+            <button
+              key={d.driver_id}
+              className={active?.driver_id === d.driver_id ? 'selected' : ''}
+              onClick={() => setChosen(d.driver_id)}
+              aria-pressed={active?.driver_id === d.driver_id}
+            >
+              <span className="prediction-rank">{i + 1}</span>
+              <span className="probability-name">
+                {names[d.driver_id]}
+                <span className="probability-track">
+                  <span style={{ width: `${d.probability * 100}%` }} />
+                </span>
+              </span>
+              <b>{(d.probability * 100).toFixed(1)}%</b>
+            </button>
+          ))}
+        </div>
+        {active && (
+          <aside className="explanation">
+            <p className="eyebrow">Model explanation</p>
+            <h3>{names[active.driver_id]}</h3>
+            <div className="probability-big">
+              {(active.probability * 100).toFixed(1)}
+              <small>%</small>
+            </div>
+            <p>Grid-only baseline: {(active.baseline_probability * 100).toFixed(1)}%</p>
+            <h4>Contributions to this prediction</h4>
+            {active.factors.map((f) => (
+              <div className="factor" key={f.feature}>
+                <span>
+                  {labels[f.feature] || f.feature}
+                  <small>Input: {f.value.toFixed(3)}</small>
+                </span>
+                <b className={f.log_odds_contribution >= 0 ? 'positive' : 'negative'}>
+                  {f.log_odds_contribution >= 0 ? '+' : ''}
+                  {f.log_odds_contribution.toFixed(3)}
+                </b>
+              </div>
+            ))}
+            <p className="caption">
+              SHAP contributions are in log-odds relative to the model’s reference prediction.
+              Positive contributions raise the score; they do not establish cause.
+            </p>
+            <details>
+              <summary>Evaluation & limitations</summary>
+              <p className="caption">
+                Independent probabilities need not sum to three. Model trained on 2010–2018;
+                selection used 2019–2021. Test scores and baseline comparisons are recorded in the
+                project’s evaluation report. Historical grids may reflect later corrections.
+              </p>
+            </details>
+          </aside>
+        )}
+      </div>
+    </section>
+  );
 }

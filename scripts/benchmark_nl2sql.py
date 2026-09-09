@@ -26,7 +26,7 @@ def equivalent(actual, expected):
             return math.isclose(a, b, rel_tol=1e-5, abs_tol=0.005)
         return a == b
 
-    # Compare as row multisets: rankings are checked separately where order is specified.
+    # Compare row multisets. Ordering is not scored by this benchmark.
     remaining = list(expected)
     for row in actual:
         match = next(
