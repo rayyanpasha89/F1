@@ -82,3 +82,23 @@ def test_transport_failure_does_not_expose_response_secrets():
     with pytest.raises(ProviderError, match="HTTP 401") as error:
         client.structured("route", "question", Intent)
     assert "sensitive" not in str(error.value)
+
+
+def test_entity_grounding_comes_from_database_labels():
+    from backend.ai.grounding import entity_context
+
+    class TinyAnalytics:
+        def rows(self, sql):
+            if "FROM circuits" in sql:
+                return [
+                    {
+                        "circuit_id": 99,
+                        "circuit_ref": "monaco",
+                        "name": "A changed Monaco label",
+                        "country": "Monaco",
+                    }
+                ]
+            return []
+
+    context = entity_context(TinyAnalytics(), "What is the Monaco circuit called?")
+    assert context["circuits"][0]["name"] == "A changed Monaco label"
