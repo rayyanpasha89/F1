@@ -1,0 +1,37 @@
+{
+  "verified_at": "2026-09-10",
+  "region": "eu-north-1",
+  "account": "148356747273",
+  "git_commit": "8d0e8d1fb92a3ea2e47ed842c22b6a4ca49b186a",
+  "url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/",
+  "database_public": false,
+  "checks": [
+    {"path": "/", "status": 200, "bytes": 407},
+    {"path": "/races/1128", "status": 200, "bytes": 407},
+    {"path": "/api/health", "status": 200, "bytes": 64},
+    {"path": "/api/races/1128/comparison?driver_a=844&driver_b=830", "status": 200, "bytes": 2626},
+    {"path": "/api/profiles/drivers/844?year=2024", "status": 200, "bytes": 14994},
+    {"path": "/api/predictions/1128", "status": 200, "bytes": 16972},
+    {"asset": "/assets/index-BGI0lilP.js", "status": 200, "contains_driver_comparison": true, "contains_spelling_ui": true},
+    {"question": "How many race winns does Lewis Hamliton have?", "status": 200, "intent": "statistics", "answer": "wins: 105", "visible_correction": "Hamliton -> hamilton", "has_executed_sql": true},
+    {"question": "How many wins did Schumacher have?", "status": 200, "intent": "clarify", "suggestions": ["Michael Schumacher", "Mick Schumacher", "Ralf Schumacher"], "has_sql": false},
+    {"question": "Who performs best at Monaco in wet wether?", "status": 200, "intent": "unsupported", "has_sql": false}
+  ],
+  "other_evidence": {
+    "strict_ingestion_rows": 701433,
+    "strict_ingestion_tables": 14,
+    "private_database_tcp_probe": true,
+    "runtime_readonly_startup_check": true,
+    "cloudwatch_runtime_snapshot_events": 80,
+    "cloudwatch_stream": "lightsail/20260909T162739453171Z",
+    "codebuild_id": "f1-race-strategist-dev:ffeb7d46-c73c-4b13-9be7-971bc7a49581",
+    "codebuild_status": "SUCCEEDED",
+    "github_actions_run": 34376649850,
+    "github_actions_status": "success"
+  },
+  "limitations": [
+    "This report records targeted smoke and safety checks, not continuous availability.",
+    "The chat benchmark is a reused development suite rather than an unseen evaluation set.",
+    "The implementing agent performed these checks; this is not independent certification."
+  ]
+}
