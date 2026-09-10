@@ -78,18 +78,18 @@
 - Modify: `tests/test_chat.py`
 - Create: `tests/test_agentic_chat.py`
 
-- [ ] Add failing validation tests for `ConversationEntity`, `ConversationTurn`, and `ChatRequest.conversation`: maximum three turns, known entity kinds, positive IDs, bounded names/questions, forbidden extra fields, and backward-compatible `previous_question`.
-- [ ] Add a scripted provider test that captures router input and requires variants, ranked entities, selected race, and compact structured turns while excluding prior SQL, results, and assistant prose.
-- [ ] Add failing tests that every route returns a trace with allowlisted fields, that early refusal and ambiguity report zero calls, and that serialized trace output excludes sentinel access codes, database URLs, prompts, raw errors, and provider bodies.
-- [ ] Add a failing test that a `ProviderCallBudget` refuses a fourth invocation.
-- [ ] Run `.venv/bin/pytest tests/test_chat.py tests/test_agentic_chat.py -q` and confirm the new tests fail for missing models, fields, or trace.
-- [ ] Implement the conversation models and retain the last three validated turns.
-- [ ] Implement a request-local `ProviderCallBudget(max_calls=3)` wrapper and route every `structured` call through it.
-- [ ] Build retrieval before routing, feed only allowlisted JSON context to Bedrock, combine valid router hints with deterministic schema ranking, and preserve prediction/explanation behavior.
-- [ ] Implement a trace builder with original/interpreted questions, variants, selected entities, selected tables, route, attempts, provider call count, aggregate provider timing, and total timing.
-- [ ] Add the trace to deterministic unsupported, ambiguity, provider-routed clarification, prediction, explanation, executed, empty, and rejected responses.
-- [ ] Run `.venv/bin/pytest tests/test_chat.py tests/test_agentic_chat.py tests/test_entity_resolution.py -q` and require all tests to pass.
-- [ ] Commit with `git add backend/ai/chat.py tests/test_chat.py tests/test_agentic_chat.py && git commit -m "feat: add bounded conversation and audit trace"`.
+- [x] Add failing validation tests for `ConversationEntity`, `ConversationTurn`, and `ChatRequest.conversation`: maximum three turns, known entity kinds, positive IDs, bounded names/questions, forbidden extra fields, and backward-compatible `previous_question`.
+- [x] Add a scripted provider test that captures router input and requires variants, ranked entities, selected race, and compact structured turns while excluding prior SQL, results, and assistant prose.
+- [x] Add failing tests that every route returns a trace with allowlisted fields, that early refusal and ambiguity report zero calls, and that serialized trace output excludes sentinel access codes, database URLs, prompts, raw errors, and provider bodies.
+- [x] Add a failing test that a `ProviderCallBudget` refuses a fourth invocation.
+- [x] Run `.venv/bin/pytest tests/test_chat.py tests/test_agentic_chat.py -q` and confirm the new tests fail for missing models, fields, or trace.
+- [x] Implement the conversation models and retain the last three validated turns.
+- [x] Implement a request-local `ProviderCallBudget(max_calls=3)` wrapper and route every `structured` call through it.
+- [x] Build retrieval before routing, feed only allowlisted JSON context to Bedrock, combine valid router hints with deterministic schema ranking, and preserve prediction/explanation behavior.
+- [x] Implement a trace builder with original/interpreted questions, variants, selected entities, selected tables, route, attempts, provider call count, aggregate provider timing, and total timing.
+- [x] Add the trace to deterministic unsupported, ambiguity, provider-routed clarification, prediction, explanation, executed, empty, and rejected responses.
+- [x] Run `.venv/bin/pytest tests/test_chat.py tests/test_agentic_chat.py tests/test_entity_resolution.py -q` and require all tests to pass.
+- [x] Commit with `git add backend/ai/chat.py tests/test_chat.py tests/test_agentic_chat.py tests/test_entity_resolution.py docs/superpowers/plans/2026-09-10-agentic-retrieval.md && git commit -m "feat: add bounded conversation and audit trace"`.
 
 ### Task 5: Add one sanitized SQL repair attempt
 
