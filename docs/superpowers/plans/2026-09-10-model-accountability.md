@@ -257,4 +257,4 @@
 - [x] Deploy the immutable image to `f1-strategist-demo`; require Lightsail `RUNNING`/`ACTIVE` and the exact image SHA.
 - [x] Run the public verifier with bounded chat, desktop/mobile browser flows, console/network checks, and Lighthouse. Require accessibility 100, best practices 100, and CLS at most 0.10.
 - [x] Retrieve bounded Lightsail logs and export a new CloudWatch snapshot. Verify prediction/review/chat events exist and sensitive values are absent.
-- [ ] Write new AWS/cloud reports and worklog evidence, commit, push, wait for final CI, then reconfirm public readiness, deployed SHA, clean Git, and unchanged presentation hashes.
+- [x] Write new AWS/cloud reports and worklog evidence, commit, push, wait for final CI, then reconfirm public readiness, deployed SHA, clean Git, and unchanged presentation hashes.
