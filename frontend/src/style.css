@@ -593,6 +593,36 @@ summary {
 .sql {
   margin-top: 12px;
 }
+.agent-trace {
+  margin: 14px 0;
+  border: 1px solid #bdc9d8;
+  background: #eaf0f7;
+  padding: 10px 12px;
+}
+.agent-trace summary {
+  color: #173d70;
+}
+.agent-trace dl {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 2px;
+}
+.agent-trace dl div {
+  display: grid;
+  grid-template-columns: minmax(105px, 0.38fr) minmax(0, 1fr);
+  gap: 10px;
+  padding-top: 7px;
+  border-top: 1px solid #cbd7e4;
+}
+.agent-trace dt {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+.agent-trace dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
 .sql pre {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -615,6 +645,10 @@ summary {
   .chat-toggle {
     right: 15px;
     bottom: 18px;
+  }
+  .agent-trace dl div {
+    grid-template-columns: 1fr;
+    gap: 2px;
   }
 }
 

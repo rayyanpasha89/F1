@@ -111,3 +111,32 @@ def test_configured_chat_access_code_is_enforced(client, monkeypatch):
         ).status_code
         == 200
     )
+
+
+def test_chat_logs_safe_execution_evidence_without_request_secrets(client, monkeypatch, caplog):
+    access_secret = "access-code-SENTINEL"
+    question_secret = "question-SENTINEL"
+    monkeypatch.setenv("CHAT_ACCESS_CODE", access_secret)
+
+    with caplog.at_level("INFO", logger="backend.main"):
+        response = client.post(
+            "/api/chat",
+            headers={"x-chat-access-code": access_secret},
+            json={"question": f"Is wet weather available? {question_secret}"},
+        )
+
+    assert response.status_code == 200
+    messages = [
+        record.getMessage() for record in caplog.records if "chat_complete" in record.getMessage()
+    ]
+    assert len(messages) == 1
+    event = messages[0]
+    assert "route=unsupported" in event
+    assert "status=unsupported" in event
+    assert "provider_calls=0" in event
+    assert "repairs=0" in event
+    assert "tables=-" in event
+    assert "elapsed_ms=" in event
+    assert access_secret not in event
+    assert question_secret not in event
+    assert "SELECT" not in event and "postgresql://" not in event

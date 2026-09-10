@@ -1,0 +1,83 @@
+{
+  "recorded_at": "2026-09-10T06:01:10Z",
+  "source_commit": "9d7b0283e998d4b4c1e77d60be34a1bf7c7b3906",
+  "scope": "bounded agentic retrieval, conversation trace, one SQL repair, safe logging, React audit UI, and separate evaluation runner",
+  "python": {
+    "ruff_check": "passed",
+    "ruff_format_check": "passed; 42 files already formatted",
+    "pytest": {
+      "passed": 111,
+      "skipped": 4,
+      "warnings": 5,
+      "duration_seconds": 3.85,
+      "skip_reason": "four PostgreSQL tests are opt-in and were run separately"
+    }
+  },
+  "frontend": {
+    "eslint": "passed",
+    "prettier_check": "passed",
+    "vitest_files": 3,
+    "vitest_passed": 9,
+    "vite_build": "passed",
+    "javascript_bundle": "dist/assets/index-CE_UNUVj.js",
+    "javascript_bundle_kb": 256.55,
+    "css_bundle": "dist/assets/index-BaS0mSFa.css",
+    "css_bundle_kb": 14.26
+  },
+  "postgresql": {
+    "version": "16.15",
+    "database": "f1_agentic_verify_20260910",
+    "reader_role": "f1_agentic_reader_20260910",
+    "isolation": "new F1-only local database and role; no Naaz database accessed or changed",
+    "tables": 14,
+    "rows": 701433,
+    "integration_passed": 4,
+    "warnings": 5,
+    "verified": [
+      "all audited row counts and analytics routes",
+      "SQLite and PostgreSQL feature equivalence",
+      "database-level DELETE and CREATE denial for the reader role",
+      "production startup rejects writable credentials and accepts the reader role"
+    ]
+  },
+  "terraform": {
+    "version": "1.13.5",
+    "platform": "darwin_arm64",
+    "download_checksum": "verified against HashiCorp SHA256SUMS",
+    "aws_provider": "6.63.0 from dependency lock",
+    "infra_format": "passed",
+    "infra_init": "passed",
+    "infra_validate": "passed",
+    "lightsail_format": "passed",
+    "lightsail_init": "passed",
+    "lightsail_validate": "passed"
+  },
+  "agentic_development_suite": {
+    "cases": 22,
+    "gold_sql_executed": 14,
+    "gold_sql_valid": 14,
+    "offline_retrieval_expectations": "passed",
+    "coverage": [
+      "misspellings",
+      "paraphrases",
+      "shared surnames",
+      "pronoun follow-ups",
+      "selected-race explanation",
+      "unsupported source requests",
+      "destructive request refusal"
+    ]
+  },
+  "focused_security_checks": {
+    "provider_call_limit": 3,
+    "maximum_sql_repairs": 1,
+    "repair_failure_redaction": "passed",
+    "trace_redaction": "passed",
+    "application_log_redaction": "passed",
+    "frontend_context_redaction": "passed"
+  },
+  "known_upstream_warnings": [
+    "SHAP matplotlib color-map PendingDeprecationWarning",
+    "Starlette TestClient httpx deprecation warnings",
+    "React Router use-client bundle notices"
+  ]
+}

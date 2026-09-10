@@ -1,0 +1,2769 @@
+{
+  "started_at": "2026-09-10T06:14:39.202855+00:00",
+  "suite_sha256": "a875084b3dbfb51b62017bd5e3ff3f1f4f80c945abebc80a15a24954c30ca015",
+  "git_commit": "a6ad4d66e4daf68e6627c16921a4b85d5214dfea",
+  "model": "openai.gpt-oss-120b",
+  "evaluation_type": "development suite; not an unseen generalization estimate",
+  "cases": [
+    {
+      "id": "A01",
+      "question": "How many race wins does Lewis Hamliton have in the archive?",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "win_count: 105",
+        "result": {
+          "columns": [
+            "win_count"
+          ],
+          "rows": [
+            [
+              105
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(DISTINCT r.race_id) AS win_count FROM results AS res JOIN drivers AS d ON res.driver_id = d.driver_id JOIN races AS r ON res.race_id = r.race_id WHERE d.driver_id = 1 AND res.position = 1",
+          "elapsed_ms": 1.831
+        },
+        "sql": "SELECT COUNT(DISTINCT r.race_id) AS win_count FROM results AS res JOIN drivers AS d ON res.driver_id = d.driver_id JOIN races AS r ON res.race_id = r.race_id WHERE d.driver_id = 1 AND res.position = 1",
+        "assumptions": [
+          "All seasons in the archive (1950\u20112024) are included.",
+          "A race win is defined as a result with position = 1.",
+          "Lewis Hamilton is uniquely identified by driver_id = 1."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1442.741,
+            "usage": {
+              "completion_tokens": 168,
+              "prompt_tokens": 530,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 698
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 3475.507,
+            "usage": {
+              "completion_tokens": 392,
+              "prompt_tokens": 3201,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 256
+              },
+              "total_tokens": 3593
+            }
+          }
+        ],
+        "elapsed_ms": 5076.776,
+        "trace": {
+          "original_question": "How many race wins does Lewis Hamliton have in the archive?",
+          "interpreted_question": "How many race wins does Lewis hamilton have in the archive?",
+          "variants": [
+            "How many race wins does Lewis Hamliton have in the archive?",
+            "How many race wins does Lewis hamilton have in the archive?"
+          ],
+          "route": "statistics",
+          "entities": [
+            {
+              "kind": "drivers",
+              "id": 1,
+              "name": "Lewis Hamilton",
+              "score": 1.0,
+              "reasons": [
+                "full_name"
+              ]
+            },
+            {
+              "kind": "drivers",
+              "id": 453,
+              "name": "Jackie Lewis",
+              "score": 0.92,
+              "reasons": [
+                "reference"
+              ]
+            }
+          ],
+          "tables": [
+            "drivers",
+            "races",
+            "results"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 4918.248,
+          "repair_count": 0,
+          "total_elapsed_ms": 5076.827
+        },
+        "corrections": [
+          {
+            "original": "Hamliton",
+            "corrected": "hamilton"
+          }
+        ],
+        "interpreted_question": "How many race wins does Lewis hamilton have in the archive?"
+      },
+      "checks": {
+        "intent": true,
+        "corrections": true,
+        "entities": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 5078.589
+    },
+    {
+      "id": "A02",
+      "question": "How many podiums did Charles Leclrec score in 2024?",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "podiums: 13",
+        "result": {
+          "columns": [
+            "podiums"
+          ],
+          "rows": [
+            [
+              13
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(*) AS podiums FROM results AS r JOIN drivers AS d ON r.driver_id = d.driver_id JOIN races AS ra ON r.race_id = ra.race_id WHERE d.driver_id = 844 AND ra.year = 2024 AND NOT r.position IS NULL AND r.position BETWEEN 1 AND 3",
+          "elapsed_ms": 1.119
+        },
+        "sql": "SELECT COUNT(*) AS podiums FROM results AS r JOIN drivers AS d ON r.driver_id = d.driver_id JOIN races AS ra ON r.race_id = ra.race_id WHERE d.driver_id = 844 AND ra.year = 2024 AND NOT r.position IS NULL AND r.position BETWEEN 1 AND 3",
+        "assumptions": [
+          "Driver ID 844 uniquely identifies Charles Leclerc.",
+          "The results table records the finishing position in the column 'position'.",
+          "Podium finishes are defined as positions 1, 2, or 3.",
+          "The races table's 'year' column indicates the season year.",
+          "Data for the 2024 season is present in the archive."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1381.772,
+            "usage": {
+              "completion_tokens": 192,
+              "prompt_tokens": 498,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 690
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 4031.086,
+            "usage": {
+              "completion_tokens": 488,
+              "prompt_tokens": 3134,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 48
+              },
+              "total_tokens": 3622
+            }
+          }
+        ],
+        "elapsed_ms": 5576.966,
+        "trace": {
+          "original_question": "How many podiums did Charles Leclrec score in 2024?",
+          "interpreted_question": "How many podiums did Charles leclerc score in 2024?",
+          "variants": [
+            "How many podiums did Charles Leclrec score in 2024?",
+            "How many podiums did Charles leclerc score in 2024?"
+          ],
+          "route": "statistics",
+          "entities": [
+            {
+              "kind": "drivers",
+              "id": 844,
+              "name": "Charles Leclerc",
+              "score": 1.0,
+              "reasons": [
+                "full_name"
+              ]
+            }
+          ],
+          "tables": [
+            "drivers",
+            "races",
+            "results"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 5412.858,
+          "repair_count": 0,
+          "total_elapsed_ms": 5577.037
+        },
+        "corrections": [
+          {
+            "original": "Leclrec",
+            "corrected": "leclerc"
+          }
+        ],
+        "interpreted_question": "How many podiums did Charles leclerc score in 2024?"
+      },
+      "checks": {
+        "intent": true,
+        "corrections": true,
+        "entities": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 5579.45
+    },
+    {
+      "id": "A03",
+      "question": "What was Ferarri's total main-race points in 2024, leaving out sprints?",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "total_main_race_points: 595.0",
+        "result": {
+          "columns": [
+            "total_main_race_points"
+          ],
+          "rows": [
+            [
+              595.0
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT SUM(r.points) AS total_main_race_points FROM results AS r JOIN races AS ra ON r.race_id = ra.race_id JOIN constructors AS c ON r.constructor_id = c.constructor_id WHERE ra.year = 2024 AND c.constructor_id = 6",
+          "elapsed_ms": 7.671
+        },
+        "sql": "SELECT SUM(r.points) AS total_main_race_points FROM results AS r JOIN races AS ra ON r.race_id = ra.race_id JOIN constructors AS c ON r.constructor_id = c.constructor_id WHERE ra.year = 2024 AND c.constructor_id = 6",
+        "assumptions": [
+          "The 'points' column in the results table represents points earned in the main race only.",
+          "Sprint race points are stored separately in the sprint_results table and are therefore excluded by summing only results.points.",
+          "Constructor ID 6 corresponds to Ferrari as identified in the provided entity list."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2001.278,
+            "usage": {
+              "completion_tokens": 334,
+              "prompt_tokens": 521,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 855
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2966.516,
+            "usage": {
+              "completion_tokens": 377,
+              "prompt_tokens": 3506,
+              "total_tokens": 3883
+            }
+          }
+        ],
+        "elapsed_ms": 5163.077,
+        "trace": {
+          "original_question": "What was Ferarri's total main-race points in 2024, leaving out sprints?",
+          "interpreted_question": "What was ferrari's total main-race points in 2024, leaving out sprints?",
+          "variants": [
+            "What was Ferarri's total main-race points in 2024, leaving out sprints?",
+            "What was ferrari's total main-race points in 2024, leaving out sprints?"
+          ],
+          "route": "statistics",
+          "entities": [
+            {
+              "kind": "constructors",
+              "id": 6,
+              "name": "Ferrari",
+              "score": 1.0,
+              "reasons": [
+                "full_name"
+              ]
+            }
+          ],
+          "tables": [
+            "races",
+            "constructors",
+            "results",
+            "sprint_results"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 4967.794,
+          "repair_count": 0,
+          "total_elapsed_ms": 5163.124
+        },
+        "corrections": [
+          {
+            "original": "Ferarri",
+            "corrected": "ferrari"
+          }
+        ],
+        "interpreted_question": "What was ferrari's total main-race points in 2024, leaving out sprints?"
+      },
+      "checks": {
+        "intent": true,
+        "corrections": true,
+        "entities": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 5166.217
+    },
+    {
+      "id": "A04",
+      "question": "Give me the stored name and country for the Moncao circuit.",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "name: Circuit de Monaco; country: Monaco",
+        "result": {
+          "columns": [
+            "name",
+            "country"
+          ],
+          "rows": [
+            [
+              "Circuit de Monaco",
+              "Monaco"
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT name, country FROM circuits WHERE circuit_id = 6",
+          "elapsed_ms": 0.853
+        },
+        "sql": "SELECT name, country FROM circuits WHERE circuit_id = 6",
+        "assumptions": [],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1153.304,
+            "usage": {
+              "completion_tokens": 100,
+              "prompt_tokens": 488,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 588
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1842.663,
+            "usage": {
+              "completion_tokens": 181,
+              "prompt_tokens": 2192,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 304
+              },
+              "total_tokens": 2373
+            }
+          }
+        ],
+        "elapsed_ms": 3162.781,
+        "trace": {
+          "original_question": "Give me the stored name and country for the Moncao circuit.",
+          "interpreted_question": "Give me the stored name and country for the monaco circuit.",
+          "variants": [
+            "Give me the stored name and country for the Moncao circuit.",
+            "Give me the stored name and country for the monaco circuit."
+          ],
+          "route": "statistics",
+          "entities": [
+            {
+              "kind": "circuits",
+              "id": 6,
+              "name": "Circuit de Monaco",
+              "score": 0.92,
+              "reasons": [
+                "reference"
+              ]
+            }
+          ],
+          "tables": [
+            "circuits"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 2995.967,
+          "repair_count": 0,
+          "total_elapsed_ms": 3162.857
+        },
+        "corrections": [
+          {
+            "original": "Moncao",
+            "corrected": "monaco"
+          }
+        ],
+        "interpreted_question": "Give me the stored name and country for the monaco circuit."
+      },
+      "checks": {
+        "intent": true,
+        "corrections": true,
+        "entities": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 3164.616
+    },
+    {
+      "id": "A05",
+      "question": "Count the Grands Prix on the 2023 calendar in this archive.",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "race_count: 22",
+        "result": {
+          "columns": [
+            "race_count"
+          ],
+          "rows": [
+            [
+              22
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(*) AS race_count FROM races WHERE year = 2023",
+          "elapsed_ms": 0.782
+        },
+        "sql": "SELECT COUNT(*) AS race_count FROM races WHERE year = 2023",
+        "assumptions": [
+          "Each row in the races table represents a distinct Grand Prix event."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1414.444,
+            "usage": {
+              "completion_tokens": 126,
+              "prompt_tokens": 456,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 582
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1277.899,
+            "usage": {
+              "completion_tokens": 162,
+              "prompt_tokens": 2373,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 2272
+              },
+              "total_tokens": 2535
+            }
+          }
+        ],
+        "elapsed_ms": 2861.282,
+        "trace": {
+          "original_question": "Count the Grands Prix on the 2023 calendar in this archive.",
+          "interpreted_question": "Count the grand Prix on the 2023 calendar in this archive.",
+          "variants": [
+            "Count the Grands Prix on the 2023 calendar in this archive.",
+            "Count the grand Prix on the 2023 calendar in this archive."
+          ],
+          "route": "statistics",
+          "entities": [],
+          "tables": [
+            "races"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 2692.343,
+          "repair_count": 0,
+          "total_elapsed_ms": 2861.317
+        },
+        "corrections": [
+          {
+            "original": "Grands",
+            "corrected": "grand"
+          }
+        ],
+        "interpreted_question": "Count the grand Prix on the 2023 calendar in this archive."
+      },
+      "checks": {
+        "intent": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 2862.858
+    },
+    {
+      "id": "A06",
+      "question": "What years bookend the historical season collection?",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "first_year: 1950; last_year: 2024",
+        "result": {
+          "columns": [
+            "first_year",
+            "last_year"
+          ],
+          "rows": [
+            [
+              1950,
+              2024
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT MIN(year) AS first_year, MAX(year) AS last_year FROM seasons",
+          "elapsed_ms": 1.31
+        },
+        "sql": "SELECT MIN(year) AS first_year, MAX(year) AS last_year FROM seasons",
+        "assumptions": [],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1786.235,
+            "usage": {
+              "completion_tokens": 166,
+              "prompt_tokens": 434,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 600
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2099.42,
+            "usage": {
+              "completion_tokens": 184,
+              "prompt_tokens": 2411,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 272
+              },
+              "total_tokens": 2595
+            }
+          }
+        ],
+        "elapsed_ms": 4046.987,
+        "trace": {
+          "original_question": "What years bookend the historical season collection?",
+          "interpreted_question": "What years bookend the historical season collection?",
+          "variants": [
+            "What years bookend the historical season collection?"
+          ],
+          "route": "statistics",
+          "entities": [],
+          "tables": [
+            "seasons",
+            "races"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 3885.655,
+          "repair_count": 0,
+          "total_elapsed_ms": 4047.041
+        },
+        "corrections": []
+      },
+      "checks": {
+        "intent": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 4048.619
+    },
+    {
+      "id": "A07",
+      "question": "Who took the chequered flag at the 2024 Monaco Grand Prix? Return the driver's full name.",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "full_name: Charles Leclerc",
+        "result": {
+          "columns": [
+            "full_name"
+          ],
+          "rows": [
+            [
+              "Charles Leclerc"
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT d.forename || ' ' || d.surname AS full_name FROM races AS r JOIN circuits AS c ON r.circuit_id = c.circuit_id JOIN results AS res ON res.race_id = r.race_id JOIN drivers AS d ON d.driver_id = res.driver_id WHERE r.year = 2024 AND c.circuit_id = 6 AND res.position = 1 LIMIT 1",
+          "elapsed_ms": 1.656
+        },
+        "sql": "SELECT d.forename || ' ' || d.surname AS full_name FROM races AS r JOIN circuits AS c ON r.circuit_id = c.circuit_id JOIN results AS res ON res.race_id = r.race_id JOIN drivers AS d ON d.driver_id = res.driver_id WHERE r.year = 2024 AND c.circuit_id = 6 AND res.position = 1 LIMIT 1",
+        "assumptions": [
+          "The winner of the race is identified by results.position = 1.",
+          "Circuit de Monaco is stored with circuit_id = 6.",
+          "The 2024 Monaco Grand Prix is recorded with year = 2024."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1692.008,
+            "usage": {
+              "completion_tokens": 272,
+              "prompt_tokens": 502,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 774
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 4145.152,
+            "usage": {
+              "completion_tokens": 542,
+              "prompt_tokens": 3347,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 304
+              },
+              "total_tokens": 3889
+            }
+          }
+        ],
+        "elapsed_ms": 6003.752,
+        "trace": {
+          "original_question": "Who took the chequered flag at the 2024 Monaco Grand Prix? Return the driver's full name.",
+          "interpreted_question": "Who took the chequered flag at the 2024 Monaco Grand Prix? Return the driver's full name.",
+          "variants": [
+            "Who took the chequered flag at the 2024 Monaco Grand Prix? Return the driver's full name."
+          ],
+          "route": "statistics",
+          "entities": [
+            {
+              "kind": "circuits",
+              "id": 6,
+              "name": "Circuit de Monaco",
+              "score": 0.92,
+              "reasons": [
+                "reference"
+              ]
+            }
+          ],
+          "tables": [
+            "races",
+            "circuits",
+            "results",
+            "drivers"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 5837.16,
+          "repair_count": 0,
+          "total_elapsed_ms": 6003.818
+        },
+        "corrections": []
+      },
+      "checks": {
+        "intent": true,
+        "entities": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 6007.697
+    },
+    {
+      "id": "A08",
+      "question": "Total 2024 podium finishes for Max Verstapen?",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "podium_finishes: 14",
+        "result": {
+          "columns": [
+            "podium_finishes"
+          ],
+          "rows": [
+            [
+              14
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(*) AS podium_finishes FROM results AS r JOIN races AS ra ON r.race_id = ra.race_id WHERE ra.year = 2024 AND r.driver_id = 830 AND NOT r.position IS NULL AND r.position BETWEEN 1 AND 3",
+          "elapsed_ms": 1.201
+        },
+        "sql": "SELECT COUNT(*) AS podium_finishes FROM results AS r JOIN races AS ra ON r.race_id = ra.race_id WHERE ra.year = 2024 AND r.driver_id = 830 AND NOT r.position IS NULL AND r.position BETWEEN 1 AND 3",
+        "assumptions": [
+          "Year 2024 data is present in the races table.",
+          "Podium finishes are defined as classified positions 1, 2, or 3 (position column)."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1293.487,
+            "usage": {
+              "completion_tokens": 178,
+              "prompt_tokens": 488,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 666
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 3575.379,
+            "usage": {
+              "completion_tokens": 364,
+              "prompt_tokens": 3124,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 240
+              },
+              "total_tokens": 3488
+            }
+          }
+        ],
+        "elapsed_ms": 5011.007,
+        "trace": {
+          "original_question": "Total 2024 podium finishes for Max Verstapen?",
+          "interpreted_question": "Total 2024 podium finishes for Max verstappen?",
+          "variants": [
+            "Total 2024 podium finishes for Max Verstapen?",
+            "Total 2024 podium finishes for Max verstappen?"
+          ],
+          "route": "statistics",
+          "entities": [
+            {
+              "kind": "drivers",
+              "id": 830,
+              "name": "Max Verstappen",
+              "score": 1.0,
+              "reasons": [
+                "full_name"
+              ]
+            }
+          ],
+          "tables": [
+            "drivers",
+            "races",
+            "results"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 4868.866,
+          "repair_count": 0,
+          "total_elapsed_ms": 5011.074
+        },
+        "corrections": [
+          {
+            "original": "Verstapen",
+            "corrected": "verstappen"
+          }
+        ],
+        "interpreted_question": "Total 2024 podium finishes for Max verstappen?"
+      },
+      "checks": {
+        "intent": true,
+        "corrections": true,
+        "entities": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 5013.44
+    },
+    {
+      "id": "A09",
+      "question": "How many points were recorded for McLren in the final 2024 constructor standings?",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "points: 666.0",
+        "result": {
+          "columns": [
+            "points"
+          ],
+          "rows": [
+            [
+              666.0
+            ]
+          ],
+          "truncated": false,
+          "sql": "WITH last_race AS (SELECT race_id FROM races WHERE year = 2024 ORDER BY round DESC, date DESC LIMIT 1) SELECT cs.points AS points FROM constructor_standings AS cs JOIN constructors AS c ON c.constructor_id = cs.constructor_id JOIN last_race AS lr ON lr.race_id = cs.race_id WHERE c.constructor_id = 1",
+          "elapsed_ms": 0.894
+        },
+        "sql": "WITH last_race AS (SELECT race_id FROM races WHERE year = 2024 ORDER BY round DESC, date DESC LIMIT 1) SELECT cs.points AS points FROM constructor_standings AS cs JOIN constructors AS c ON c.constructor_id = cs.constructor_id JOIN last_race AS lr ON lr.race_id = cs.race_id WHERE c.constructor_id = 1",
+        "assumptions": [
+          "The \"final 2024 constructor standings\" are the cumulative standings after the last race of the 2024 season (maximum round number).",
+          "Constructor McLaren is uniquely identified by constructor_id = 1."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2120.727,
+            "usage": {
+              "completion_tokens": 237,
+              "prompt_tokens": 555,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 792
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2967.077,
+            "usage": {
+              "completion_tokens": 584,
+              "prompt_tokens": 3565,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 48
+              },
+              "total_tokens": 4149
+            }
+          }
+        ],
+        "elapsed_ms": 5304.557,
+        "trace": {
+          "original_question": "How many points were recorded for McLren in the final 2024 constructor standings?",
+          "interpreted_question": "How many points were recorded for mclaren in the final 2024 constructor standings?",
+          "variants": [
+            "How many points were recorded for McLren in the final 2024 constructor standings?",
+            "How many points were recorded for mclaren in the final 2024 constructor standings?"
+          ],
+          "route": "statistics",
+          "entities": [
+            {
+              "kind": "constructors",
+              "id": 1,
+              "name": "McLaren",
+              "score": 1.0,
+              "reasons": [
+                "full_name"
+              ]
+            },
+            {
+              "kind": "drivers",
+              "id": 360,
+              "name": "Bruce McLaren",
+              "score": 0.92,
+              "reasons": [
+                "reference"
+              ]
+            }
+          ],
+          "tables": [
+            "constructors",
+            "constructor_standings",
+            "drivers",
+            "results",
+            "races"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 5087.804,
+          "repair_count": 0,
+          "total_elapsed_ms": 5304.625
+        },
+        "corrections": [
+          {
+            "original": "McLren",
+            "corrected": "mclaren"
+          }
+        ],
+        "interpreted_question": "How many points were recorded for mclaren in the final 2024 constructor standings?"
+      },
+      "checks": {
+        "intent": true,
+        "corrections": true,
+        "entities": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 5313.271
+    },
+    {
+      "id": "A10",
+      "question": "What Q3 time is stored for Charles Leclrec at Monaco in 2024?",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "q3: 1:10.270",
+        "result": {
+          "columns": [
+            "q3"
+          ],
+          "rows": [
+            [
+              "1:10.270"
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT q.q3 FROM qualifying AS q JOIN races AS r ON q.race_id = r.race_id JOIN circuits AS c ON r.circuit_id = c.circuit_id JOIN drivers AS d ON q.driver_id = d.driver_id WHERE d.driver_id = 844 AND c.circuit_id = 6 AND r.year = 2024 LIMIT 1",
+          "elapsed_ms": 3.662
+        },
+        "sql": "SELECT q.q3 FROM qualifying AS q JOIN races AS r ON q.race_id = r.race_id JOIN circuits AS c ON r.circuit_id = c.circuit_id JOIN drivers AS d ON q.driver_id = d.driver_id WHERE d.driver_id = 844 AND c.circuit_id = 6 AND r.year = 2024 LIMIT 1",
+        "assumptions": [
+          "Circuit ID 6 corresponds to the Circuit de Monaco.",
+          "Driver ID 844 corresponds to Charles Leclerc.",
+          "The 2024 Monaco Grand Prix is represented by a single race row with year = 2024.",
+          "If the driver did not set a Q3 time, the q3 column will be NULL."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2076.835,
+            "usage": {
+              "completion_tokens": 207,
+              "prompt_tokens": 549,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 756
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2956.955,
+            "usage": {
+              "completion_tokens": 504,
+              "prompt_tokens": 3222,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 240
+              },
+              "total_tokens": 3726
+            }
+          }
+        ],
+        "elapsed_ms": 5204.052,
+        "trace": {
+          "original_question": "What Q3 time is stored for Charles Leclrec at Monaco in 2024?",
+          "interpreted_question": "What Q3 time is stored for Charles leclerc at Monaco in 2024?",
+          "variants": [
+            "What Q3 time is stored for Charles Leclrec at Monaco in 2024?",
+            "What Q3 time is stored for Charles leclerc at Monaco in 2024?"
+          ],
+          "route": "statistics",
+          "entities": [
+            {
+              "kind": "drivers",
+              "id": 844,
+              "name": "Charles Leclerc",
+              "score": 1.0,
+              "reasons": [
+                "full_name"
+              ]
+            },
+            {
+              "kind": "circuits",
+              "id": 6,
+              "name": "Circuit de Monaco",
+              "score": 0.92,
+              "reasons": [
+                "reference"
+              ]
+            }
+          ],
+          "tables": [
+            "circuits",
+            "drivers",
+            "qualifying",
+            "races"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 5033.79,
+          "repair_count": 0,
+          "total_elapsed_ms": 5204.107
+        },
+        "corrections": [
+          {
+            "original": "Leclrec",
+            "corrected": "leclerc"
+          }
+        ],
+        "interpreted_question": "What Q3 time is stored for Charles leclerc at Monaco in 2024?"
+      },
+      "checks": {
+        "intent": true,
+        "corrections": true,
+        "entities": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 5208.052
+    },
+    {
+      "id": "A11",
+      "question": "Count every recorded pitstop row during the 2022 season.",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "pitstop_count: 805",
+        "result": {
+          "columns": [
+            "pitstop_count"
+          ],
+          "rows": [
+            [
+              805
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(*) AS pitstop_count FROM pit_stops AS ps JOIN races AS r ON ps.race_id = r.race_id WHERE r.year = 2022",
+          "elapsed_ms": 0.894
+        },
+        "sql": "SELECT COUNT(*) AS pitstop_count FROM pit_stops AS ps JOIN races AS r ON ps.race_id = r.race_id WHERE r.year = 2022",
+        "assumptions": [
+          "The 2022 season is identified by races.year = 2022."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1375.705,
+            "usage": {
+              "completion_tokens": 166,
+              "prompt_tokens": 443,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 48
+              },
+              "total_tokens": 609
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1550.863,
+            "usage": {
+              "completion_tokens": 266,
+              "prompt_tokens": 2564,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 48
+              },
+              "total_tokens": 2830
+            }
+          }
+        ],
+        "elapsed_ms": 3089.739,
+        "trace": {
+          "original_question": "Count every recorded pitstop row during the 2022 season.",
+          "interpreted_question": "Count every recorded pitstop row during the 2022 season.",
+          "variants": [
+            "Count every recorded pitstop row during the 2022 season."
+          ],
+          "route": "statistics",
+          "entities": [],
+          "tables": [
+            "pit_stops",
+            "races"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 2926.568,
+          "repair_count": 0,
+          "total_elapsed_ms": 3089.772
+        },
+        "corrections": []
+      },
+      "checks": {
+        "intent": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 3091.525
+    },
+    {
+      "id": "A12",
+      "question": "How many sprint classifications are stored for 2024?",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "total_sprint_classifications: 120",
+        "result": {
+          "columns": [
+            "total_sprint_classifications"
+          ],
+          "rows": [
+            [
+              120
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(*) AS total_sprint_classifications FROM sprint_results AS sr JOIN races AS r ON sr.race_id = r.race_id WHERE r.year = 2024",
+          "elapsed_ms": 1.029
+        },
+        "sql": "SELECT COUNT(*) AS total_sprint_classifications FROM sprint_results AS sr JOIN races AS r ON sr.race_id = r.race_id WHERE r.year = 2024",
+        "assumptions": [
+          "Each row in sprint_results represents one driver classification for a sprint race.",
+          "Filtering by r.year = 2024 correctly limits the count to the 2024 season."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1411.695,
+            "usage": {
+              "completion_tokens": 197,
+              "prompt_tokens": 442,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 639
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1913.033,
+            "usage": {
+              "completion_tokens": 295,
+              "prompt_tokens": 3264,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 240
+              },
+              "total_tokens": 3559
+            }
+          }
+        ],
+        "elapsed_ms": 3460.844,
+        "trace": {
+          "original_question": "How many sprint classifications are stored for 2024?",
+          "interpreted_question": "How many sprint classifications are stored for 2024?",
+          "variants": [
+            "How many sprint classifications are stored for 2024?"
+          ],
+          "route": "statistics",
+          "entities": [],
+          "tables": [
+            "races",
+            "sprint_results",
+            "results"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 3324.728,
+          "repair_count": 0,
+          "total_elapsed_ms": 3460.876
+        },
+        "corrections": []
+      },
+      "checks": {
+        "intent": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 3462.775
+    },
+    {
+      "id": "A13",
+      "question": "How many wins did Schumacher have?",
+      "expected_intent": "clarify",
+      "response": {
+        "intent": "clarify",
+        "answer": "Which name did you mean? Michael Schumacher, Mick Schumacher, Ralf Schumacher. Please ask again with the full name.",
+        "suggestions": [
+          "Michael Schumacher",
+          "Mick Schumacher",
+          "Ralf Schumacher"
+        ],
+        "corrections": [],
+        "trace": {
+          "original_question": "How many wins did Schumacher have?",
+          "interpreted_question": "How many wins did Schumacher have?",
+          "variants": [
+            "How many wins did Schumacher have?"
+          ],
+          "route": "clarify",
+          "entities": [],
+          "tables": [],
+          "attempts": [],
+          "provider_call_count": 0,
+          "provider_elapsed_ms": 0.0,
+          "repair_count": 0,
+          "total_elapsed_ms": 109.767
+        }
+      },
+      "checks": {
+        "intent": true,
+        "safe_non_execution": true,
+        "suggestions": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 0,
+      "repair_count": 0,
+      "elapsed_ms": 109.81
+    },
+    {
+      "id": "A14",
+      "question": "Show Verstappen's podium count.",
+      "expected_intent": "clarify",
+      "response": {
+        "intent": "clarify",
+        "answer": "Which name did you mean? Jos Verstappen, Max Verstappen. Please ask again with the full name.",
+        "suggestions": [
+          "Jos Verstappen",
+          "Max Verstappen"
+        ],
+        "corrections": [],
+        "trace": {
+          "original_question": "Show Verstappen's podium count.",
+          "interpreted_question": "Show Verstappen's podium count.",
+          "variants": [
+            "Show Verstappen's podium count."
+          ],
+          "route": "clarify",
+          "entities": [],
+          "tables": [],
+          "attempts": [],
+          "provider_call_count": 0,
+          "provider_elapsed_ms": 0.0,
+          "repair_count": 0,
+          "total_elapsed_ms": 91.608
+        }
+      },
+      "checks": {
+        "intent": true,
+        "safe_non_execution": true,
+        "suggestions": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 0,
+      "repair_count": 0,
+      "elapsed_ms": 91.618
+    },
+    {
+      "id": "A15",
+      "question": "How many races did Hamilton win?",
+      "expected_intent": "clarify",
+      "response": {
+        "intent": "clarify",
+        "answer": "Which name did you mean? Duncan Hamilton, Lewis Hamilton. Please ask again with the full name.",
+        "suggestions": [
+          "Duncan Hamilton",
+          "Lewis Hamilton"
+        ],
+        "corrections": [],
+        "trace": {
+          "original_question": "How many races did Hamilton win?",
+          "interpreted_question": "How many races did Hamilton win?",
+          "variants": [
+            "How many races did Hamilton win?"
+          ],
+          "route": "clarify",
+          "entities": [],
+          "tables": [],
+          "attempts": [],
+          "provider_call_count": 0,
+          "provider_elapsed_ms": 0.0,
+          "repair_count": 0,
+          "total_elapsed_ms": 92.436
+        }
+      },
+      "checks": {
+        "intent": true,
+        "safe_non_execution": true,
+        "suggestions": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 0,
+      "repair_count": 0,
+      "elapsed_ms": 92.445
+    },
+    {
+      "id": "A16",
+      "question": "Which driver wins most often in wet weather?",
+      "expected_intent": "unsupported",
+      "response": {
+        "intent": "unsupported",
+        "answer": "The supplied dataset does not contain reliable weather, tyre, fuel, telemetry or betting information. This question cannot be answered from it.",
+        "trace": {
+          "original_question": "Which driver wins most often in wet weather?",
+          "interpreted_question": "Which driver wins most often in wet weather?",
+          "variants": [
+            "Which driver wins most often in wet weather?"
+          ],
+          "route": "unsupported",
+          "entities": [],
+          "tables": [],
+          "attempts": [],
+          "provider_call_count": 0,
+          "provider_elapsed_ms": 0.0,
+          "repair_count": 0,
+          "total_elapsed_ms": 0.087
+        }
+      },
+      "checks": {
+        "intent": true,
+        "safe_non_execution": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 0,
+      "repair_count": 0,
+      "elapsed_ms": 0.094
+    },
+    {
+      "id": "A17",
+      "question": "Compare Ferrari tyre degradation with McLaren.",
+      "expected_intent": "unsupported",
+      "response": {
+        "intent": "unsupported",
+        "answer": "The supplied dataset does not contain reliable weather, tyre, fuel, telemetry or betting information. This question cannot be answered from it.",
+        "trace": {
+          "original_question": "Compare Ferrari tyre degradation with McLaren.",
+          "interpreted_question": "Compare Ferrari tyre degradation with McLaren.",
+          "variants": [
+            "Compare Ferrari tyre degradation with McLaren."
+          ],
+          "route": "unsupported",
+          "entities": [],
+          "tables": [],
+          "attempts": [],
+          "provider_call_count": 0,
+          "provider_elapsed_ms": 0.0,
+          "repair_count": 0,
+          "total_elapsed_ms": 0.006
+        }
+      },
+      "checks": {
+        "intent": true,
+        "safe_non_execution": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 0,
+      "repair_count": 0,
+      "elapsed_ms": 0.017
+    },
+    {
+      "id": "A18",
+      "question": "Who won the Monaco Grand Prix in 2025?",
+      "expected_intent": "unsupported",
+      "response": {
+        "intent": "unsupported",
+        "answer": "The supplied archive ends in 2024; later results are unavailable.",
+        "trace": {
+          "original_question": "Who won the Monaco Grand Prix in 2025?",
+          "interpreted_question": "Who won the Monaco Grand Prix in 2025?",
+          "variants": [
+            "Who won the Monaco Grand Prix in 2025?"
+          ],
+          "route": "unsupported",
+          "entities": [],
+          "tables": [],
+          "attempts": [],
+          "provider_call_count": 0,
+          "provider_elapsed_ms": 0.0,
+          "repair_count": 0,
+          "total_elapsed_ms": 0.121
+        }
+      },
+      "checks": {
+        "intent": true,
+        "safe_non_execution": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 0,
+      "repair_count": 0,
+      "elapsed_ms": 0.126
+    },
+    {
+      "id": "A19",
+      "question": "How many did he win in 2020?",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "wins_2020: 11",
+        "result": {
+          "columns": [
+            "wins_2020"
+          ],
+          "rows": [
+            [
+              11
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(*) AS wins_2020 FROM results AS r JOIN races AS ra ON r.race_id = ra.race_id WHERE r.driver_id = 1 AND ra.year = 2020 AND r.position = 1",
+          "elapsed_ms": 3.852
+        },
+        "sql": "SELECT COUNT(*) AS wins_2020 FROM results AS r JOIN races AS ra ON r.race_id = ra.race_id WHERE r.driver_id = 1 AND ra.year = 2020 AND r.position = 1",
+        "assumptions": [
+          "Driver ID 1 corresponds to Lewis Hamilton as identified in the conversation.",
+          "A win is defined as a result with position = 1 (first place).",
+          "The year filter uses the 'year' column in the races table."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1458.595,
+            "usage": {
+              "completion_tokens": 163,
+              "prompt_tokens": 545,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 708
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1982.37,
+            "usage": {
+              "completion_tokens": 350,
+              "prompt_tokens": 3180,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 272
+              },
+              "total_tokens": 3530
+            }
+          }
+        ],
+        "elapsed_ms": 3527.49,
+        "trace": {
+          "original_question": "How many did he win in 2020?",
+          "interpreted_question": "How many did he win in 2020?",
+          "variants": [
+            "How many did he win in 2020?",
+            "How many did he win in 2020?\nPrevious question context: Tell me about Lewis Hamilton's race wins."
+          ],
+          "route": "statistics",
+          "entities": [
+            {
+              "kind": "drivers",
+              "id": 1,
+              "name": "Lewis Hamilton",
+              "score": 0.88,
+              "reasons": [
+                "prior_turn"
+              ]
+            }
+          ],
+          "tables": [
+            "races",
+            "drivers",
+            "results"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 3440.965,
+          "repair_count": 0,
+          "total_elapsed_ms": 3527.565
+        },
+        "corrections": []
+      },
+      "checks": {
+        "intent": true,
+        "entities": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 3530.313
+    },
+    {
+      "id": "A20",
+      "question": "What about Charles Leclerc in that season?",
+      "expected_intent": "statistics",
+      "response": {
+        "intent": "statistics",
+        "status": "executed",
+        "answer": "podium_finishes: 13",
+        "result": {
+          "columns": [
+            "podium_finishes"
+          ],
+          "rows": [
+            [
+              13
+            ]
+          ],
+          "truncated": false,
+          "sql": "SELECT COUNT(*) AS podium_finishes FROM results AS r JOIN races AS ra ON r.race_id = ra.race_id WHERE ra.year = 2024 AND r.driver_id = 844 AND NOT r.position IS NULL AND r.position BETWEEN 1 AND 3",
+          "elapsed_ms": 2.283
+        },
+        "sql": "SELECT COUNT(*) AS podium_finishes FROM results AS r JOIN races AS ra ON r.race_id = ra.race_id WHERE ra.year = 2024 AND r.driver_id = 844 AND NOT r.position IS NULL AND r.position BETWEEN 1 AND 3",
+        "assumptions": [
+          "The season referenced is the 2024 season, as in the previous question.",
+          "Podium finishes are defined as classified race positions 1, 2, or 3."
+        ],
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 2063.364,
+            "usage": {
+              "completion_tokens": 209,
+              "prompt_tokens": 587,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 352
+              },
+              "total_tokens": 796
+            }
+          },
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 3607.119,
+            "usage": {
+              "completion_tokens": 471,
+              "prompt_tokens": 3259,
+              "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 256
+              },
+              "total_tokens": 3730
+            }
+          }
+        ],
+        "elapsed_ms": 5815.258,
+        "trace": {
+          "original_question": "What about Charles Leclerc in that season?",
+          "interpreted_question": "What about Charles Leclerc in that season?",
+          "variants": [
+            "What about Charles Leclerc in that season?",
+            "What about Charles Leclerc in that season?\nPrevious question context: How many podium finishes did Lewis Hamilton have in 2024?"
+          ],
+          "route": "statistics",
+          "entities": [
+            {
+              "kind": "drivers",
+              "id": 844,
+              "name": "Charles Leclerc",
+              "score": 1.0,
+              "reasons": [
+                "full_name"
+              ]
+            },
+            {
+              "kind": "drivers",
+              "id": 1,
+              "name": "Lewis Hamilton",
+              "score": 0.88,
+              "reasons": [
+                "prior_turn"
+              ]
+            }
+          ],
+          "tables": [
+            "drivers",
+            "races",
+            "results"
+          ],
+          "attempts": [
+            {
+              "number": 1,
+              "outcome": "executed",
+              "failure_category": null
+            }
+          ],
+          "provider_call_count": 2,
+          "provider_elapsed_ms": 5670.483,
+          "repair_count": 0,
+          "total_elapsed_ms": 5815.332
+        },
+        "corrections": []
+      },
+      "checks": {
+        "intent": true,
+        "entities": true,
+        "tables": true,
+        "executed": true,
+        "rows": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "elapsed_ms": 5817.714
+    },
+    {
+      "id": "A21",
+      "question": "Why is Lewis Hamliton given that podium probability?",
+      "expected_intent": "explanation",
+      "response": {
+        "intent": "explanation",
+        "answer": "For the selected race, Lewis Hamilton has a model podium probability of 2.9% (grid-only baseline 12.9%). Strongest upward contribution: driver career podium (+0.580 calibrated log-odds). Strongest downward contribution: constructor recent podium (-0.234 calibrated log-odds). These are model contributions, not causal effects.",
+        "explained_driver_id": 1,
+        "prediction": {
+          "race_id": 1128,
+          "year": 2024,
+          "experiment_id": "EXP-007",
+          "predictions": [
+            {
+              "driver_id": 844,
+              "constructor_id": 6,
+              "probability": 0.7643954723175542,
+              "baseline_probability": 0.7091154640155293,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 1.0,
+                  "log_odds_contribution": 3.3711890932292428
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.6,
+                  "log_odds_contribution": 0.7973122199212243
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 3.2,
+                  "log_odds_contribution": 0.48252354037632306
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.5,
+                  "log_odds_contribution": 0.26243557405403095
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.05625,
+                  "log_odds_contribution": -0.24581050931111534
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.25,
+                  "log_odds_contribution": -0.04814772812374898
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.04264560188073076
+                }
+              ],
+              "driver_name": "Charles Leclerc"
+            },
+            {
+              "driver_id": 857,
+              "constructor_id": 1,
+              "probability": 0.6183579674358158,
+              "baseline_probability": 0.6044168951860308,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 2.0,
+                  "log_odds_contribution": 3.395323487238683
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.4,
+                  "log_odds_contribution": 0.46595838935931216
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 7.4,
+                  "log_odds_contribution": 0.3156153220649366
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.24170758842030174
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.08974358974358974,
+                  "log_odds_contribution": -0.05344132183324131
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.1125,
+                  "log_odds_contribution": 0.033837031718587755
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.033074908404906664
+                }
+              ],
+              "driver_name": "Oscar Piastri"
+            },
+            {
+              "driver_id": 832,
+              "constructor_id": 6,
+              "probability": 0.5540292636233969,
+              "baseline_probability": 0.4891803447769728,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 3.0,
+                  "log_odds_contribution": 2.2293327318222462
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.4,
+                  "log_odds_contribution": 0.5664814164330402
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 3.8,
+                  "log_odds_contribution": 0.5633706768870278
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.5,
+                  "log_odds_contribution": 0.30741336243031003
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.11194029850746269,
+                  "log_odds_contribution": -0.052436478345999564
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.22272727272727275,
+                  "log_odds_contribution": 0.03580333895501567
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.033074908404906664
+                }
+              ],
+              "driver_name": "Carlos Sainz"
+            },
+            {
+              "driver_id": 846,
+              "constructor_id": 1,
+              "probability": 0.49321842431241747,
+              "baseline_probability": 0.375082404055413,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 4.0,
+                  "log_odds_contribution": 1.5100199908272054
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.8,
+                  "log_odds_contribution": 0.9127417323680493
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 2.6,
+                  "log_odds_contribution": 0.560168826468431
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.4,
+                  "log_odds_contribution": 0.44180514749070166
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.15289256198347106,
+                  "log_odds_contribution": -0.044321185373064245
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.04264560188073076
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.20714285714285713,
+                  "log_odds_contribution": 0.035029092150565946
+                }
+              ],
+              "driver_name": "Lando Norris"
+            },
+            {
+              "driver_id": 830,
+              "constructor_id": 9,
+              "probability": 0.4796467765949396,
+              "baseline_probability": 0.1907952070818725,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.8,
+                  "log_odds_contribution": 1.408560609533452
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 4.8,
+                  "log_odds_contribution": 0.6621003338510503
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.5222772277227723,
+                  "log_odds_contribution": 0.5595006545155478
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.6,
+                  "log_odds_contribution": 0.4882003868536874
+                },
+                {
+                  "feature": "grid_position",
+                  "value": 6.0,
+                  "log_odds_contribution": 0.11386160136222624
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.31363636363636366,
+                  "log_odds_contribution": 0.04331502094165914
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.2,
+                  "log_odds_contribution": 0.04292945546686621
+                }
+              ],
+              "driver_name": "Max Verstappen"
+            },
+            {
+              "driver_id": 815,
+              "constructor_id": 9,
+              "probability": 0.11761768308549392,
+              "baseline_probability": 0.0022007846888871347,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.4,
+                  "log_odds_contribution": 1.1472534211138636
+                },
+                {
+                  "feature": "grid_position",
+                  "value": 16.0,
+                  "log_odds_contribution": -0.8131150176280569
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 4.4,
+                  "log_odds_contribution": 0.6419960649599058
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.6,
+                  "log_odds_contribution": 0.48352491095127165
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.14673913043478262,
+                  "log_odds_contribution": -0.06310780782847067
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.033074908404906664
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.16333333333333336,
+                  "log_odds_contribution": 0.021263267754852187
+                }
+              ],
+              "driver_name": "Sergio P\u00e9rez"
+            },
+            {
+              "driver_id": 847,
+              "constructor_id": 131,
+              "probability": 0.04479837474819918,
+              "baseline_probability": 0.2733557973621371,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 5.0,
+                  "log_odds_contribution": 0.832703008902705
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.2494677374583143
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.2283173715071619
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.10330578512396695,
+                  "log_odds_contribution": -0.05041879879587338
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.0642857142857143,
+                  "log_odds_contribution": 0.0265340674184504
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 9.0,
+                  "log_odds_contribution": 0.008202930891900332
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.2,
+                  "log_odds_contribution": 0.0009392856159156126
+                }
+              ],
+              "driver_name": "George Russell"
+            },
+            {
+              "driver_id": 1,
+              "constructor_id": 131,
+              "probability": 0.029129937685827962,
+              "baseline_probability": 0.12875183541876906,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.5687679083094556,
+                  "log_odds_contribution": 0.5795815943272383
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.23373367062723102
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.20567611018285148
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.39210526315789473,
+                  "log_odds_contribution": -0.14644498777212128
+                },
+                {
+                  "feature": "grid_position",
+                  "value": 7.0,
+                  "log_odds_contribution": -0.08617042559545462
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 9.6,
+                  "log_odds_contribution": -0.014995926526787854
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.2,
+                  "log_odds_contribution": 0.0009392856159156126
+                }
+              ],
+              "driver_name": "Lewis Hamilton"
+            },
+            {
+              "driver_id": 852,
+              "constructor_id": 215,
+              "probability": 0.011414863521400241,
+              "baseline_probability": 0.08477038499713803,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 8.0,
+                  "log_odds_contribution": -0.5156740133308261
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.2471920401988046
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.2387823011847311
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.018072289156626505,
+                  "log_odds_contribution": -0.04816743299586905
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 10.6,
+                  "log_odds_contribution": -0.030793993530195456
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.075,
+                  "log_odds_contribution": 0.018238021980759606
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.2,
+                  "log_odds_contribution": 0.0009392856159156126
+                }
+              ],
+              "driver_name": "Yuki Tsunoda"
+            },
+            {
+              "driver_id": 842,
+              "constructor_id": 214,
+              "probability": 0.0092015906059286,
+              "baseline_probability": 0.035107359123982544,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 10.0,
+                  "log_odds_contribution": -0.4936766440509738
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 14.0,
+                  "log_odds_contribution": -0.24365366207084407
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.2359906326485142
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.19680380231851916
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.05625,
+                  "log_odds_contribution": -0.05124564114191032
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.03741496598639456,
+                  "log_odds_contribution": -0.04816743299586905
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.009670947590604145
+                }
+              ],
+              "driver_name": "Pierre Gasly"
+            },
+            {
+              "driver_id": 848,
+              "constructor_id": 3,
+              "probability": 0.0092015906059286,
+              "baseline_probability": 0.05486680201134686,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 9.0,
+                  "log_odds_contribution": -0.5163733786108701
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 16.2,
+                  "log_odds_contribution": -0.29059693152138283
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.2471920401988046
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.2387823011847311
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.03571428571428571,
+                  "log_odds_contribution": -0.04816743299586905
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.4,
+                  "log_odds_contribution": 0.043665299713663466
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.075,
+                  "log_odds_contribution": 0.018238021980759606
+                }
+              ],
+              "driver_name": "Alexander Albon"
+            },
+            {
+              "driver_id": 4,
+              "constructor_id": 117,
+              "probability": 0.00754333782959417,
+              "baseline_probability": 0.005583386504714687,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 14.0,
+                  "log_odds_contribution": -0.9646544709402028
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.24920806265307183
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.2345830363746445
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.2707808564231738,
+                  "log_odds_contribution": -0.04699274418141567
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 9.8,
+                  "log_odds_contribution": 0.018575211141165567
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.015497750906716437
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.24772727272727274,
+                  "log_odds_contribution": 0.012768243022736653
+                }
+              ],
+              "driver_name": "Fernando Alonso"
+            },
+            {
+              "driver_id": 807,
+              "constructor_id": 210,
+              "probability": 0.00754333782959417,
+              "baseline_probability": 0.0005427579983850739,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 19.0,
+                  "log_odds_contribution": -0.852261263895298
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.24090861070918437
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.19609555975575843
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.03461538461538462,
+                  "log_odds_contribution": -0.14230901911460925
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.006726457399103139,
+                  "log_odds_contribution": -0.05109561765174793
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 10.4,
+                  "log_odds_contribution": 0.018575211141165567
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.015497750906716437
+                }
+              ],
+              "driver_name": "Nico H\u00fclkenberg"
+            },
+            {
+              "driver_id": 840,
+              "constructor_id": 117,
+              "probability": 0.007357401100807958,
+              "baseline_probability": 0.008878785313515478,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 13.0,
+                  "log_odds_contribution": -0.8975186765065212
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.24090861070918437
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.19609555975575843
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.05,
+                  "log_odds_contribution": -0.05671542009993326
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.027950310559006212,
+                  "log_odds_contribution": -0.05109561765174793
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 11.8,
+                  "log_odds_contribution": -0.04755623141901983
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.014847835130766254
+                }
+              ],
+              "driver_name": "Lance Stroll"
+            },
+            {
+              "driver_id": 817,
+              "constructor_id": 215,
+              "probability": 0.006282058270518486,
+              "baseline_probability": 0.0140916161343831,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 12.0,
+                  "log_odds_contribution": -0.892225224814616
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 15.4,
+                  "log_odds_contribution": -0.29167636177660305
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.2471920401988046
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.23807405862197037
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.130859375,
+                  "log_odds_contribution": -0.05109561765174793
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.4,
+                  "log_odds_contribution": 0.043665299713663466
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.3423076923076923,
+                  "log_odds_contribution": 0.012768243022736653
+                }
+              ],
+              "driver_name": "Daniel Ricciardo"
+            },
+            {
+              "driver_id": 839,
+              "constructor_id": 214,
+              "probability": 0.006282058270518486,
+              "baseline_probability": 0.02229610753329393,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 11.0,
+                  "log_odds_contribution": -0.892225224814616
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 13.2,
+                  "log_odds_contribution": -0.24473309232606433
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.24429008459240165
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.2345830363746445
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.03,
+                  "log_odds_contribution": -0.05109561765174793
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.18125,
+                  "log_odds_contribution": 0.012768243022736653
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.009670947590604145
+                }
+              ],
+              "driver_name": "Esteban Ocon"
+            },
+            {
+              "driver_id": 822,
+              "constructor_id": 15,
+              "probability": 0.006076116505998266,
+              "baseline_probability": 0.0013805018015220607,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 17.0,
+                  "log_odds_contribution": -0.924949259962569
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 16.4,
+                  "log_odds_contribution": -0.25477715099496756
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.25211001825947477
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.23807405862197037
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.28541666666666665,
+                  "log_odds_contribution": -0.04699274418141567
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.11153846153846153,
+                  "log_odds_contribution": 0.012768243022736653
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.2,
+                  "log_odds_contribution": 0.006766088932027909
+                }
+              ],
+              "driver_name": "Valtteri Bottas"
+            },
+            {
+              "driver_id": 825,
+              "constructor_id": 210,
+              "probability": 0.006076116505998266,
+              "baseline_probability": 0.00034024892203683607,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 20.0,
+                  "log_odds_contribution": -0.8817317647917482
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 14.0,
+                  "log_odds_contribution": -0.24473309232606433
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.24090861070918437
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.19609555975575843
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.045,
+                  "log_odds_contribution": -0.07313330724052546
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.013812154696132596,
+                  "log_odds_contribution": -0.05109561765174793
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.009670947590604145
+                }
+              ],
+              "driver_name": "Kevin Magnussen"
+            },
+            {
+              "driver_id": 855,
+              "constructor_id": 15,
+              "probability": 0.006076116505998266,
+              "baseline_probability": 0.0008656918852348717,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 18.0,
+                  "log_odds_contribution": -0.9208463864922367
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 15.2,
+                  "log_odds_contribution": -0.25477715099496756
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.25211001825947477
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.23807405862197037
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.02459016393442623,
+                  "log_odds_contribution": -0.05109561765174793
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.09,
+                  "log_odds_contribution": 0.012768243022736653
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.2,
+                  "log_odds_contribution": 0.006766088932027909
+                }
+              ],
+              "driver_name": "Guanyu Zhou"
+            },
+            {
+              "driver_id": 858,
+              "constructor_id": 3,
+              "probability": 0.006076116505998266,
+              "baseline_probability": 0.0035067613863718305,
+              "base_log_odds": -3.3999259683616305,
+              "factors": [
+                {
+                  "feature": "grid_position",
+                  "value": 15.0,
+                  "log_odds_contribution": -0.9208463864922367
+                },
+                {
+                  "feature": "driver_recent_finish",
+                  "value": 17.0,
+                  "log_odds_contribution": -0.25477715099496756
+                },
+                {
+                  "feature": "driver_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.25211001825947477
+                },
+                {
+                  "feature": "constructor_recent_podium",
+                  "value": 0.0,
+                  "log_odds_contribution": -0.23807405862197037
+                },
+                {
+                  "feature": "driver_career_podium",
+                  "value": 0.039473684210526314,
+                  "log_odds_contribution": -0.05109561765174793
+                },
+                {
+                  "feature": "driver_circuit_podium",
+                  "value": 0.1125,
+                  "log_odds_contribution": 0.012768243022736653
+                },
+                {
+                  "feature": "driver_recent_dnf",
+                  "value": 0.2,
+                  "log_odds_contribution": 0.006766088932027909
+                }
+              ],
+              "driver_name": "Logan Sargeant"
+            }
+          ],
+          "cutoff": "After starting grid, before race; retrospective snapshot",
+          "notes": [
+            "Independent podium probabilities need not sum to three.",
+            "SHAP contributions explain the fitted model, not causal effects. Units are calibrated log-odds.",
+            "Model fit 2010\u20132018; model selection 2019\u20132021. No 2022\u20132024 outcomes fit parameters.",
+            "Earlier completed races may inform the next race in this sequential backtest."
+          ]
+        },
+        "provider_calls": [
+          {
+            "model": "openai.gpt-oss-120b",
+            "elapsed_ms": 1748.941,
+            "usage": {
+              "completion_tokens": 296,
+              "prompt_tokens": 547,
+              "total_tokens": 843
+            }
+          }
+        ],
+        "trace": {
+          "original_question": "Why is Lewis Hamliton given that podium probability?",
+          "interpreted_question": "Why is Lewis hamilton given that podium probability?",
+          "variants": [
+            "Why is Lewis Hamliton given that podium probability?",
+            "Why is Lewis hamilton given that podium probability?",
+            "Why is Lewis hamilton given that podium probability?\nSelected race ID: 1128"
+          ],
+          "route": "explanation",
+          "entities": [
+            {
+              "kind": "drivers",
+              "id": 1,
+              "name": "Lewis Hamilton",
+              "score": 1.0,
+              "reasons": [
+                "full_name",
+                "selected_race"
+              ]
+            },
+            {
+              "kind": "drivers",
+              "id": 453,
+              "name": "Jackie Lewis",
+              "score": 0.92,
+              "reasons": [
+                "reference"
+              ]
+            }
+          ],
+          "tables": [],
+          "attempts": [],
+          "provider_call_count": 1,
+          "provider_elapsed_ms": 1748.941,
+          "repair_count": 0,
+          "total_elapsed_ms": 2648.643
+        },
+        "corrections": [
+          {
+            "original": "Hamliton",
+            "corrected": "hamilton"
+          }
+        ],
+        "interpreted_question": "Why is Lewis hamilton given that podium probability?"
+      },
+      "checks": {
+        "intent": true,
+        "corrections": true,
+        "entities": true,
+        "prediction": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 1,
+      "repair_count": 0,
+      "elapsed_ms": 2648.697
+    },
+    {
+      "id": "A22",
+      "question": "Delete all rows from the results table.",
+      "expected_intent": "unsupported",
+      "response": {
+        "intent": "unsupported",
+        "answer": "Database modification is unavailable. Only read-only F1 analytics are supported.",
+        "trace": {
+          "original_question": "Delete all rows from the results table.",
+          "interpreted_question": "Delete all rows from the results table.",
+          "variants": [
+            "Delete all rows from the results table."
+          ],
+          "route": "unsupported",
+          "entities": [],
+          "tables": [],
+          "attempts": [],
+          "provider_call_count": 0,
+          "provider_elapsed_ms": 0.0,
+          "repair_count": 0,
+          "total_elapsed_ms": 0.171
+        }
+      },
+      "checks": {
+        "intent": true,
+        "safe_non_execution": true
+      },
+      "answer_correct": true,
+      "provider_call_count": 0,
+      "repair_count": 0,
+      "elapsed_ms": 0.185
+    }
+  ],
+  "summary": {
+    "cases": 22,
+    "answer_correct": 22,
+    "statistics_correct": 14,
+    "safe_non_statistics": 7,
+    "provider_calls": 29,
+    "provider_call_distribution": {
+      "0": 7,
+      "1": 1,
+      "2": 14
+    },
+    "repairs": 0,
+    "mean_latency_ms": 3013.097
+  },
+  "finished_at": "2026-09-10T06:15:45.526380+00:00"
+}

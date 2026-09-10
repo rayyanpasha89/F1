@@ -11,7 +11,7 @@ An academic Formula 1 intelligence application with historical dashboards and ge
 - React historical navigation with responsive tables and loading/error/empty states; real API data throughout.
 - Measured grid-only logistic baseline and feature/model experiments with chronological validation.
 - Frozen calibrated gradient boosting predictor for historical 2022–2024 races, with actual SHAP explanations and baseline comparison.
-- Bedrock `openai.gpt-oss-120b` chat with separate intent/SQL stages, database-derived entity grounding, visible executed SQL, genuine prediction routing and unsupported-data refusals.
+- Bedrock `openai.gpt-oss-120b` chat with bounded query augmentation, database-derived entity and schema reranking, compact follow-up context, one controlled SQL repair, visible audit trace, genuine prediction routing and unsupported-data refusals.
 - Parser policy, read-only database access, 200-row caps, query timeouts, destructive-query rejection and optional chat access code.
 - Four executed reproducibility notebooks, fixed 40-question live benchmark and passing GitHub Python/frontend CI.
 
@@ -91,8 +91,11 @@ The fixed NL2SQL suite contains 30 analytics questions and 10 refusal cases. Liv
 
 ```sh
 python -m scripts.benchmark_nl2sql --output reports/nl2sql_new_run.json
+python -m scripts.benchmark_agentic --output reports/agentic_new_run.json
 python -m scripts.execute_notebooks
 ```
+
+The agentic development suite is separate from the immutable 40-case NL2SQL suite. It checks spelling corrections, ranked entities and tables, ambiguity, follow-ups, safe refusals, exact executed rows, provider-call counts, repair counts and latency. Both suites were used during development and are not unseen generalization estimates.
 
 Chat has two concurrent slots, six requests/minute per client and 200/day per process. Limits reset on restart; behind the internal load balancer clients may share a limit. The access code is the primary demo access control, not individual user authentication. Browser chat history lives in session storage; the code stays in memory. Model-supplied assumptions are displayed as assumptions, not validated facts.
 

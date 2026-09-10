@@ -4,7 +4,12 @@ from backend.ai.grounding import resolve_entities
 
 
 class Catalog:
-    def rows(self, query):
+    def rows(self, query, **params):
+        if "JOIN results" in query:
+            return [
+                {"kind": "drivers", "entity_id": 1},
+                {"kind": "drivers", "entity_id": 2},
+            ]
         if "FROM drivers" in query:
             return [
                 {

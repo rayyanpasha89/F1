@@ -34,7 +34,7 @@ def test_statistics_answer_comes_from_executed_rows(tmp_path):
     path = tmp_path / "f1.db"
     with sqlite3.connect(path) as conn:
         conn.execute(
-            "CREATE TABLE drivers(driver_id INTEGER,driver_ref TEXT,forename TEXT,surname TEXT)"
+            "CREATE TABLE drivers(driver_id INTEGER,driver_ref TEXT,code TEXT,forename TEXT,surname TEXT)"
         )
         conn.execute(
             "CREATE TABLE constructors(constructor_id INTEGER,constructor_ref TEXT,name TEXT)"

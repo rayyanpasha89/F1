@@ -1,0 +1,179 @@
+[
+  {
+    "id": "A01",
+    "question": "How many race wins does Lewis Hamliton have in the archive?",
+    "expected_intent": "statistics",
+    "expected_corrections": [{"original": "Hamliton", "corrected": "hamilton"}],
+    "expected_entities": [{"kind": "drivers", "id": 1}],
+    "expected_tables": ["drivers", "results"],
+    "gold_sql": "SELECT COUNT(*) FROM results WHERE driver_id=1 AND position=1"
+  },
+  {
+    "id": "A02",
+    "question": "How many podiums did Charles Leclrec score in 2024?",
+    "expected_intent": "statistics",
+    "expected_corrections": [{"original": "Leclrec", "corrected": "leclerc"}],
+    "expected_entities": [{"kind": "drivers", "id": 844}],
+    "expected_tables": ["drivers", "results", "races"],
+    "gold_sql": "SELECT COUNT(*) FROM results x JOIN races r USING(race_id) WHERE x.driver_id=844 AND r.year=2024 AND x.position BETWEEN 1 AND 3"
+  },
+  {
+    "id": "A03",
+    "question": "What was Ferarri's total main-race points in 2024, leaving out sprints?",
+    "expected_intent": "statistics",
+    "expected_corrections": [{"original": "Ferarri", "corrected": "ferrari"}],
+    "expected_entities": [{"kind": "constructors", "id": 6}],
+    "expected_tables": ["constructors", "results", "races"],
+    "gold_sql": "SELECT SUM(points) FROM results x JOIN races r USING(race_id) WHERE x.constructor_id=6 AND r.year=2024"
+  },
+  {
+    "id": "A04",
+    "question": "Give me the stored name and country for the Moncao circuit.",
+    "expected_intent": "statistics",
+    "expected_corrections": [{"original": "Moncao", "corrected": "monaco"}],
+    "expected_entities": [{"kind": "circuits", "id": 6}],
+    "expected_tables": ["circuits"],
+    "gold_sql": "SELECT name,country FROM circuits WHERE circuit_id=6"
+  },
+  {
+    "id": "A05",
+    "question": "Count the Grands Prix on the 2023 calendar in this archive.",
+    "expected_intent": "statistics",
+    "expected_tables": ["races"],
+    "gold_sql": "SELECT COUNT(*) FROM races WHERE year=2023"
+  },
+  {
+    "id": "A06",
+    "question": "What years bookend the historical season collection?",
+    "expected_intent": "statistics",
+    "expected_tables": ["seasons"],
+    "gold_sql": "SELECT MIN(year),MAX(year) FROM seasons"
+  },
+  {
+    "id": "A07",
+    "question": "Who took the chequered flag at the 2024 Monaco Grand Prix? Return the driver's full name.",
+    "expected_intent": "statistics",
+    "expected_entities": [{"kind": "circuits", "id": 6}],
+    "expected_tables": ["drivers", "results", "races"],
+    "gold_sql": "SELECT d.forename || ' ' || d.surname FROM results x JOIN drivers d USING(driver_id) JOIN races r USING(race_id) WHERE r.year=2024 AND r.name='Monaco Grand Prix' AND x.position=1"
+  },
+  {
+    "id": "A08",
+    "question": "Total 2024 podium finishes for Max Verstapen?",
+    "expected_intent": "statistics",
+    "expected_corrections": [{"original": "Verstapen", "corrected": "verstappen"}],
+    "expected_entities": [{"kind": "drivers", "id": 830}],
+    "expected_tables": ["drivers", "results", "races"],
+    "gold_sql": "SELECT COUNT(*) FROM results x JOIN races r USING(race_id) WHERE x.driver_id=830 AND r.year=2024 AND x.position BETWEEN 1 AND 3"
+  },
+  {
+    "id": "A09",
+    "question": "How many points were recorded for McLren in the final 2024 constructor standings?",
+    "expected_intent": "statistics",
+    "expected_corrections": [{"original": "McLren", "corrected": "mclaren"}],
+    "expected_entities": [{"kind": "constructors", "id": 1}],
+    "expected_tables": ["constructors", "constructor_standings", "races"],
+    "gold_sql": "SELECT s.points FROM constructor_standings s JOIN races r USING(race_id) WHERE s.constructor_id=1 AND r.year=2024 ORDER BY r.round DESC LIMIT 1"
+  },
+  {
+    "id": "A10",
+    "question": "What Q3 time is stored for Charles Leclrec at Monaco in 2024?",
+    "expected_intent": "statistics",
+    "expected_corrections": [{"original": "Leclrec", "corrected": "leclerc"}],
+    "expected_entities": [{"kind": "drivers", "id": 844}, {"kind": "circuits", "id": 6}],
+    "expected_tables": ["qualifying", "drivers", "races"],
+    "gold_sql": "SELECT q.q3 FROM qualifying q JOIN races r USING(race_id) WHERE q.driver_id=844 AND r.year=2024 AND r.name='Monaco Grand Prix'"
+  },
+  {
+    "id": "A11",
+    "question": "Count every recorded pitstop row during the 2022 season.",
+    "expected_intent": "statistics",
+    "expected_tables": ["pit_stops", "races"],
+    "gold_sql": "SELECT COUNT(*) FROM pit_stops p JOIN races r USING(race_id) WHERE r.year=2022"
+  },
+  {
+    "id": "A12",
+    "question": "How many sprint classifications are stored for 2024?",
+    "expected_intent": "statistics",
+    "expected_tables": ["sprint_results", "races"],
+    "gold_sql": "SELECT COUNT(*) FROM sprint_results s JOIN races r USING(race_id) WHERE r.year=2024"
+  },
+  {
+    "id": "A13",
+    "question": "How many wins did Schumacher have?",
+    "expected_intent": "clarify",
+    "expected_suggestions": ["Michael Schumacher", "Mick Schumacher", "Ralf Schumacher"]
+  },
+  {
+    "id": "A14",
+    "question": "Show Verstappen's podium count.",
+    "expected_intent": "clarify",
+    "expected_suggestions": ["Jos Verstappen", "Max Verstappen"]
+  },
+  {
+    "id": "A15",
+    "question": "How many races did Hamilton win?",
+    "expected_intent": "clarify",
+    "expected_suggestions": ["Duncan Hamilton", "Lewis Hamilton"]
+  },
+  {
+    "id": "A16",
+    "question": "Which driver wins most often in wet weather?",
+    "expected_intent": "unsupported"
+  },
+  {
+    "id": "A17",
+    "question": "Compare Ferrari tyre degradation with McLaren.",
+    "expected_intent": "unsupported"
+  },
+  {
+    "id": "A18",
+    "question": "Who won the Monaco Grand Prix in 2025?",
+    "expected_intent": "unsupported"
+  },
+  {
+    "id": "A19",
+    "question": "How many did he win in 2020?",
+    "expected_intent": "statistics",
+    "conversation": [
+      {
+        "question": "Tell me about Lewis Hamilton's race wins.",
+        "intent": "statistics",
+        "entities": [{"kind": "drivers", "id": 1, "name": "Lewis Hamilton"}],
+        "race_id": null
+      }
+    ],
+    "expected_entities": [{"kind": "drivers", "id": 1}],
+    "expected_tables": ["drivers", "results", "races"],
+    "gold_sql": "SELECT COUNT(*) FROM results x JOIN races r USING(race_id) WHERE x.driver_id=1 AND r.year=2020 AND x.position=1"
+  },
+  {
+    "id": "A20",
+    "question": "What about Charles Leclerc in that season?",
+    "expected_intent": "statistics",
+    "conversation": [
+      {
+        "question": "How many podium finishes did Lewis Hamilton have in 2024?",
+        "intent": "statistics",
+        "entities": [{"kind": "drivers", "id": 1, "name": "Lewis Hamilton"}],
+        "race_id": null
+      }
+    ],
+    "expected_entities": [{"kind": "drivers", "id": 844}],
+    "expected_tables": ["drivers", "results", "races"],
+    "gold_sql": "SELECT COUNT(*) FROM results x JOIN races r USING(race_id) WHERE x.driver_id=844 AND r.year=2024 AND x.position BETWEEN 1 AND 3"
+  },
+  {
+    "id": "A21",
+    "question": "Why is Lewis Hamliton given that podium probability?",
+    "race_id": 1128,
+    "expected_intent": "explanation",
+    "expected_corrections": [{"original": "Hamliton", "corrected": "hamilton"}],
+    "expected_entities": [{"kind": "drivers", "id": 1}]
+  },
+  {
+    "id": "A22",
+    "question": "Delete all rows from the results table.",
+    "expected_intent": "unsupported"
+  }
+]
