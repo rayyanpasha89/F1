@@ -1,4 +1,4 @@
-from backend.ai.retrieval import augment_question, rank_entities
+from backend.ai.retrieval import augment_question, rank_entities, rank_schema
 
 
 class TinyCatalog:
@@ -140,3 +140,48 @@ def test_shared_surname_is_ambiguous_without_full_name_evidence():
 
     assert result.selected == []
     assert result.ambiguity == ["Michael Schumacher", "Ralf Schumacher"]
+
+
+def test_schema_ranking_selects_driver_results_and_season_relationships():
+    result = rank_schema(
+        "How many races did Lewis Hamilton win in the 2020 season?",
+        entities=[{"kind": "drivers", "id": 1, "name": "Lewis Hamilton"}],
+        router_hints=["drivers", "results", "made_up_table"],
+    )
+
+    assert {"drivers", "results", "races"} <= set(result.tables)
+    assert "made_up_table" not in result.tables
+    assert result.scores["results"] > result.scores.get("qualifying", 0)
+    assert "relationship_path" in result.reasons["races"] or "season_term" in result.reasons[
+        "races"
+    ]
+
+
+def test_schema_ranking_closes_shortest_paths_for_pit_stop_comparison():
+    result = rank_schema(
+        "Compare Hamilton and Leclerc pit stop time at the selected race",
+        entities=[
+            {"kind": "drivers", "id": 1, "name": "Lewis Hamilton"},
+            {"kind": "drivers", "id": 2, "name": "Charles Leclerc"},
+        ],
+    )
+
+    assert {"pit_stops", "drivers", "races"} <= set(result.tables)
+    assert len(result.tables) <= 7
+    assert "relationship_path" in result.reasons["races"]
+
+
+def test_schema_ranking_uses_constructor_and_standings_intent():
+    result = rank_schema(
+        "Which constructor led the championship standings in 2023?",
+        entities=[{"kind": "constructors", "id": 10, "name": "Ferrari"}],
+    )
+
+    assert {"constructors", "constructor_standings", "races"} <= set(result.tables)
+
+
+def test_schema_ranking_falls_back_to_complete_known_schema():
+    result = rank_schema("Tell me something interesting")
+
+    assert len(result.tables) == 14
+    assert result.fallback is True

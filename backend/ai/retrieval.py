@@ -1,12 +1,15 @@
 """Deterministic retrieval context for the bounded F1 chat pipeline."""
 
+import json
 import re
+from collections import deque
 from difflib import SequenceMatcher
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from backend.ai.grounding import entity_catalog, normalize
+from backend.database import ROOT, SCHEMA
 
 
 EntityKind = Literal["drivers", "constructors", "circuits"]
@@ -35,6 +38,15 @@ class EntityRanking(BaseModel):
     selected: list[RankedEntity] = Field(default_factory=list, max_length=12)
     ranked: list[RankedEntity] = Field(default_factory=list, max_length=20)
     ambiguity: list[str] = Field(default_factory=list, max_length=10)
+
+
+class SchemaRanking(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    tables: list[str] = Field(min_length=1, max_length=14)
+    scores: dict[str, float]
+    reasons: dict[str, list[str]]
+    fallback: bool = False
 
 
 FOLLOWUP = re.compile(
@@ -244,4 +256,150 @@ def rank_entities(analytics, variants, prior_entities=(), race_id=None):
         selected=selected,
         ranked=ranked,
         ambiguity=sorted(ambiguous_names)[:10],
+    )
+
+
+SCHEMA_TERMS = {
+    "drivers": {"driver", "drivers"},
+    "constructors": {"constructor", "constructors", "team", "teams"},
+    "circuits": {"circuit", "circuits", "track", "tracks", "country", "countries"},
+    "races": {"race", "races", "season", "seasons", "year", "round", "date"},
+    "results": {
+        "win",
+        "wins",
+        "won",
+        "winner",
+        "winners",
+        "podium",
+        "podiums",
+        "finish",
+        "finished",
+        "position",
+        "points",
+        "grid",
+        "classified",
+    },
+    "qualifying": {"qualifying", "qualification", "quali", "pole", "q1", "q2", "q3"},
+    "constructor_results": {"constructor result", "team result"},
+    "constructor_standings": {"constructor standing", "team standing"},
+    "driver_standings": {"driver standing"},
+    "lap_times": {"lap time", "lap times", "fastest lap"},
+    "pit_stops": {"pit stop", "pit stops", "pitstop", "pitstops"},
+    "sprint_results": {"sprint", "sprints"},
+    "status": {"status", "dnf", "retired", "retirement", "finished"},
+}
+
+
+def _relationship_graph(relationships):
+    graph = {name: set() for name in SCHEMA}
+    for relation in relationships:
+        left = relation.get("table")
+        right = str(relation.get("references", "")).split(".", 1)[0]
+        if left in graph and right in graph:
+            graph[left].add(right)
+            graph[right].add(left)
+    return graph
+
+
+def _shortest_path(graph, start, targets):
+    queue = deque([(start, [start])])
+    visited = {start}
+    while queue:
+        node, path = queue.popleft()
+        if node in targets:
+            return path
+        for neighbor in sorted(graph[node]):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+    return []
+
+
+def rank_schema(question, entities=(), router_hints=(), relationships=None):
+    """Score known tables and add the shortest stored relationship paths."""
+    relationships = relationships or json.loads((ROOT / "knowledge/relationships.json").read_text())
+    text = normalize(question)
+    words = set(re.findall(r"[a-z0-9]+", text))
+    scores = {name: 0.0 for name in SCHEMA}
+    reasons = {name: [] for name in SCHEMA}
+
+    def add(table, amount, reason):
+        if table not in SCHEMA:
+            return
+        scores[table] += amount
+        if reason not in reasons[table]:
+            reasons[table].append(reason)
+
+    for table, terms in SCHEMA_TERMS.items():
+        for term in terms:
+            matched = _contains_phrase(text, term) if " " in term else term in words
+            if matched:
+                if table == "races" and term in {"season", "seasons", "year"}:
+                    reason = "season_term"
+                elif table == "races":
+                    reason = "race_term"
+                else:
+                    reason = "intent_term"
+                add(table, 2.0, reason)
+                break
+
+    # Resolve standings and lap/pit phrases more precisely than column-name overlap.
+    if words & {"championship", "standings", "standing"}:
+        if words & {"constructor", "constructors", "team", "teams"}:
+            add("constructor_standings", 3.0, "standings_intent")
+        else:
+            add("driver_standings", 3.0, "standings_intent")
+        add("races", 1.0, "standings_snapshot")
+    if ("pit" in words and ("stop" in words or "stops" in words)) or words & {
+        "pitstop",
+        "pitstops",
+    }:
+        add("pit_stops", 3.0, "pit_stop_intent")
+    if "lap" in words or "laps" in words:
+        add("lap_times", 2.5, "lap_intent")
+    if words & {"dnf", "retired", "retirement"}:
+        add("results", 1.5, "classification_intent")
+
+    for entity in entities:
+        kind = entity.kind if hasattr(entity, "kind") else entity.get("kind")
+        table = kind if kind in {"drivers", "constructors", "circuits"} else None
+        if table:
+            add(table, 3.0, "entity_kind")
+    for table in router_hints:
+        if table in SCHEMA:
+            add(table, 2.5, "router_hint")
+
+    active = [name for name, score in scores.items() if score > 0]
+    if not active:
+        return SchemaRanking(
+            tables=list(SCHEMA),
+            scores={name: 0.0 for name in SCHEMA},
+            reasons={name: ["complete_schema_fallback"] for name in SCHEMA},
+            fallback=True,
+        )
+
+    seeds = sorted(active, key=lambda name: (-scores[name], name))[:5]
+    graph = _relationship_graph(relationships)
+    connected = {seeds[0]}
+    ordered = [seeds[0]]
+    for seed in seeds[1:]:
+        path = _shortest_path(graph, seed, connected)
+        if not path:
+            path = [seed]
+        for table in path:
+            if table not in ordered:
+                ordered.append(table)
+            if len(path) > 1 and "relationship_path" not in reasons[table]:
+                reasons[table].append("relationship_path")
+        connected.update(path)
+
+    # Keep direct evidence not included in a disconnected path, within a compact prompt budget.
+    for seed in seeds:
+        if seed not in ordered:
+            ordered.append(seed)
+    ordered = ordered[:7]
+    return SchemaRanking(
+        tables=ordered,
+        scores={name: round(scores[name], 3) for name in ordered},
+        reasons={name: reasons[name] for name in ordered},
     )

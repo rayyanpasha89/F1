@@ -62,13 +62,13 @@
 - Modify: `backend/ai/retrieval.py`
 - Modify: `tests/test_retrieval.py`
 
-- [ ] Add failing tests for `rank_schema` that require `drivers` and `results` for driver wins, `races` for season filters, `pit_stops` plus relationship tables for pit-stop comparisons, router-hint filtering to known tables, shortest-path closure from `knowledge/relationships.json`, a compact selected set, and all-schema fallback for an unrankable question.
-- [ ] Run `.venv/bin/pytest tests/test_retrieval.py -q` and confirm the new assertions fail.
-- [ ] Implement deterministic token/phrase weights for table names, columns, F1 terms, entity kinds, and valid router hints.
-- [ ] Parse the repository relationship list into an undirected table graph and add the shortest lexicographically stable relationship path between required tables.
-- [ ] Return selected tables, per-table scores, and path reasons in the retrieval context; never add names outside `SCHEMA`.
-- [ ] Run `.venv/bin/pytest tests/test_retrieval.py -q` and require all tests to pass.
-- [ ] Commit with `git add backend/ai/retrieval.py tests/test_retrieval.py && git commit -m "feat: rank schema with relationship closure"`.
+- [x] Add failing tests for `rank_schema` that require `drivers` and `results` for driver wins, `races` for season filters, `pit_stops` plus relationship tables for pit-stop comparisons, router-hint filtering to known tables, shortest-path closure from `knowledge/relationships.json`, a compact selected set, and all-schema fallback for an unrankable question.
+- [x] Run `.venv/bin/pytest tests/test_retrieval.py -q` and confirm the new assertions fail.
+- [x] Implement deterministic token and phrase weights for F1 terms, entity kinds, and valid router hints.
+- [x] Parse the repository relationship list into an undirected table graph and add the shortest lexicographically stable relationship path between required tables.
+- [x] Return selected tables, per-table scores, and path reasons in the retrieval context; never add names outside `SCHEMA`.
+- [x] Run `.venv/bin/pytest tests/test_retrieval.py -q` and require all tests to pass.
+- [x] Commit with `git add backend/ai/retrieval.py tests/test_retrieval.py docs/superpowers/plans/2026-09-10-agentic-retrieval.md && git commit -m "feat: rank schema with relationship closure"`.
 
 ### Task 4: Introduce bounded conversation state, call budget, and audit trace
 
