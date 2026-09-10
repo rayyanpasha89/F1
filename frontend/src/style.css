@@ -1227,8 +1227,9 @@ summary {
   border: 1px solid #b7c5d4;
   border-left: 6px solid var(--timing);
 }
-.model-page-state {
-  min-height: 55vh;
+.model-page-state,
+.route-page-state {
+  min-height: 100svh;
   display: grid;
   place-items: center;
 }

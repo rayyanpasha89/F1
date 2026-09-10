@@ -29,16 +29,16 @@ const fmt = (value) =>
     : typeof value === 'number'
       ? value.toLocaleString(undefined, { maximumFractionDigits: 2 })
       : value;
-export function DataState({ state, children }) {
+export function DataState({ state, children, className = '' }) {
   if (state.loading)
     return (
-      <p role="status" className="state">
+      <p role="status" className={`state ${className}`.trim()}>
         Loading race data…
       </p>
     );
   if (state.error)
     return (
-      <div role="alert" className="state error">
+      <div role="alert" className={`state error ${className}`.trim()}>
         {state.error} <button onClick={() => window.location.reload()}>Reload</button>
       </div>
     );
@@ -204,6 +204,9 @@ function Season() {
 }
 function RaceTable({ raceId, kind, columns }) {
   const state = useApi(`/races/${raceId}/${kind}`);
+  if (state.loading) {
+    return <LoadingTable label={`Loading race ${kind.replace('-', ' ')}…`} rows={20} />;
+  }
   return (
     <DataState state={state}>{({ data }) => <Table rows={data} columns={columns} />}</DataState>
   );
@@ -215,7 +218,7 @@ function Race() {
   const tab = search.get('tab') || 'results';
   const kinds = ['results', 'grid', 'qualifying', 'pit-stops'];
   return (
-    <DataState state={state}>
+    <DataState state={state} className="route-page-state">
       {(r) => (
         <>
           <Link className="back" to={`/?year=${r.year}`}>
@@ -458,7 +461,13 @@ function App() {
           <Route
             path="/model"
             element={
-              <React.Suspense fallback={<p role="status">Opening model accountability…</p>}>
+              <React.Suspense
+                fallback={
+                  <p role="status" className="state model-page-state">
+                    Opening model accountability…
+                  </p>
+                }
+              >
                 <ModelLab />
               </React.Suspense>
             }
