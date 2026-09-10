@@ -24,3 +24,4 @@ README_PACKAGE.md
 f1-race-analytics.md
 
 **/.terraform/
+.worktrees/
