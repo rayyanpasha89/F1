@@ -43,6 +43,30 @@ class TinyCatalog:
                     "surname": "Schumacher",
                     "name": "Ralf Schumacher",
                 },
+                {
+                    "driver_id": 5,
+                    "driver_ref": "pic",
+                    "code": "PIC",
+                    "forename": "Charles",
+                    "surname": "Pic",
+                    "name": "Charles Pic",
+                },
+                {
+                    "driver_id": 6,
+                    "driver_ref": "driver",
+                    "code": None,
+                    "forename": "Paddy",
+                    "surname": "Driver",
+                    "name": "Paddy Driver",
+                },
+                {
+                    "driver_id": 7,
+                    "driver_ref": "winkelhock",
+                    "code": "WIN",
+                    "forename": "Markus",
+                    "surname": "Winkelhock",
+                    "name": "Markus Winkelhock",
+                },
             ]
         if "FROM constructors" in query:
             return [
@@ -142,6 +166,33 @@ def test_shared_surname_is_ambiguous_without_full_name_evidence():
     assert result.ambiguity == ["Michael Schumacher", "Ralf Schumacher"]
 
 
+def test_full_name_evidence_excludes_relatives_and_shared_forenames():
+    result = rank_entities(
+        TinyCatalog(),
+        augment_question(
+            "Compare Michael Schumacher and Charles Leclerc",
+            "Compare Michael Schumacher and Charles Leclerc",
+        ),
+    )
+
+    assert [(entity.id, entity.name) for entity in result.selected] == [
+        (3, "Michael Schumacher"),
+        (2, "Charles Leclerc"),
+    ]
+
+
+def test_generic_words_and_lowercase_words_matching_codes_select_no_driver():
+    result = rank_entities(
+        TinyCatalog(),
+        augment_question(
+            "Which driver has the most wins in this archive?",
+            "Which driver has the most wins in this archive?",
+        ),
+    )
+
+    assert result.selected == []
+
+
 def test_schema_ranking_selects_driver_results_and_season_relationships():
     result = rank_schema(
         "How many races did Lewis Hamilton win in the 2020 season?",
@@ -152,9 +203,9 @@ def test_schema_ranking_selects_driver_results_and_season_relationships():
     assert {"drivers", "results", "races"} <= set(result.tables)
     assert "made_up_table" not in result.tables
     assert result.scores["results"] > result.scores.get("qualifying", 0)
-    assert "relationship_path" in result.reasons["races"] or "season_term" in result.reasons[
-        "races"
-    ]
+    assert (
+        "relationship_path" in result.reasons["races"] or "season_term" in result.reasons["races"]
+    )
 
 
 def test_schema_ranking_closes_shortest_paths_for_pit_stop_comparison():
@@ -185,3 +236,11 @@ def test_schema_ranking_falls_back_to_complete_known_schema():
 
     assert len(result.tables) == 14
     assert result.fallback is True
+
+
+def test_schema_ranking_recognizes_numeric_years_and_season_boundaries():
+    dated = rank_schema("Count the Grands Prix on the 2023 calendar")
+    boundaries = rank_schema("What years bookend the historical season collection?")
+
+    assert "races" in dated.tables
+    assert "seasons" in boundaries.tables

@@ -298,7 +298,8 @@ class ChatService:
         budget,
     ):
         question = resolution["question"]
-        preliminary_schema = rank_schema(question, entity_ranking.selected)
+        schema_question = "\n".join(variant.text for variant in variants)
+        preliminary_schema = rank_schema(schema_question, entity_ranking.selected)
         context_data = {
             "question": question,
             "variants": [variant.text for variant in variants],
@@ -309,7 +310,7 @@ class ChatService:
         }
         context = json.dumps(context_data)
         route, _ = budget.structured(ROUTER, context, Intent)
-        schema_ranking = rank_schema(question, entity_ranking.selected, route.tables)
+        schema_ranking = rank_schema(schema_question, entity_ranking.selected, route.tables)
         if route.intent in {"unsupported", "clarify"}:
             message = (
                 "This question requires information outside the supplied F1 dataset."

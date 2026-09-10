@@ -151,6 +151,7 @@ def rank_entities(analytics, variants, prior_entities=(), race_id=None):
     """Rank stored entity labels; leave close/shared identities for clarification."""
     catalog = entity_catalog(analytics)
     texts = _current_texts(variants)
+    raw_texts = [v.text for v in variants if v.source in {"original", "corrected"}]
     words = set(re.findall(r"[a-z0-9]+", " ".join(texts)))
     followup = bool(FOLLOWUP.search(variants[0].text if variants else ""))
     race_entities = _race_entities(analytics, race_id)
@@ -164,39 +165,72 @@ def rank_entities(analytics, variants, prior_entities=(), race_id=None):
         or (isinstance(item, dict) and item.get("kind") and item.get("id"))
     }
     scored = []
-    surname_hits = {}
+    ambiguous_names = set()
+    excluded_names = set()
+    surname_groups = {}
+    for row in catalog["drivers"]:
+        surname_groups.setdefault(normalize(row["surname"]), []).append(row)
+    for surname, rows in surname_groups.items():
+        if surname not in words or len(rows) < 2:
+            continue
+        named = [row for row in rows if normalize(row["forename"]) in words]
+        if named:
+            excluded_names.update(row["name"] for row in rows if row not in named)
+        else:
+            ambiguous_names.update(row["name"] for row in rows)
+    generic_aliases = {
+        "archive",
+        "circuit",
+        "circuits",
+        "constructor",
+        "constructors",
+        "driver",
+        "drivers",
+        "race",
+        "races",
+        "team",
+        "teams",
+    }
     for kind, rows in catalog.items():
         for row in rows:
             entity_id = _row_identity(kind, row)
             aliases = _aliases(kind, row)
             score = 0.0
             reasons = []
-            if any(_contains_phrase(text, value) for text in texts for value in aliases["full_name"]):
+            if any(
+                _contains_phrase(text, value) for text in texts for value in aliases["full_name"]
+            ):
                 score = 1.0
                 reasons.append("full_name")
             elif any(
                 _contains_phrase(text, value)
                 for text in texts
                 for value in aliases.get("reference", [])
+                if normalize(value) not in generic_aliases
             ):
                 score = 0.92
                 reasons.append("reference")
             elif any(
-                _contains_phrase(text, value)
-                for text in texts
+                re.search(rf"\b{re.escape(value)}\b", text) is not None
+                for text in raw_texts
                 for value in aliases.get("code", [])
-                if len(value) >= 3
+                if len(value) >= 3 and value.isupper()
             ):
                 score = 0.9
                 reasons.append("code")
             else:
                 components = [normalize(v) for v in aliases.get("component", []) if v]
-                matched = [value for value in components if value in words and len(value) >= 3]
+                matched = [
+                    value
+                    for value in components
+                    if value in words and len(value) >= 3 and value not in generic_aliases
+                ]
                 if matched:
-                    score = 0.84
+                    is_driver_surname = (
+                        kind == "drivers" and normalize(row.get("surname", "")) in matched
+                    )
+                    score = 0.84 if is_driver_surname or kind != "drivers" else 0.7
                     reasons.append("name_component")
-                    if kind == "drivers" and normalize(row.get("surname", "")) in matched:
-                        surname_hits.setdefault(normalize(row["surname"]), []).append(row)
                 else:
                     searchable = [
                         normalize(value)
@@ -214,7 +248,7 @@ def rank_entities(analytics, variants, prior_entities=(), race_id=None):
                         default=0.0,
                     )
                     if similarity >= 0.84:
-                        score = round(0.72 + (similarity - 0.84) * 0.75, 6)
+                        score = min(0.73, round(0.65 + (similarity - 0.84) * 0.5, 6))
                         reasons.append("edit_similarity")
             key = (kind, entity_id)
             if followup and key in prior:
@@ -238,19 +272,14 @@ def rank_entities(analytics, variants, prior_entities=(), race_id=None):
                 )
             )
 
-    ambiguous_names = set()
-    for surname, rows in surname_hits.items():
-        if len(rows) < 2:
-            continue
-        for row in rows:
-            if not any(normalize(row.get("forename", "")) in words for _ in [0]):
-                ambiguous_names.add(row["name"])
     scored.sort(key=lambda pair: (-pair[0].score, pair[1], pair[0].kind, pair[0].name))
     ranked = [entity for entity, _ in scored[:20]]
     selected = [
         entity
         for entity in ranked
-        if entity.score >= 0.74 and entity.name not in ambiguous_names
+        if entity.score >= 0.74
+        and entity.name not in ambiguous_names
+        and entity.name not in excluded_names
     ][:12]
     return EntityRanking(
         selected=selected,
@@ -264,6 +293,7 @@ SCHEMA_TERMS = {
     "constructors": {"constructor", "constructors", "team", "teams"},
     "circuits": {"circuit", "circuits", "track", "tracks", "country", "countries"},
     "races": {"race", "races", "season", "seasons", "year", "round", "date"},
+    "seasons": {"season collection", "season range"},
     "results": {
         "win",
         "wins",
@@ -350,6 +380,29 @@ def rank_schema(question, entities=(), router_hints=(), relationships=None):
         else:
             add("driver_standings", 3.0, "standings_intent")
         add("races", 1.0, "standings_snapshot")
+    if re.search(r"\b(?:19|20)\d{2}\b", text):
+        add("races", 2.0, "year_literal")
+    if (words & {"season", "seasons"}) and (
+        words
+        & {
+            "archive",
+            "bookend",
+            "bookends",
+            "boundary",
+            "boundaries",
+            "collection",
+            "earliest",
+            "latest",
+            "maximum",
+            "minimum",
+            "range",
+        }
+    ):
+        add("seasons", 3.0, "season_boundary_intent")
+    if "grand prix" in text or "grands prix" in text or "calendar" in words:
+        add("races", 2.0, "race_term")
+    if "chequered flag" in text or "checkered flag" in text:
+        add("results", 3.0, "finish_intent")
     if ("pit" in words and ("stop" in words or "stops" in words)) or words & {
         "pitstop",
         "pitstops",

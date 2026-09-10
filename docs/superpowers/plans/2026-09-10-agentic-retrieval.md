@@ -152,14 +152,15 @@
 - Create: `tests/test_benchmark_agentic.py`
 - Modify: `README.md`
 
-- [ ] Author a fixed development suite with unique IDs and explicit expectations across misspellings, paraphrases, shared-name ambiguity, selected-race context, pronoun follow-ups, unsupported requests, and normal statistics. Include gold SQL only for statistics answers and structured previous turns only for follow-ups.
-- [ ] Write failing runner tests for suite hashing, no-overwrite behavior, sequential conversation construction, exact row comparison through the existing `equivalent` helper, correction/entity/intent/clarification assertions, and summary fields for calls, repairs, and latency.
-- [ ] Run `.venv/bin/pytest tests/test_benchmark_agentic.py -q` and confirm failures because the runner is absent.
-- [ ] Implement `scripts/benchmark_agentic.py` with an injectable service for offline tests and a CLI requiring a new output path.
-- [ ] Record suite hash, Git SHA, model, case response, correctness components, call count, repair count, latency, and summary aggregates. Preserve every partial report after each case.
-- [ ] Document that the new suite and fixed 40-case suite are development evaluations and are reported separately.
-- [ ] Run `.venv/bin/pytest tests/test_benchmark_agentic.py tests/test_retrieval.py tests/test_agentic_chat.py -q` and require all tests to pass.
-- [ ] Commit with `git add tests/nl2sql/agentic_questions.json scripts/benchmark_agentic.py tests/test_benchmark_agentic.py README.md && git commit -m "test: add agentic retrieval evaluation suite"`.
+- [x] Author a fixed 22-case development suite with unique IDs and explicit expectations across misspellings, paraphrases, shared-name ambiguity, selected-race context, pronoun follow-ups, unsupported requests, and normal statistics. Include gold SQL only for statistics answers and structured previous turns only for follow-ups.
+- [x] Write failing runner tests for suite hashing, no-overwrite behavior, sequential conversation construction, exact row comparison through the existing `equivalent` helper, correction/entity/intent/clarification assertions, and summary fields for calls, repairs, and latency.
+- [x] Run `.venv/bin/pytest tests/test_benchmark_agentic.py -q` and confirm failures because the runner is absent.
+- [x] Implement `scripts/benchmark_agentic.py` with an injectable service for offline tests and a CLI requiring a new output path.
+- [x] Record suite hash, Git SHA, model, case response, correctness components, call count, repair count, latency, and summary aggregates. Preserve every partial report after each case.
+- [x] Document that the new suite and fixed 40-case suite are development evaluations and are reported separately.
+- [x] Execute every gold SQL statement and audit deterministic corrections, entities, schema selection, ambiguity, and false-positive names before any paid run.
+- [x] Run `.venv/bin/pytest tests/test_benchmark_agentic.py tests/test_retrieval.py tests/test_agentic_chat.py -q` and require all tests to pass.
+- [x] Commit with `git add backend/ai/chat.py backend/ai/retrieval.py tests/test_retrieval.py tests/nl2sql/agentic_questions.json scripts/benchmark_agentic.py tests/test_benchmark_agentic.py README.md docs/superpowers/plans/2026-09-10-agentic-retrieval.md && git commit -m "test: add agentic retrieval evaluation suite"`.
 
 ### Task 9: Run complete local and PostgreSQL verification
 
