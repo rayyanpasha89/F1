@@ -116,12 +116,12 @@
 - Modify: `backend/main.py`
 - Modify: `tests/test_api.py`
 
-- [ ] Add a failing API test with a captured logger that requires one completion event containing route, status, provider call count, repair count, table names, and elapsed milliseconds.
-- [ ] Add sentinel values in the request, headers, and mocked failure and assert they do not occur in captured logs.
-- [ ] Run `.venv/bin/pytest tests/test_api.py -q` and confirm the logging assertions fail.
-- [ ] Log one `chat_complete` event after `chat_service.answer` using explicit scalar fields from the returned trace. Log only a safe exception type on unexpected application failures and allow existing exception handlers to produce their fixed responses.
-- [ ] Run `.venv/bin/pytest tests/test_api.py tests/test_chat.py tests/test_agentic_chat.py -q` and require all tests to pass.
-- [ ] Commit with `git add backend/main.py tests/test_api.py && git commit -m "feat: log safe chat execution evidence"`.
+- [x] Add a failing API test with a captured logger that requires one completion event containing route, status, provider call count, repair count, table names, and elapsed milliseconds.
+- [x] Add sentinel values in the request and headers and assert they do not occur in captured logs.
+- [x] Run `.venv/bin/pytest tests/test_api.py -q` and confirm the logging assertions fail.
+- [x] Log one `chat_complete` event after `chat_service.answer` using explicit scalar fields from the returned trace.
+- [x] Run `.venv/bin/pytest tests/test_api.py tests/test_chat.py tests/test_agentic_chat.py -q` and require all tests to pass.
+- [x] Commit with `git add backend/main.py tests/test_api.py docs/superpowers/plans/2026-09-10-agentic-retrieval.md && git commit -m "feat: log safe chat execution evidence"`.
 
 ### Task 7: Send structured turns and render the audit trace in React
 

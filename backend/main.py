@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-from backend.database import make_engine
+from backend.database import SCHEMA, make_engine
 from backend.ai.chat import ChatService, ChatRequest
 from backend.ai.provider import ProviderError
 from backend.config import ConfigurationError
@@ -102,7 +102,19 @@ def create_app(engine=None):
                 content={"detail": "Two chat requests are running. Try again shortly."},
             )
         try:
-            return chat_service.answer(body)
+            result = chat_service.answer(body)
+            trace = result.get("trace", {})
+            tables = trace.get("tables") or []
+            logger.info(
+                "chat_complete route=%s status=%s provider_calls=%s repairs=%s tables=%s elapsed_ms=%s",
+                trace.get("route", result.get("intent", "unknown")),
+                result.get("status", result.get("intent", "unknown")),
+                trace.get("provider_call_count", 0),
+                trace.get("repair_count", 0),
+                ",".join(table for table in tables if table in SCHEMA) or "-",
+                trace.get("total_elapsed_ms", 0),
+            )
+            return result
         finally:
             chat_slots.release()
 
