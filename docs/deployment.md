@@ -2,7 +2,7 @@
 
 ## Active Lightsail deployment
 
-The dev application is reachable at https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/ . Initial public smoke checks passed for frontend, deep links, health, seasons, standings, qualifying, profiles and all 20 Monaco podium probabilities. Subsequent product improvements require their own build and verification; see the worklog for the released commit.
+The dev application is reachable at https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/ . Lightsail deployment 9 is `ACTIVE` on immutable image `4b3946451986f09fdd11d880a2de757366947989`. Public checks passed for frontend, deep links, health, seasons, standings, comparison, profiles, all 20 Monaco podium probabilities and the bounded agentic chat flow. GitHub Actions run `34456776706` and CodeBuild `cce52796-d309-4d3c-a536-4a97e796c0a1` passed for that source. Machine-readable evidence is in `reports/aws_agentic_release.json` and `reports/aws_agentic_cloud_verification.json`.
 
 The user authorized Lightsail after CloudFront required account verification and RDS rejected seven-day backup retention on the account plan. Terraform under `infra/lightsail/` manages the small container service, its narrowly scoped ECR pull policy, and an encrypted PostgreSQL 16 database through a CloudFormation resource. Database deletion/replacement is retained. This account is 148356747273, CLI default profile, region eu-north-1. Never use the Naaz configuration.
 

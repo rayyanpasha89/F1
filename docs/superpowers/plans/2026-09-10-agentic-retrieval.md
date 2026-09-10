@@ -201,12 +201,12 @@
 
 - Modify as findings require: implementation and test files above
 
-- [ ] Run `git diff $(git merge-base HEAD main)..HEAD --check` and inspect the complete feature diff for source-boundary violations, prompt leakage, unsafe SQL bypasses, excessive model calls, schema-selection errors, conversation overcollection, and presentation claims.
-- [ ] Run the verification-before-completion suite again after review changes: complete backend tests, frontend tests/build, infrastructure checks, and focused privacy tests.
-- [ ] Merge `feat/agentic-retrieval` into `main` without rewriting history after the branch is green.
-- [ ] Push `main` to `origin` and record the exact merge SHA.
-- [ ] Wait for the GitHub Actions workflow on that SHA and require every Python, frontend, and infrastructure job to pass.
-- [ ] If CI fails, add a local reproducer, fix the cause on the feature branch or a focused follow-up branch, merge, push, and wait for the replacement SHA.
+- [x] Run `git diff $(git merge-base HEAD main)..HEAD --check` and inspect the complete feature diff for source-boundary violations, prompt leakage, unsafe SQL bypasses, excessive model calls, schema-selection errors, conversation overcollection, and presentation claims.
+- [x] Run the verification-before-completion suite again after review changes: complete backend tests, frontend tests/build, infrastructure checks, and focused privacy tests.
+- [x] Merge `feat/agentic-retrieval` into `main` without rewriting history after the branch is green.
+- [x] Push `main` to `origin` and record the exact merge SHA.
+- [x] Wait for the GitHub Actions workflow on that SHA and require every Python, frontend, and infrastructure job to pass.
+- [x] If CI fails, add a local reproducer, fix the cause on the feature branch or a focused follow-up branch, merge, push, and wait for the replacement SHA.
 
 ### Task 12: Build and deploy the exact commit to AWS Lightsail
 
@@ -215,11 +215,11 @@
 - Modify if needed: `scripts/release_lightsail.py`
 - Create: `reports/aws_agentic_release.json`
 
-- [ ] Verify `aws sts get-caller-identity --profile default` returns account `148356747273` and `aws configure list --profile default` resolves `eu-north-1`; do not print secret values.
-- [ ] Start CodeBuild for the exact merged Git SHA and wait for `SUCCEEDED`. Record the build ID, source SHA, image tag, and timestamps.
-- [ ] Invoke the guarded Lightsail release script for `f1-strategist-demo` using that immutable image tag. Wait for the deployment to reach `ACTIVE` and health checks to pass.
-- [ ] Confirm the active deployment image resolves to the intended SHA and the managed public endpoint remains HTTPS.
-- [ ] Write `reports/aws_agentic_release.json` with account, region, Git SHA, build ID/result, deployment version/state, image tag, and nonsecret timings.
+- [x] Verify `aws sts get-caller-identity --profile default` returns account `148356747273`; use the guarded script's explicit `eu-north-1` session because the CLI configuration display remains `us-east-1`. Do not print secret values.
+- [x] Start CodeBuild for the exact merged Git SHA and wait for `SUCCEEDED`. Record the build ID, source SHA, image tag, and timestamps.
+- [x] Invoke the guarded Lightsail release script for `f1-strategist-demo` using that immutable image tag. Wait for the deployment to reach `ACTIVE` and health checks to pass.
+- [x] Confirm the active deployment image resolves to the intended SHA and the managed public endpoint remains HTTPS.
+- [x] Write `reports/aws_agentic_release.json` with account, region, Git SHA, build ID/result, deployment version/state, image tag, and nonsecret timings.
 
 ### Task 13: Verify the public API, frontend, logs, and presentation evidence
 
@@ -228,20 +228,20 @@
 - Create: `reports/aws_agentic_cloud_verification.json`
 - Modify: `docs/worklog.md`
 - Modify: `docs/architecture.md`
-- Modify: `docs/ai_assistance.md`
+- Modify: `AI_ASSISTANCE.md`
 - Modify: `docs/adversarial_review.md`
 - Create: `docs/presentations/F1_Race_Strategist_Final_Review.pptx`
 - Create: `docs/final_demo_guide.md`
 
-- [ ] Verify the public `/`, a supported race route, `/api/health`, comparison, profiles, standings, predictions, and frontend assets return successful responses.
-- [ ] Through the public chat API, verify one normal statistic, one misspelled entity with correction, one structured follow-up, one ambiguous surname clarification without SQL, one weather refusal without SQL, and one race prediction/explanation. Space calls within the deployed rate limits.
-- [ ] Open the public frontend, submit a misspelled question, and verify the answer, correction, generated SQL, and “How this answer was built” panel render with the expected route, entities, tables, attempts, calls, and timing.
-- [ ] Retrieve a bounded CloudWatch log snapshot and assert chat completion records exist while sentinel secrets, request text, SQL, connection strings, and credentials do not.
-- [ ] Write `reports/aws_agentic_cloud_verification.json` with URL, deployment SHA, each assertion, response status, safe trace summary, asset check, and log event count.
-- [ ] Update architecture, AI-assistance disclosure, adversarial review, and worklog with the verified implementation, limitations, test totals, evaluation results, CI run, CodeBuild ID, deployment state, and cloud checks.
-- [ ] Create a final editable presentation using the existing interim deck’s evidence style. Include verified agentic retrieval, query repair, UI trace, live benchmark comparison, GitHub CI, AWS architecture, and public deployment screenshots. Keep the interim deck unchanged as a historical snapshot.
-- [ ] Validate the PowerPoint package, render every slide, inspect for overlap or clipping, verify native tables/charts and speaker notes, and record the SHA-256. State if native PowerPoint opening was not performed.
-- [ ] Run the complete local verification one final time after documentation-only changes where applicable.
+- [x] Verify the public `/`, a supported race route, `/api/health`, comparison, profiles, standings, predictions, and frontend assets return successful responses.
+- [x] Through the public chat API, verify one normal statistic, one misspelled entity with correction, one structured follow-up, one ambiguous surname clarification without SQL, one weather refusal without SQL, and one race prediction/explanation. Space calls within the deployed rate limits.
+- [x] Open the public frontend, submit a misspelled question, and verify the answer, correction, generated SQL, and “How this answer was built” panel render with the expected route, entities, tables, attempts, calls, and timing.
+- [x] Retrieve a bounded CloudWatch log snapshot and assert chat completion records exist while sentinel secrets, request text, SQL, connection strings, and credentials do not.
+- [x] Write `reports/aws_agentic_cloud_verification.json` with URL, deployment SHA, each assertion, response status, safe trace summary, asset check, and log event count.
+- [x] Update architecture, AI-assistance disclosure, adversarial review, and worklog with the verified implementation, limitations, test totals, evaluation results, CI run, CodeBuild ID, deployment state, and cloud checks.
+- [x] Create a final editable presentation using the existing interim deck’s evidence style. Include verified agentic retrieval, query repair, UI trace, live benchmark comparison, GitHub CI, AWS architecture, and public deployment screenshots. Keep the interim deck unchanged as a historical snapshot.
+- [x] Validate the PowerPoint package, render every slide, inspect for overlap or clipping, verify native tables/charts and speaker notes, and record the SHA-256. State if native PowerPoint opening was not performed.
+- [x] Run the complete local verification one final time after documentation-only changes where applicable.
 - [ ] Commit all release evidence and presentation artifacts, push `main`, wait for the final documentation CI run, and confirm the application deployment still points to the verified code SHA.
 
 ### Task 14: Completion report

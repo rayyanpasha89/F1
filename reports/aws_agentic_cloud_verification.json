@@ -1,0 +1,332 @@
+{
+  "verified_at": "2026-09-10T09:00:02.384958+00:00",
+  "url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/",
+  "git_commit": "4b3946451986f09fdd11d880a2de757366947989",
+  "deployment_version": 9,
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 407,
+      "elapsed_ms": 872.104,
+      "passed": true
+    },
+    {
+      "path": "/races/1128",
+      "status": 200,
+      "bytes": 407,
+      "elapsed_ms": 806.825,
+      "passed": true
+    },
+    {
+      "path": "/api/health",
+      "status": 200,
+      "bytes": 64,
+      "elapsed_ms": 759.244,
+      "passed": true
+    },
+    {
+      "path": "/api/seasons",
+      "status": 200,
+      "bytes": 1873,
+      "elapsed_ms": 812.933,
+      "passed": true
+    },
+    {
+      "path": "/api/standings/drivers/2024",
+      "status": 200,
+      "bytes": 4513,
+      "elapsed_ms": 764.808,
+      "passed": true
+    },
+    {
+      "path": "/api/races/1128/comparison?driver_a=844&driver_b=830",
+      "status": 200,
+      "bytes": 2626,
+      "elapsed_ms": 819.745,
+      "passed": true
+    },
+    {
+      "path": "/api/profiles/drivers/844?year=2024",
+      "status": 200,
+      "bytes": 14994,
+      "elapsed_ms": 695.914,
+      "passed": true
+    },
+    {
+      "path": "/api/predictions/1128",
+      "status": 200,
+      "bytes": 16972,
+      "elapsed_ms": 858.61,
+      "passed": true
+    }
+  ],
+  "frontend_asset": {
+    "path": "/assets/index-CE_UNUVj.js",
+    "status": 200,
+    "bytes": 256548,
+    "contains_agent_trace_ui": true,
+    "contains_compact_conversation": true
+  },
+  "chat_checks": [
+    {
+      "name": "misspelling_and_reranking",
+      "status": 200,
+      "intent": "statistics",
+      "passed": true,
+      "answer": "win_count: 105",
+      "corrections": [
+        {
+          "original": "Hamliton",
+          "corrected": "hamilton"
+        }
+      ],
+      "suggestions": [],
+      "result_columns": [
+        "win_count"
+      ],
+      "result_rows": [
+        [
+          105
+        ]
+      ],
+      "has_executed_sql": true,
+      "explained_driver_id": null,
+      "trace": {
+        "interpreted_question": "How many race wins does Lewis hamilton have in the archive?",
+        "variants": [
+          "How many race wins does Lewis Hamliton have in the archive?",
+          "How many race wins does Lewis hamilton have in the archive?"
+        ],
+        "route": "statistics",
+        "entities": [
+          {
+            "kind": "drivers",
+            "id": 1,
+            "name": "Lewis Hamilton",
+            "score": 1.0,
+            "reasons": [
+              "full_name"
+            ]
+          }
+        ],
+        "tables": [
+          "drivers",
+          "races",
+          "results"
+        ],
+        "attempts": [
+          {
+            "number": 1,
+            "outcome": "executed",
+            "failure_category": null
+          }
+        ],
+        "provider_call_count": 2,
+        "provider_elapsed_ms": 3125.192,
+        "repair_count": 0,
+        "total_elapsed_ms": 3902.017
+      },
+      "wall_elapsed_ms": 4592.535
+    },
+    {
+      "name": "structured_followup",
+      "status": 200,
+      "intent": "statistics",
+      "passed": true,
+      "answer": "win_count: 11",
+      "corrections": [],
+      "suggestions": [],
+      "result_columns": [
+        "win_count"
+      ],
+      "result_rows": [
+        [
+          11
+        ]
+      ],
+      "has_executed_sql": true,
+      "explained_driver_id": null,
+      "trace": {
+        "interpreted_question": "How many did he win in 2020?",
+        "variants": [
+          "How many did he win in 2020?",
+          "How many did he win in 2020?\nPrevious question context: Tell me about Lewis Hamilton's race wins."
+        ],
+        "route": "statistics",
+        "entities": [
+          {
+            "kind": "drivers",
+            "id": 1,
+            "name": "Lewis Hamilton",
+            "score": 0.88,
+            "reasons": [
+              "prior_turn"
+            ]
+          }
+        ],
+        "tables": [
+          "races",
+          "drivers",
+          "results"
+        ],
+        "attempts": [
+          {
+            "number": 1,
+            "outcome": "executed",
+            "failure_category": null
+          }
+        ],
+        "provider_call_count": 2,
+        "provider_elapsed_ms": 2571.936,
+        "repair_count": 0,
+        "total_elapsed_ms": 2953.224
+      },
+      "wall_elapsed_ms": 3676.506
+    },
+    {
+      "name": "ambiguous_family_name",
+      "status": 200,
+      "intent": "clarify",
+      "passed": true,
+      "answer": "Which name did you mean? Michael Schumacher, Mick Schumacher, Ralf Schumacher. Please ask again with the full name.",
+      "corrections": [],
+      "suggestions": [
+        "Michael Schumacher",
+        "Mick Schumacher",
+        "Ralf Schumacher"
+      ],
+      "result_columns": [],
+      "result_rows": [],
+      "has_executed_sql": false,
+      "explained_driver_id": null,
+      "trace": {
+        "interpreted_question": "How many wins did Schumacher have?",
+        "variants": [
+          "How many wins did Schumacher have?"
+        ],
+        "route": "clarify",
+        "entities": [],
+        "tables": [],
+        "attempts": [],
+        "provider_call_count": 0,
+        "provider_elapsed_ms": 0.0,
+        "repair_count": 0,
+        "total_elapsed_ms": 413.099
+      },
+      "wall_elapsed_ms": 1184.238
+    },
+    {
+      "name": "unsupported_weather",
+      "status": 200,
+      "intent": "unsupported",
+      "passed": true,
+      "answer": "The supplied dataset does not contain reliable weather, tyre, fuel, telemetry or betting information. This question cannot be answered from it.",
+      "corrections": [],
+      "suggestions": [],
+      "result_columns": [],
+      "result_rows": [],
+      "has_executed_sql": false,
+      "explained_driver_id": null,
+      "trace": {
+        "interpreted_question": "Who performs best at Monaco in wet wether?",
+        "variants": [
+          "Who performs best at Monaco in wet wether?"
+        ],
+        "route": "unsupported",
+        "entities": [],
+        "tables": [],
+        "attempts": [],
+        "provider_call_count": 0,
+        "provider_elapsed_ms": 0.0,
+        "repair_count": 0,
+        "total_elapsed_ms": 0.229
+      },
+      "wall_elapsed_ms": 753.435
+    },
+    {
+      "name": "selected_race_explanation",
+      "status": 200,
+      "intent": "explanation",
+      "passed": true,
+      "answer": "For the selected race, Lewis Hamilton has a model podium probability of 2.9% (grid-only baseline 12.9%). Strongest upward contribution: driver career podium (+0.580 calibrated log-odds). Strongest downward contribution: constructor recent podium (-0.234 calibrated log-odds). These are model contributions, not causal effects.",
+      "corrections": [
+        {
+          "original": "Hamliton",
+          "corrected": "hamilton"
+        }
+      ],
+      "suggestions": [],
+      "result_columns": [],
+      "result_rows": [],
+      "has_executed_sql": false,
+      "explained_driver_id": 1,
+      "trace": {
+        "interpreted_question": "Why is Lewis hamilton given that podium probability?",
+        "variants": [
+          "Why is Lewis Hamliton given that podium probability?",
+          "Why is Lewis hamilton given that podium probability?",
+          "Why is Lewis hamilton given that podium probability?\nSelected race ID: 1128"
+        ],
+        "route": "explanation",
+        "entities": [
+          {
+            "kind": "drivers",
+            "id": 1,
+            "name": "Lewis Hamilton",
+            "score": 1.0,
+            "reasons": [
+              "full_name",
+              "selected_race"
+            ]
+          }
+        ],
+        "tables": [],
+        "attempts": [],
+        "provider_call_count": 1,
+        "provider_elapsed_ms": 2098.282,
+        "repair_count": 0,
+        "total_elapsed_ms": 7565.402
+      },
+      "wall_elapsed_ms": 8561.41
+    }
+  ],
+  "browser_verification": {
+    "tool": "Playwright with system Chrome",
+    "screenshots": [
+      "docs/presentations/assets/live_dashboard.png",
+      "docs/presentations/assets/live_agentic_trace.png",
+      "docs/presentations/assets/live_race_prediction.png",
+      "docs/presentations/assets/github_ci_success.png"
+    ],
+    "misspelling_answer_rendered": true,
+    "expanded_trace_rendered": true,
+    "trace_entities": [
+      "Lewis Hamilton"
+    ],
+    "race_prediction_rendered": true
+  },
+  "logging": {
+    "queried_runtime_events": 69,
+    "filtered_chat_events": 5,
+    "cloudwatch_group": "/f1/dev/api",
+    "cloudwatch_stream": "lightsail/agentic-20260910T085254152735Z",
+    "safe_chat_completion_lines": 5,
+    "secret_or_question_content_detected": false,
+    "continuous_source": "Lightsail container stdout/stderr",
+    "snapshot_scope": "bounded filtered operator export"
+  },
+  "summary": {
+    "routes_passed": 8,
+    "chat_checks_passed": 5,
+    "max_provider_calls_observed": 2,
+    "repairs_observed": 0,
+    "entity_noise_regression_passed": true,
+    "safe_completion_log_lines": 5
+  },
+  "limitations": [
+    "This is a targeted release verification, not continuous availability monitoring.",
+    "The deployment uses the historical Formula 1 snapshot through 2024.",
+    "Weather, tyres, fuel, telemetry, betting, and future results remain intentionally unsupported."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "released_at": "2026-09-10T08:47:37+00:00",
+  "account": "148356747273",
+  "operator_arn": "arn:aws:iam::148356747273:user/ray-demo2",
+  "region": "eu-north-1",
+  "git_commit": "4b3946451986f09fdd11d880a2de757366947989",
+  "github_actions": {
+    "run_id": 34456776706,
+    "status": "success",
+    "url": "https://github.com/rayyanpasha89/F1/actions/runs/34456776706"
+  },
+  "codebuild": {
+    "id": "f1-race-strategist-dev:cce52796-d309-4d3c-a536-4a97e796c0a1",
+    "status": "SUCCEEDED",
+    "start_time": "2026-09-10T08:45:22.927000+00:00",
+    "end_time": "2026-09-10T08:47:18.745000+00:00",
+    "source_location": "f1-race-strategist-dev-148356747273-artifacts/build/4b3946451986f09fdd11d880a2de757366947989.zip"
+  },
+  "ecr": {
+    "repository": "f1-race-strategist-dev",
+    "image_tag": "4b3946451986f09fdd11d880a2de757366947989",
+    "image_digest": "sha256:1de45ce6e08c83675a1995118a395fd0f684e8050d44f09817be1e06d4548739",
+    "pushed_at": "2026-09-10T08:47:18.055000+00:00"
+  },
+  "lightsail": {
+    "service": "f1-strategist-demo",
+    "service_state": "RUNNING",
+    "deployment_version": 9,
+    "deployment_state": "ACTIVE",
+    "image": "148356747273.dkr.ecr.eu-north-1.amazonaws.com/f1-race-strategist-dev:4b3946451986f09fdd11d880a2de757366947989",
+    "url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/"
+  },
+  "logging": {
+    "queried_runtime_events": 69,
+    "filtered_chat_events": 5,
+    "cloudwatch_group": "/f1/dev/api",
+    "cloudwatch_stream": "lightsail/agentic-20260910T085254152735Z",
+    "safe_chat_completion_lines": 5,
+    "secret_or_question_content_detected": false,
+    "continuous_source": "Lightsail container stdout/stderr",
+    "snapshot_scope": "bounded filtered operator export"
+  }
+}
