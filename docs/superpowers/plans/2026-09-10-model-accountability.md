@@ -175,14 +175,14 @@
 - Lazy `ModelLab` consumes `/model-card`
 - Route: `/model`; header label: `Model accountability`
 
-- [ ] Write failing component tests for review success, exact post-race labeling, predicted/recorded podiums, Brier semantics, surprises, loading/error/unavailable states, and model-page link.
-- [ ] Write failing Model Lab tests for temporal split, before/after metric table, uncertainty intervals, lineage, limitations, and accessible headings.
-- [ ] Run focused Vitest files and confirm missing components fail.
-- [ ] Implement Forecast Review after the existing prediction panel without mixing result labels into forecast language.
-- [ ] Implement the lazy Model Lab route with native HTML/CSS visualizations and add navigation.
-- [ ] Add responsive styles and keep controls keyboard accessible.
-- [ ] Run focused and full frontend tests, ESLint, Prettier, and Vite build. Inspect chunk output to confirm Model Lab is separate from the initial bundle.
-- [ ] Commit with `git commit -m "ui: add model accountability race lab"`.
+- [x] Write failing component tests for review success, exact post-race labeling, predicted/recorded podiums, Brier semantics, surprises, loading/error/unavailable states, and model-page link.
+- [x] Write failing Model Lab tests for temporal split, before/after metric table, uncertainty intervals, lineage, limitations, and accessible headings.
+- [x] Run focused Vitest files and confirm missing components fail.
+- [x] Implement Forecast Review after the existing prediction panel without mixing result labels into forecast language.
+- [x] Implement the lazy Model Lab route with native HTML/CSS visualizations and add navigation.
+- [x] Add responsive styles and keep controls keyboard accessible.
+- [x] Run focused and full frontend tests, ESLint, Prettier, and Vite build. Inspect chunk output to confirm Model Lab is separate from the initial bundle.
+- [x] Commit with `git commit -m "ui: add model accountability race lab"`.
 
 ### Task 8: Harden HTTP delivery, runtime telemetry, and dashboard stability
 

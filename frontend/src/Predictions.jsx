@@ -71,6 +71,10 @@ export default function Predictions({ raceId, year }) {
               <small>%</small>
             </div>
             <p>Grid-only baseline: {(active.baseline_probability * 100).toFixed(1)}%</p>
+            <p className="caption">
+              Raw model output: {(active.raw_probability * 100).toFixed(1)}%. A shared race offset
+              keeps the ranking and makes all driver probabilities total three podium places.
+            </p>
             <h4>Contributions to this prediction</h4>
             {active.factors.map((f) => (
               <div className="factor" key={f.feature}>
@@ -91,9 +95,10 @@ export default function Predictions({ raceId, year }) {
             <details>
               <summary>Evaluation & limitations</summary>
               <p className="caption">
-                Independent probabilities need not sum to three. Model trained on 2010–2018;
-                selection used 2019–2021. Test scores and baseline comparisons are recorded in the
-                project’s evaluation report. Historical grids may reflect later corrections.
+                Production probabilities sum to three across the race after an outcome-free log-odds
+                projection. Model trained on 2010–2018; selection used 2019–2021. The 2022–2024 test
+                is already consumed and later analysis is labeled accordingly. Historical grids may
+                reflect later corrections.
               </p>
             </details>
           </aside>

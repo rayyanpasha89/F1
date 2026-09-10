@@ -16,8 +16,11 @@ import '@fontsource/barlow-condensed/700.css';
 import './style.css';
 import { useApi } from './api';
 import Predictions from './Predictions';
+import ForecastReview from './ForecastReview';
 import DriverComparison from './DriverComparison';
 import StrategistChat from './StrategistChat';
+
+const ModelLab = React.lazy(() => import('./ModelLab'));
 
 const fmt = (value) =>
   value == null
@@ -313,6 +316,7 @@ function Race() {
           </div>
           <DriverComparison key={`comparison-${id}`} raceId={id} />
           <Predictions key={id} raceId={id} year={r.year} />
+          <ForecastReview key={`review-${id}`} raceId={id} year={r.year} />
         </>
       )}
     </DataState>
@@ -438,12 +442,21 @@ function App() {
           </span>
         </Link>
         <NavLink to="/">Championship archive</NavLink>
+        <NavLink to="/model">Model accountability</NavLink>
         <span className="archive-label">Historical intelligence · 1950—2024</span>
       </header>
       <main>
         <Routes>
           <Route path="/" element={<Season />} />
           <Route path="/races/:id" element={<Race />} />
+          <Route
+            path="/model"
+            element={
+              <React.Suspense fallback={<p role="status">Opening model accountability…</p>}>
+                <ModelLab />
+              </React.Suspense>
+            }
+          />
           <Route path="/:kind/:id" element={<Profile />} />
           <Route
             path="*"
