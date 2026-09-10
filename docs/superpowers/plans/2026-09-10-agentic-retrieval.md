@@ -129,19 +129,19 @@
 
 - Modify: `frontend/src/StrategistChat.jsx`
 - Modify: `frontend/src/StrategistChat.test.jsx`
-- Modify: `frontend/src/styles.css`
+- Modify: `frontend/src/style.css`
 
-- [ ] Extend the existing frontend test with three prior responses and require the POST body to contain at most three compact turns with only `question`, `intent`, `entities`, and `race_id`; require it to exclude answer text, SQL, result rows, provider metadata, and access code.
-- [ ] Add a failing render test for a response trace. Require a collapsed “How this answer was built” disclosure that shows interpreted question, route, entity names, table names, two SQL attempts, three model calls, and total elapsed time when opened.
-- [ ] Add a failing test that legacy responses without a trace still render successfully.
-- [ ] Run `npm test -- --run src/StrategistChat.test.jsx` from `frontend` and confirm the new payload and audit-panel assertions fail.
-- [ ] Add a pure compact-turn mapper that derives safe entities from `response.trace.entities`, filters invalid turns, and slices the last three.
-- [ ] Send both the compact `conversation` array and legacy `previous_question` during the compatibility period.
-- [ ] Render the trace in a `<details>` panel with human-readable labels and no raw provider metadata or prompts.
-- [ ] Add responsive styles consistent with the existing drawer and accessible summary/focus behavior.
-- [ ] Run `npm test -- --run src/StrategistChat.test.jsx` and require all focused tests to pass.
-- [ ] Run `npm test -- --run` and `npm run build`; require the complete frontend suite and production build to pass.
-- [ ] Commit with `git add frontend/src/StrategistChat.jsx frontend/src/StrategistChat.test.jsx frontend/src/styles.css && git commit -m "feat: show how strategist answers are built"`.
+- [x] Extend the existing frontend test with three prior responses and require the POST body to contain at most three compact turns with only `question`, `intent`, `entities`, and `race_id`; require it to exclude answer text, SQL, result rows, provider metadata, and access code.
+- [x] Add a failing render test for a response trace. Require a collapsed “How this answer was built” disclosure that shows interpreted question, route, entity names, table names, two SQL attempts, three model calls, and total elapsed time when opened.
+- [x] Confirm the existing legacy response test still renders successfully without a trace.
+- [x] Run `npm test -- --run src/StrategistChat.test.jsx` from `frontend` and confirm the new payload and audit-panel assertions fail.
+- [x] Add a pure compact-turn mapper that derives safe entities from `response.trace.entities`, filters invalid turns, and slices the last three.
+- [x] Send both the compact `conversation` array and legacy `previous_question` during the compatibility period.
+- [x] Render the trace in a `<details>` panel with human-readable labels and no raw provider metadata or prompts.
+- [x] Add responsive styles consistent with the existing drawer and accessible summary behavior.
+- [x] Run `npm test -- --run src/StrategistChat.test.jsx` and require all focused tests to pass.
+- [x] Run `npm test -- --run`, `npm run lint`, `npm run format:check`, and `npm run build`; require the complete frontend suite and production build to pass.
+- [x] Commit with `git add frontend/src/StrategistChat.jsx frontend/src/StrategistChat.test.jsx frontend/src/style.css docs/superpowers/plans/2026-09-10-agentic-retrieval.md && git commit -m "feat: show how strategist answers are built"`.
 
 ### Task 8: Add the separate agentic evaluation suite and runner
 

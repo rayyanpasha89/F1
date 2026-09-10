@@ -9,6 +9,100 @@ function saved() {
     return [];
   }
 }
+
+const supportedIntents = new Set([
+  'statistics',
+  'prediction',
+  'explanation',
+  'unsupported',
+  'clarify',
+]);
+const supportedEntityKinds = new Set(['drivers', 'constructors', 'circuits']);
+
+function compactConversation(messages) {
+  return messages
+    .slice(-3)
+    .map((message) => {
+      const entities = (message.response?.trace?.entities || [])
+        .filter(
+          (entity) =>
+            supportedEntityKinds.has(entity.kind) &&
+            Number.isInteger(entity.id) &&
+            entity.id > 0 &&
+            typeof entity.name === 'string' &&
+            entity.name.length > 0,
+        )
+        .slice(0, 8)
+        .map(({ kind, id, name }) => ({ kind, id, name }));
+      return {
+        question: message.question,
+        intent: message.response?.intent,
+        entities,
+        race_id: Number.isInteger(message.race_id) ? message.race_id : null,
+      };
+    })
+    .filter(
+      (turn) =>
+        typeof turn.question === 'string' &&
+        turn.question.length >= 3 &&
+        supportedIntents.has(turn.intent),
+    );
+}
+
+function titleCase(value) {
+  return typeof value === 'string'
+    ? value.charAt(0).toUpperCase() + value.slice(1).replaceAll('_', ' ')
+    : 'Unavailable';
+}
+
+function AuditTrace({ trace }) {
+  if (!trace) return null;
+  const repairs = Number(trace.repair_count) || 0;
+  const attempts = Array.isArray(trace.attempts) ? trace.attempts.length : 0;
+  const elapsed = Number(trace.total_elapsed_ms);
+  return (
+    <details className="agent-trace">
+      <summary>How this answer was built</summary>
+      <dl>
+        <div>
+          <dt>Interpreted question</dt>
+          <dd>{trace.interpreted_question || trace.original_question || 'Unavailable'}</dd>
+        </div>
+        <div>
+          <dt>Route</dt>
+          <dd>{titleCase(trace.route)}</dd>
+        </div>
+        <div>
+          <dt>Entities</dt>
+          <dd>
+            {trace.entities?.length
+              ? trace.entities.map((entity) => entity.name).join(', ')
+              : 'None selected'}
+          </dd>
+        </div>
+        <div>
+          <dt>Tables</dt>
+          <dd>{trace.tables?.length ? trace.tables.join(', ') : 'No SQL tables used'}</dd>
+        </div>
+        <div>
+          <dt>SQL attempts</dt>
+          <dd>
+            {attempts} ({repairs} {repairs === 1 ? 'repair' : 'repairs'})
+          </dd>
+        </div>
+        <div>
+          <dt>Model calls</dt>
+          <dd>{Number(trace.provider_call_count) || 0}</dd>
+        </div>
+        <div>
+          <dt>Total time</dt>
+          <dd>{Number.isFinite(elapsed) ? `${(elapsed / 1000).toFixed(2)} s` : 'Unavailable'}</dd>
+        </div>
+      </dl>
+    </details>
+  );
+}
+
 export default function StrategistChat() {
   const [open, setOpen] = useState(false),
     [messages, setMessages] = useState(saved),
@@ -32,16 +126,21 @@ export default function StrategistChat() {
     setError('');
     setBusy(true);
     try {
+      const selectedRaceId = race ? Number(race.params.id) : null;
       const result = await request('/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-chat-access-code': accessCode },
         body: JSON.stringify({
           question: asked,
-          race_id: race ? Number(race.params.id) : null,
+          race_id: selectedRaceId,
           previous_question: messages.at(-1)?.question || null,
+          conversation: compactConversation(messages),
         }),
       });
-      setMessages((current) => [...current.slice(-11), { question: asked, response: result }]);
+      setMessages((current) => [
+        ...current.slice(-11),
+        { question: asked, race_id: selectedRaceId, response: result },
+      ]);
       setQuestion('');
     } catch (e) {
       setError(e.message);
@@ -101,6 +200,7 @@ export default function StrategistChat() {
                 {m.response.assumptions?.length > 0 && (
                   <p className="caption">Assumptions: {m.response.assumptions.join(' ')}</p>
                 )}
+                <AuditTrace trace={m.response.trace} />
                 {m.response.result && (
                   <div className="table-scroll">
                     <table>
