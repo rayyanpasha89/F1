@@ -331,14 +331,14 @@ def _relationship_graph(relationships):
     return graph
 
 
-def _shortest_path(graph, start, targets):
+def _shortest_path(graph, start, targets, scores):
     queue = deque([(start, [start])])
     visited = {start}
     while queue:
         node, path = queue.popleft()
         if node in targets:
             return path
-        for neighbor in sorted(graph[node]):
+        for neighbor in sorted(graph[node], key=lambda name: (-scores.get(name, 0), name)):
             if neighbor not in visited:
                 visited.add(neighbor)
                 queue.append((neighbor, path + [neighbor]))
@@ -403,6 +403,11 @@ def rank_schema(question, entities=(), router_hints=(), relationships=None):
         add("races", 2.0, "race_term")
     if "chequered flag" in text or "checkered flag" in text:
         add("results", 3.0, "finish_intent")
+    if any(
+        phrase in text
+        for phrase in ["race for", "raced for", "drive for", "drove for", "competed for"]
+    ):
+        add("results", 3.0, "driver_constructor_association")
     if ("pit" in words and ("stop" in words or "stops" in words)) or words & {
         "pitstop",
         "pitstops",
@@ -418,9 +423,13 @@ def rank_schema(question, entities=(), router_hints=(), relationships=None):
         table = kind if kind in {"drivers", "constructors", "circuits"} else None
         if table:
             add(table, 3.0, "entity_kind")
+    has_deterministic_evidence = any(score > 0 for score in scores.values())
     for table in router_hints:
         if table in SCHEMA:
-            add(table, 2.5, "router_hint")
+            if scores[table] > 0:
+                add(table, 0.5, "router_hint")
+            elif not has_deterministic_evidence:
+                add(table, 2.0, "router_hint")
 
     active = [name for name, score in scores.items() if score > 0]
     if not active:
@@ -436,7 +445,7 @@ def rank_schema(question, entities=(), router_hints=(), relationships=None):
     connected = {seeds[0]}
     ordered = [seeds[0]]
     for seed in seeds[1:]:
-        path = _shortest_path(graph, seed, connected)
+        path = _shortest_path(graph, seed, connected, scores)
         if not path:
             path = [seed]
         for table in path:

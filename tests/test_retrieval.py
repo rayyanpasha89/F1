@@ -244,3 +244,22 @@ def test_schema_ranking_recognizes_numeric_years_and_season_boundaries():
 
     assert "races" in dated.tables
     assert "seasons" in boundaries.tables
+
+
+def test_driver_constructor_association_prefers_results_over_standings_summaries():
+    result = rank_schema(
+        "Which constructors did Fernando Alonso race for in 2023?",
+        entities=[{"kind": "drivers", "id": 4, "name": "Fernando Alonso"}],
+        router_hints=[
+            "drivers",
+            "driver_standings",
+            "races",
+            "constructor_results",
+            "constructors",
+            "results",
+        ],
+    )
+
+    assert {"drivers", "results", "constructors", "races"} <= set(result.tables)
+    assert "driver_standings" not in result.tables
+    assert "constructor_results" not in result.tables
