@@ -252,9 +252,9 @@
 - [x] Run Ruff check/format, all frontend tests/lint/format/build, both Terraform validations, model evidence regeneration comparison, whole-archive sweep, JSON parse checks, presentation hash comparison, and a sensitive-value scan.
 - [x] Record exact counts, durations, hashes, dependency audit results, projection gates, and presentation non-modification in `reports/model_accountability_local_verification.json`.
 - [x] Review the complete feature diff for leakage, fabricated evidence, artifact trust, unsafe report loading, Pydantic overexposure, cache mistakes, response/log secrets, performance regressions, and README disagreement.
-- [ ] Merge `feat/model-accountability` to `main` without squashing or rewriting history, push, and wait for all GitHub jobs.
-- [ ] Before each AWS mutation, run the guarded account/profile/region checks. Build the exact merge SHA in CodeBuild and wait for `SUCCEEDED`.
-- [ ] Deploy the immutable image to `f1-strategist-demo`; require Lightsail `RUNNING`/`ACTIVE` and the exact image SHA.
+- [x] Merge `feat/model-accountability` to `main` without squashing or rewriting history, push, and wait for all GitHub jobs.
+- [x] Before each AWS mutation, run the guarded account/profile/region checks. Build the exact merge SHA in CodeBuild and wait for `SUCCEEDED`.
+- [x] Deploy the immutable image to `f1-strategist-demo`; require Lightsail `RUNNING`/`ACTIVE` and the exact image SHA.
 - [ ] Run the public verifier with bounded chat, desktop/mobile browser flows, console/network checks, and Lighthouse. Require accessibility 100, best practices 100, and CLS at most 0.10.
 - [ ] Retrieve bounded Lightsail logs and export a new CloudWatch snapshot. Verify prediction/review/chat events exist and sensitive values are absent.
 - [ ] Write new AWS/cloud reports and worklog evidence, commit, push, wait for final CI, then reconfirm public readiness, deployed SHA, clean Git, and unchanged presentation hashes.

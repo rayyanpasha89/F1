@@ -1,0 +1,80 @@
+{
+  "base_url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com",
+  "checks": {
+    "archive": {
+      "first_year": 1950,
+      "last_year": 2024,
+      "race_count_2024": 24,
+      "race_id": 1128,
+      "race_name": "Monaco Grand Prix",
+      "season_count": 75,
+      "status": "passed"
+    },
+    "chat": {
+      "correction_verified": true,
+      "intent": "statistics",
+      "provider_call_count": 2,
+      "repair_count": 0,
+      "status": "passed"
+    },
+    "delivery": {
+      "cache_policy": true,
+      "gzip_responses": 10,
+      "request_ids_unique": true,
+      "response_count": 11,
+      "security_headers": true,
+      "server_generated_request_ids": true,
+      "status": "passed"
+    },
+    "model_card": {
+      "archive_races": 1125,
+      "archive_years": [
+        1950,
+        2024
+      ],
+      "audited_tables": 14,
+      "hash_count": 6,
+      "model_version": "EXP-007+podium-count-v1",
+      "schema_version": "f1-public-model-card-v1",
+      "season_evidence_count": 6,
+      "status": "passed",
+      "unseen_holdout": false
+    },
+    "prediction": {
+      "driver_count": 20,
+      "model_version": "EXP-007+podium-count-v1",
+      "postprocessor": "race_logit_offset",
+      "probability_sum": 3.0,
+      "race_id": 1128,
+      "status": "passed"
+    },
+    "readiness": {
+      "archive_through": 2024,
+      "database": "ok",
+      "model_bundle": "verified",
+      "model_card": "verified",
+      "model_version": "EXP-007+podium-count-v1",
+      "status": "passed"
+    },
+    "review": {
+      "brier_score": 0.04465273508022717,
+      "driver_count": 20,
+      "exact_podium_set": true,
+      "mean_absolute_error": 0.11535691372481534,
+      "race_id": 1128,
+      "status": "passed",
+      "top_three_hits": 3
+    },
+    "spa": {
+      "description_length": 105,
+      "immutable_asset": true,
+      "model_deep_link": true,
+      "status": "passed",
+      "title": "F1 Race Strategist | Historical Analytics"
+    }
+  },
+  "duration_ms": 16122.601,
+  "generated_at": "2026-09-10T18:52:04.085915+00:00",
+  "schema_version": "f1-public-release-verification-v1",
+  "status": "passed"
+}
