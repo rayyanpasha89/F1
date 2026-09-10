@@ -169,13 +169,13 @@
 - Modify if evidence requires: `docs/worklog.md`
 - Create: `reports/agentic_local_verification.json`
 
-- [ ] Run `.venv/bin/pytest -q` and record totals, skips, warnings, duration, and Git SHA.
-- [ ] Run `npm test -- --run` and `npm run build` from `frontend` and record totals and build result.
-- [ ] Run repository lint, formatting, security, and infrastructure validation commands defined by the current CI workflow; require the same gates that GitHub Actions uses.
-- [ ] Run the opt-in PostgreSQL integration tests against the project database configuration without printing connection values; require read-only execution and privilege checks to pass.
-- [ ] Exercise deterministic typo, ambiguity, follow-up, repair, refusal, and prediction paths locally with scripted providers and record assertions in `reports/agentic_local_verification.json`.
-- [ ] If any verification fails, preserve the output, add a failing regression test, fix the cause, and rerun the affected check before repeating the full verification.
-- [ ] Commit the verification report and worklog entry with `git add reports/agentic_local_verification.json docs/worklog.md && git commit -m "docs: record agentic pipeline verification"`.
+- [x] Run `.venv/bin/pytest -q -rs` and record totals, skips, warnings, duration, and Git SHA.
+- [x] Run frontend tests, lint, format check, and production build and record totals and artifact sizes.
+- [x] Run repository Ruff and both workflow-pinned Terraform validation roots; verify the downloaded Terraform 1.13.5 checksum and use locked AWS provider 6.63.0.
+- [x] Create a new F1-only local PostgreSQL database and SELECT-only role, load all 701,433 audited rows, and pass all four opt-in integration tests without printing connection values.
+- [x] Exercise deterministic typo, ambiguity, follow-up, repair, refusal, prediction, redaction, and call-limit paths and record assertions in `reports/agentic_local_verification.json`.
+- [x] Preserve failed outputs, add regression tests for discovered false-positive entities and missing year schema evidence, fix the causes, and rerun affected and full checks.
+- [x] Commit the verification report and worklog entry with `git add reports/agentic_local_verification.json docs/worklog.md docs/superpowers/plans/2026-09-10-agentic-retrieval.md && git commit -m "docs: record agentic pipeline verification"`.
 
 ### Task 10: Run live Bedrock evaluation without overwriting evidence
 
