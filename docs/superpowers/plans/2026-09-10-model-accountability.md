@@ -108,14 +108,14 @@
 - Produces: `verify_model_bundle(root: Path = ROOT) -> ModelManifest`
 - Produces: `GET /api/health/ready -> {status, archive_through, model_version, checks}`
 
-- [ ] Write failing tests proving hashes are checked before `joblib.load`, manifest/report mismatches fail with controlled `PredictionUnavailable`, and invalid calibration/features/interfaces are rejected.
-- [ ] Add failing API tests for a successful allowlisted readiness response and safe 503 behavior without filesystem paths or exception text.
-- [ ] Implement strict Pydantic manifest models and bundle validation, then call verification before deserialization.
-- [ ] Make production lifespan validate read-only PostgreSQL and the complete model bundle; keep `/api/health` as liveness and add `/api/health/ready`.
-- [ ] Include only the manifest, projection report, final metrics, model selection, and data audit evidence in the container.
-- [ ] Make release packaging validate the bundle before upload and include the manifest. Make CodeBuild call the real verifier. Change Lightsail health checks to `/api/health/ready`.
-- [ ] Run focused ML/API/deployment tests and a local Docker-context inclusion audit without printing secrets.
-- [ ] Commit with `git commit -m "security: verify model lineage at runtime"`.
+- [x] Write failing tests proving hashes are checked before `joblib.load`, manifest/report mismatches fail with controlled `PredictionUnavailable`, and invalid calibration/features/interfaces are rejected.
+- [x] Add failing API tests for a successful allowlisted readiness response and safe 503 behavior without filesystem paths or exception text.
+- [x] Implement strict Pydantic manifest models and bundle validation, then call verification before deserialization.
+- [x] Make production lifespan validate read-only PostgreSQL and the complete model bundle; keep `/api/health` as liveness and add `/api/health/ready`.
+- [x] Include only the manifest, projection report, final metrics, model selection, and data audit evidence in the container.
+- [x] Make release packaging validate the bundle before upload and include the manifest. Make CodeBuild call the real verifier. Change Lightsail health checks to `/api/health/ready`.
+- [x] Run focused ML/API/deployment tests and a local Docker-context inclusion audit without printing secrets.
+- [x] Commit with `git commit -m "security: verify model lineage at runtime"`.
 
 ### Task 5: Build the Forecast vs Reality review service and API
 

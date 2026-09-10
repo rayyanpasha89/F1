@@ -1,8 +1,86 @@
 import numpy as np
 import pandas as pd
+import joblib
+import json
+import hashlib
+import pytest
 from backend.ml.features import baseline_frame, split_masks
 from backend.ml.evaluation import metrics
+from backend.ml.evidence import ModelBundleError, verify_model_bundle
+from backend.ml.predictor import PredictionUnavailable, load_verified_artifacts
+from scripts.build_model_manifest import build_manifest
 from scripts.train_baseline import fit_baseline
+
+
+class BundleScoreModel:
+    def decision_function(self, frame):
+        return np.zeros(len(frame))
+
+
+class BundleBaseline:
+    def predict_proba(self, frame):
+        probability = np.full(len(frame), 0.15)
+        return np.column_stack([1 - probability, probability])
+
+
+def _write_json(path, value):
+    path.write_text(json.dumps(value, indent=2) + "\n")
+
+
+def _model_bundle(tmp_path, selected_model=None, artifact_changes=None):
+    (tmp_path / "models").mkdir(parents=True)
+    (tmp_path / "reports").mkdir()
+    selection = {
+        "experiment_id": "EXP-007",
+        "features": ["grid_position"],
+        "training_years": [2010, 2018],
+        "selection_years": [2019, 2021],
+        "inference_years": [2022, 2024],
+        "calibration": {"slope": 1.1, "intercept": 0.2, "method": "temporal sigmoid"},
+        "selection_frozen_at": "2026-09-08T10:35:42+00:00",
+    }
+    artifact = {
+        "model": selected_model or BundleScoreModel(),
+        **selection,
+    }
+    if artifact_changes:
+        artifact.update(artifact_changes)
+    joblib.dump(artifact, tmp_path / "models/podium_model.joblib")
+    joblib.dump(BundleBaseline(), tmp_path / "models/grid_baseline.joblib")
+    model_hash = hashlib.sha256((tmp_path / "models/podium_model.joblib").read_bytes()).hexdigest()
+    _write_json(tmp_path / "reports/model_selection.json", selection)
+    _write_json(
+        tmp_path / "reports/final_test_metrics.json",
+        {
+            "selection_frozen_at": selection["selection_frozen_at"],
+            "test_years": selection["inference_years"],
+            "artifact_sha256": model_hash,
+        },
+    )
+    _write_json(
+        tmp_path / "reports/data_audit.json",
+        {
+            "format_version": 1,
+            "tables": {"races": {"rows": 1125, "year_range": [1950, 2024]}},
+        },
+    )
+    _write_json(
+        tmp_path / "reports/race_constraint_evaluation.json",
+        {
+            "schema_version": "f1-probability-coherence-v1",
+            "model_version": "EXP-007+podium-count-v1",
+            "evidence_boundary": {"unseen_holdout": False},
+            "ship_gates": {
+                "validation_log_loss_improved": True,
+                "validation_brier_improved": True,
+                "all_race_sums_exact": True,
+                "all_rankings_preserved": True,
+            },
+        },
+    )
+    manifest = build_manifest(tmp_path, generated_at="2026-09-10T00:00:00+00:00")
+    _write_json(tmp_path / "models/manifest.json", manifest)
+    return tmp_path
 
 
 def fixture_frame():
@@ -144,3 +222,51 @@ def test_real_shap_explanations_reconstruct_model_probability():
         )
     with pytest.raises(PredictionUnavailable):
         predictor.predict(int(frame.loc[frame.year == 2018, "race_id"].iloc[0]))
+
+
+def test_bundle_hashes_are_checked_before_deserialization(tmp_path, monkeypatch):
+    root = _model_bundle(tmp_path)
+    (root / "models/podium_model.joblib").write_bytes(b"tampered")
+    loads = []
+
+    def forbidden_load(path):
+        loads.append(path)
+        raise AssertionError("deserialization ran before hash verification")
+
+    monkeypatch.setattr("backend.ml.predictor.joblib.load", forbidden_load)
+
+    with pytest.raises(PredictionUnavailable, match="Model verification failed") as error:
+        load_verified_artifacts(root)
+    assert loads == []
+    assert str(root) not in str(error.value)
+
+
+def test_bundle_rejects_evidence_mismatch_and_invalid_model_interface(tmp_path):
+    root = _model_bundle(tmp_path)
+    projection = root / "reports/race_constraint_evaluation.json"
+    projection.write_text(projection.read_text().replace("EXP-007", "EXP-999"))
+    _write_json(
+        root / "models/manifest.json",
+        build_manifest(root, generated_at="2026-09-10T00:00:00+00:00"),
+    )
+    with pytest.raises(ModelBundleError, match="Model evidence verification failed"):
+        verify_model_bundle(root)
+
+    other = tmp_path / "invalid"
+    root = _model_bundle(other, selected_model=object())
+    with pytest.raises(PredictionUnavailable, match="Model artifact interface is invalid"):
+        load_verified_artifacts(root)
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"features": ["unexpected_feature"]},
+        {"calibration": {"slope": float("nan"), "intercept": 0.2, "method": "bad"}},
+        {"inference_years": [2020, 2024]},
+    ],
+)
+def test_loaded_bundle_rejects_manifest_metadata_disagreement(tmp_path, changes):
+    root = _model_bundle(tmp_path, artifact_changes=changes)
+    with pytest.raises(PredictionUnavailable, match="Model artifact metadata is invalid"):
+        load_verified_artifacts(root)

@@ -17,7 +17,11 @@ COPY backend backend
 COPY knowledge knowledge
 COPY scripts scripts
 COPY reports/data_audit.json reports/data_audit.json
+COPY reports/model_selection.json reports/model_selection.json
+COPY reports/final_test_metrics.json reports/final_test_metrics.json
+COPY reports/race_constraint_evaluation.json reports/race_constraint_evaluation.json
 COPY models/*.joblib models/
+COPY models/manifest.json models/manifest.json
 COPY --from=frontend /web/dist /app/web
 ENV WEB_DIST=/app/web
 USER app

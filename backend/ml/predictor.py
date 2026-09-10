@@ -8,6 +8,7 @@ import shap
 from scipy.special import expit
 
 from backend.database import ROOT
+from backend.ml.evidence import ModelBundleError, ModelManifest, verify_model_bundle
 from backend.ml.features import build_features, source_frame
 from backend.ml.probability import project_expected_count
 
@@ -16,15 +17,55 @@ class PredictionUnavailable(Exception):
     pass
 
 
+def _validate_loaded_artifacts(artifact, baseline, manifest: ModelManifest) -> None:
+    try:
+        calibration = artifact["calibration"]
+        valid = (
+            artifact["experiment_id"] == manifest.experiment_id
+            and list(artifact["features"]) == list(manifest.features)
+            and list(artifact["training_years"]) == list(manifest.temporal_split.training_years)
+            and list(artifact["selection_years"]) == list(manifest.temporal_split.selection_years)
+            and list(artifact["inference_years"]) == list(manifest.temporal_split.inference_years)
+            and artifact["selection_frozen_at"] == manifest.selection_frozen_at.isoformat()
+            and calibration["method"] == manifest.calibration.method
+            and float(calibration["slope"]) == manifest.calibration.slope
+            and float(calibration["intercept"]) == manifest.calibration.intercept
+            and np.isfinite([calibration["slope"], calibration["intercept"]]).all()
+        )
+    except (KeyError, TypeError, ValueError):
+        valid = False
+    if not valid:
+        raise PredictionUnavailable("Model artifact metadata is invalid.")
+    if not callable(getattr(artifact.get("model"), "decision_function", None)) or not callable(
+        getattr(baseline, "predict_proba", None)
+    ):
+        raise PredictionUnavailable("Model artifact interface is invalid.")
+
+
+def load_verified_artifacts(root=ROOT):
+    """Verify every byte and contract before deserializing trusted local artifacts."""
+
+    try:
+        manifest = verify_model_bundle(root)
+    except ModelBundleError as error:
+        raise PredictionUnavailable("Model verification failed.") from error
+    try:
+        artifact = joblib.load(root / "models/podium_model.joblib")
+        baseline = joblib.load(root / "models/grid_baseline.joblib")
+    except Exception as error:
+        raise PredictionUnavailable("Model artifact could not be loaded.") from error
+    _validate_loaded_artifacts(artifact, baseline, manifest)
+    return artifact, baseline, manifest
+
+
 @lru_cache(maxsize=1)
 def load_artifacts():
-    path = ROOT / "models/podium_model.joblib"
-    if not path.exists():
-        raise PredictionUnavailable("Model unavailable. Run the documented training pipeline.")
-    # Only locally produced/trusted artifacts: joblib must never deserialize user uploads.
-    artifact = joblib.load(path)
-    baseline = joblib.load(ROOT / "models/grid_baseline.joblib")
-    return artifact, baseline, shap.TreeExplainer(artifact["model"])
+    artifact, baseline, _ = load_verified_artifacts(ROOT)
+    try:
+        explainer = shap.TreeExplainer(artifact["model"])
+    except Exception as error:
+        raise PredictionUnavailable("Model explanation artifact is invalid.") from error
+    return artifact, baseline, explainer
 
 
 class Predictor:

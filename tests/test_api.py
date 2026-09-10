@@ -33,6 +33,33 @@ def test_season_standings_and_race_flow(client):
     assert all("points" not in row and "position_order" not in row for row in grid)
 
 
+def test_readiness_verifies_database_and_model_bundle(client):
+    response = client.get("/api/health/ready")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "status": "ready",
+        "archive_through": 2024,
+        "model_version": "EXP-007+podium-count-v1",
+        "checks": {"database": "ok", "model_bundle": "verified"},
+    }
+
+
+def test_readiness_failure_is_safe(client, monkeypatch):
+    from backend.ml.evidence import ModelBundleError
+
+    monkeypatch.setattr(
+        "backend.main.verify_model_bundle",
+        lambda: (_ for _ in ()).throw(ModelBundleError("secret /tmp/model.joblib")),
+    )
+
+    response = client.get("/api/health/ready")
+
+    assert response.status_code == 503
+    assert response.json() == {"status": "unavailable", "detail": "Model bundle unavailable."}
+    assert "secret" not in response.text and "/tmp" not in response.text
+
+
 def test_profiles_and_empty_coverage(client):
     drivers = client.get("/api/profiles/drivers?year=2024").json()["data"]
     profile = client.get(f"/api/profiles/drivers/{drivers[0]['driver_id']}?year=2024").json()

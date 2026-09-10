@@ -5,7 +5,11 @@
 !knowledge/**
 !scripts/**
 !reports/data_audit.json
+!reports/model_selection.json
+!reports/final_test_metrics.json
+!reports/race_constraint_evaluation.json
 !models/*.joblib
+!models/manifest.json
 !frontend/**
 frontend/node_modules/
 frontend/dist/

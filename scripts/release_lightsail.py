@@ -6,6 +6,7 @@ import subprocess
 from datetime import datetime, timezone
 
 from backend.database import ROOT
+from backend.ml.evidence import verify_model_bundle
 from scripts.release_aws import guarded_session, outputs
 
 SERVICE = "f1-strategist-demo"
@@ -19,6 +20,7 @@ def main():
     session = guarded_session()
     lightsail = session.client("lightsail")
     if args.stage == "deploy":
+        verify_model_bundle(ROOT)
         if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
             raise RuntimeError("Commit and verify release files first")
         sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
@@ -49,7 +51,7 @@ def main():
                     "unhealthyThreshold": 3,
                     "timeoutSeconds": 10,
                     "intervalSeconds": 30,
-                    "path": "/api/health",
+                    "path": "/api/health/ready",
                     "successCodes": "200",
                 },
             },

@@ -16,7 +16,8 @@ from backend.ai.provider import ProviderError
 from backend.config import ConfigurationError
 from threading import BoundedSemaphore
 from backend.ai.limits import ChatLimiter
-from backend.ml.predictor import Predictor, PredictionUnavailable
+from backend.ml.evidence import ModelBundleError, verify_model_bundle
+from backend.ml.predictor import Predictor, PredictionUnavailable, load_artifacts
 from backend.services.analytics import Analytics, NotFound
 
 logger = logging.getLogger("uvicorn.error")
@@ -50,6 +51,11 @@ def create_app(engine=None):
             if not readonly or writable:
                 raise RuntimeError("Production database credentials must be SELECT-only")
             logger.warning("Production PostgreSQL reader privileges verified")
+            try:
+                load_artifacts()
+            except PredictionUnavailable as error:
+                raise RuntimeError("Production model bundle must verify") from error
+            logger.warning("Production model bundle verified")
         yield
         db.dispose()
 
@@ -129,6 +135,27 @@ def create_app(engine=None):
         with db.connect() as conn:
             conn.execute(text("SELECT race_id FROM races LIMIT 1")).first()
         return {"status": "ok", "source": "historical CSV snapshot, through 2024"}
+
+    @app.get("/api/health/ready")
+    def readiness():
+        with db.connect() as conn:
+            archive_through = conn.scalar(
+                text("SELECT MAX(year) FROM races JOIN results USING (race_id)")
+            )
+        try:
+            manifest = verify_model_bundle()
+            load_artifacts()
+        except (ModelBundleError, PredictionUnavailable):
+            return JSONResponse(
+                status_code=503,
+                content={"status": "unavailable", "detail": "Model bundle unavailable."},
+            )
+        return {
+            "status": "ready",
+            "archive_through": int(archive_through),
+            "model_version": manifest.model_version,
+            "checks": {"database": "ok", "model_bundle": "verified"},
+        }
 
     @app.get("/api/seasons", response_model=Rows)
     def seasons():

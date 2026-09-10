@@ -14,6 +14,7 @@ import boto3
 from dotenv import dotenv_values
 
 from backend.database import ROOT, SCHEMA
+from backend.ml.evidence import verify_model_bundle
 
 
 def guarded_session():
@@ -89,6 +90,7 @@ def main():
         )
         print("Runtime secret initialized and audited source uploaded; secret values omitted.")
     elif args.stage == "build":
+        verify_model_bundle(ROOT)
         source = subprocess.check_output(["git", "archive", "--format=zip", "HEAD"], cwd=ROOT)
         data = io.BytesIO(source)
         with zipfile.ZipFile(data, "a", zipfile.ZIP_DEFLATED) as archive:
