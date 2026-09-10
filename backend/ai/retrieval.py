@@ -288,7 +288,10 @@ def rank_entities(analytics, variants, prior_entities=(), race_id=None):
         and entity.name not in excluded_names
         and not (
             entity.kind == "drivers"
-            and "name_component" in entity.reasons
+            and any(
+                reason in entity.reasons
+                for reason in ("reference", "name_component", "edit_similarity")
+            )
             and explicit_driver_tokens.intersection(normalize(entity.name).split())
         )
     ][:12]

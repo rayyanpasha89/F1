@@ -69,7 +69,7 @@ class TinyCatalog:
                 },
                 {
                     "driver_id": 8,
-                    "driver_ref": "jackie_lewis",
+                    "driver_ref": "lewis",
                     "code": None,
                     "forename": "Jackie",
                     "surname": "Lewis",
