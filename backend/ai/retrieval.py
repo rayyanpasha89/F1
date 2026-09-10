@@ -274,12 +274,23 @@ def rank_entities(analytics, variants, prior_entities=(), race_id=None):
 
     scored.sort(key=lambda pair: (-pair[0].score, pair[1], pair[0].kind, pair[0].name))
     ranked = [entity for entity, _ in scored[:20]]
+    explicit_driver_tokens = {
+        token
+        for entity in ranked
+        if entity.kind == "drivers" and "full_name" in entity.reasons
+        for token in normalize(entity.name).split()
+    }
     selected = [
         entity
         for entity in ranked
         if entity.score >= 0.74
         and entity.name not in ambiguous_names
         and entity.name not in excluded_names
+        and not (
+            entity.kind == "drivers"
+            and "name_component" in entity.reasons
+            and explicit_driver_tokens.intersection(normalize(entity.name).split())
+        )
     ][:12]
     return EntityRanking(
         selected=selected,
