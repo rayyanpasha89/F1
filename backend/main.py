@@ -20,6 +20,7 @@ from backend.ml.predictor import Predictor, PredictionUnavailable
 from backend.services.analytics import Analytics, NotFound
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class Rows(BaseModel):
