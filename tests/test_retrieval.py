@@ -136,9 +136,7 @@ def test_entity_ranking_selects_exact_full_name_and_reports_reasons():
     assert result.selected[0].name == "Lewis Hamilton"
     assert result.selected[0].score == 1.0
     assert "full_name" in result.selected[0].reasons
-    assert [(entity.id, entity.name) for entity in result.selected] == [
-        (1, "Lewis Hamilton")
-    ]
+    assert [(entity.id, entity.name) for entity in result.selected] == [(1, "Lewis Hamilton")]
 
 
 def test_entity_ranking_handles_typo_and_is_stable():
