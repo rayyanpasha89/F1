@@ -1,0 +1,501 @@
+{
+  "aws_release": {
+    "account": "148356747273",
+    "codebuild": {
+      "duration_seconds": 112.619,
+      "end_time": "2026-09-11T02:47:12.041000+05:30",
+      "id": "f1-race-strategist-dev:291889a4-bf82-4c42-b77a-a73a2b4a6a8e",
+      "image_tag": "91382f8b4895ff53cdcfeb66c0e7aa4689d7b531",
+      "phase_durations_seconds": {
+        "build": 56,
+        "download_source": 1,
+        "finalizing": 0,
+        "install": 0,
+        "post_build": 28,
+        "pre_build": 17,
+        "provisioning": 7,
+        "queued": 0,
+        "submitted": 0,
+        "upload_artifacts": 0
+      },
+      "source_archive_sha256": "99da727845d9fbd28a6cc93b1c4a5b248a7d04cf7c7b66dbbf65a792cf6e1791",
+      "start_time": "2026-09-11T02:45:19.422000+05:30",
+      "status": "SUCCEEDED"
+    },
+    "ecr": {
+      "compressed_size_bytes": 268406943,
+      "digest": "sha256:be81cc251318219892e77d0f381a46de14e0c4d509474f334b8e5aae0e738d8e",
+      "manifest_media_type": "application/vnd.docker.distribution.manifest.v2+json",
+      "pushed_at": "2026-09-11T02:47:11.359000+05:30",
+      "repository": "f1-race-strategist-dev",
+      "tag": "91382f8b4895ff53cdcfeb66c0e7aa4689d7b531"
+    },
+    "lightsail": {
+      "created_at": "2026-09-11T02:48:09+05:30",
+      "deployment_state": "ACTIVE",
+      "deployment_version": 13,
+      "health_path": "/api/health/ready",
+      "image_tag": "91382f8b4895ff53cdcfeb66c0e7aa4689d7b531",
+      "service": "f1-strategist-demo",
+      "service_state": "RUNNING",
+      "url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/"
+    },
+    "profile": "default",
+    "region": "eu-north-1"
+  },
+  "browser_verification": {
+    "console_error_count": 0,
+    "failed_network_request_count": 0,
+    "routes": [
+      {
+        "heading": "The season, in perspective.",
+        "horizontal_overflow": false,
+        "route": "/",
+        "status": "passed",
+        "viewport": "1440x900"
+      },
+      {
+        "accountability_sections": 9,
+        "heading": "Every forecast leaves a trail.",
+        "horizontal_overflow": false,
+        "model_version": "EXP-007+podium-count-v1",
+        "route": "/model",
+        "status": "passed",
+        "viewport": "390x844"
+      },
+      {
+        "heading": "Monaco Grand Prix",
+        "horizontal_overflow": false,
+        "prediction_rows": 20,
+        "review_result": "Exact podium set",
+        "review_score": "3 / 3",
+        "route": "/races/1128",
+        "status": "passed",
+        "viewport": "390x844"
+      }
+    ],
+    "screenshots": {
+      "archive_desktop": {
+        "height": 2000,
+        "path": ".gstack/qa-reports/screenshots/final-live-2026-09-11/home-desktop.png",
+        "sha256": "10e110bad3ddd7820c30205b32a199c492772d1ba6383b50eac5d8e4df3396e2",
+        "width": 906
+      },
+      "model_lab_mobile": {
+        "height": 1996,
+        "path": ".gstack/qa-reports/screenshots/final-live-2026-09-11/model-mobile.png",
+        "sha256": "d673c0480e1b1a263ca0f6a1e558d5cc6159423d8a8e9bf6e14b16f2d7958955",
+        "width": 123
+      },
+      "monaco_mobile": {
+        "height": 1999,
+        "path": ".gstack/qa-reports/screenshots/final-live-2026-09-11/monaco-mobile.png",
+        "sha256": "29bb477a24d4c47cef4d35ed2987371bed00b93cf4d82937095f06154d19a15b",
+        "width": 98
+      }
+    },
+    "tool": "gstack browse persistent headless Chromium"
+  },
+  "credential_rotation": {
+    "credential_values_recorded": false,
+    "incorrect_key_attempt_detected": true,
+    "local_file_mode": "0600",
+    "performed": true,
+    "post_correction_api_status": 200,
+    "reason": "The prior demo access code appeared in an accessibility snapshot during QA.",
+    "runtime_key": "CHAT_ACCESS_CODE",
+    "status": "verified"
+  },
+  "evidence_boundaries": [
+    "The 2022-2024 test was already consumed and is labeled post-test iterative evidence.",
+    "Lighthouse performance varies with network and service timing; accessibility, best-practices, and CLS are release gates.",
+    "Screenshots and raw Lighthouse JSON are retained locally under the ignored .gstack QA directory; scalar results and hashes are recorded here.",
+    "The shared access code is demo protection rather than per-user authentication."
+  ],
+  "generated_at": "2026-09-10T21:39:35.185306+00:00",
+  "lighthouse": {
+    "before_fixes": {
+      "home_mobile": {
+        "accessibility_failures": [],
+        "best_practices_failures": [],
+        "lighthouse_version": "13.4.1",
+        "metrics": {
+          "cumulative_layout_shift": 0.003296631569205437,
+          "first_contentful_paint_ms": 1281.579,
+          "largest_contentful_paint_ms": 1281.579,
+          "speed_index_ms": 1905.408,
+          "total_blocking_time_ms": 0
+        },
+        "scores": {
+          "accessibility": 100,
+          "best-practices": 100,
+          "performance": 100,
+          "seo": 100
+        },
+        "url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/"
+      },
+      "model_mobile": {
+        "accessibility_failures": [
+          "color-contrast"
+        ],
+        "best_practices_failures": [],
+        "lighthouse_version": "13.4.1",
+        "metrics": {
+          "cumulative_layout_shift": 0.24060200825622716,
+          "first_contentful_paint_ms": 1214.995,
+          "largest_contentful_paint_ms": 1664.995,
+          "speed_index_ms": 2425.284,
+          "total_blocking_time_ms": 0
+        },
+        "scores": {
+          "accessibility": 96,
+          "best-practices": 100,
+          "performance": 87,
+          "seo": 100
+        },
+        "url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/model"
+      },
+      "race_desktop": {
+        "accessibility_failures": [
+          "color-contrast"
+        ],
+        "best_practices_failures": [],
+        "lighthouse_version": "13.4.1",
+        "metrics": {
+          "cumulative_layout_shift": 0.1279417189278522,
+          "first_contentful_paint_ms": 350.855,
+          "largest_contentful_paint_ms": 390.855,
+          "speed_index_ms": 791.844,
+          "total_blocking_time_ms": 0
+        },
+        "scores": {
+          "accessibility": 96,
+          "best-practices": 100,
+          "performance": 95,
+          "seo": 100
+        },
+        "url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/races/1128"
+      }
+    },
+    "final_live": {
+      "home_mobile": {
+        "accessibility_failures": [],
+        "best_practices_failures": [],
+        "lighthouse_version": "13.4.1",
+        "metrics": {
+          "cumulative_layout_shift": 0.003296631569205437,
+          "first_contentful_paint_ms": 1826.18,
+          "largest_contentful_paint_ms": 1826.18,
+          "speed_index_ms": 2513.679,
+          "total_blocking_time_ms": 0
+        },
+        "scores": {
+          "accessibility": 100,
+          "best-practices": 100,
+          "performance": 98,
+          "seo": 100
+        },
+        "url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/"
+      },
+      "model_mobile": {
+        "accessibility_failures": [],
+        "best_practices_failures": [],
+        "lighthouse_version": "13.4.1",
+        "metrics": {
+          "cumulative_layout_shift": 0,
+          "first_contentful_paint_ms": 1807.084,
+          "largest_contentful_paint_ms": 1807.084,
+          "speed_index_ms": 4293.687,
+          "total_blocking_time_ms": 0
+        },
+        "scores": {
+          "accessibility": 100,
+          "best-practices": 100,
+          "performance": 96,
+          "seo": 100
+        },
+        "url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/model"
+      },
+      "race_desktop": {
+        "accessibility_failures": [],
+        "best_practices_failures": [],
+        "lighthouse_version": "13.4.1",
+        "metrics": {
+          "cumulative_layout_shift": 0.0007008820192335756,
+          "first_contentful_paint_ms": 347.427,
+          "largest_contentful_paint_ms": 387.427,
+          "speed_index_ms": 778.658,
+          "total_blocking_time_ms": 0
+        },
+        "scores": {
+          "accessibility": 100,
+          "best-practices": 100,
+          "performance": 100,
+          "seo": 100
+        },
+        "url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/races/1128"
+      }
+    },
+    "release_gate": {
+      "maximum_cumulative_layout_shift": 0.1,
+      "minimum_accessibility": 100,
+      "minimum_best_practices": 100,
+      "status": "passed"
+    }
+  },
+  "presentation_non_modification": {
+    "files_modified": false,
+    "sha256": {
+      "final": "d7a042fce3ea5999ef7b8d61b0d92b3e931269b6974633b05b85f816b6b1df84",
+      "interim": "2e1700f802c51ac29a6a186de10c3a610015b9e72e9b9785b488dfd45a873737",
+      "scope": "7066b08512cd99919b228824b1b67b08dff2e48c387810d6a10afbcf2098c64a"
+    }
+  },
+  "public_origin": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com",
+  "public_release_verifier": {
+    "checks": {
+      "archive": {
+        "first_year": 1950,
+        "last_year": 2024,
+        "race_count_2024": 24,
+        "race_id": 1128,
+        "race_name": "Monaco Grand Prix",
+        "season_count": 75,
+        "status": "passed"
+      },
+      "chat": {
+        "correction_verified": true,
+        "intent": "statistics",
+        "provider_call_count": 2,
+        "repair_count": 0,
+        "status": "passed"
+      },
+      "delivery": {
+        "cache_policy": true,
+        "gzip_responses": 10,
+        "request_ids_unique": true,
+        "response_count": 11,
+        "security_headers": true,
+        "server_generated_request_ids": true,
+        "status": "passed"
+      },
+      "model_card": {
+        "archive_races": 1125,
+        "archive_years": [
+          1950,
+          2024
+        ],
+        "audited_tables": 14,
+        "hash_count": 6,
+        "model_version": "EXP-007+podium-count-v1",
+        "schema_version": "f1-public-model-card-v1",
+        "season_evidence_count": 6,
+        "status": "passed",
+        "unseen_holdout": false
+      },
+      "prediction": {
+        "driver_count": 20,
+        "model_version": "EXP-007+podium-count-v1",
+        "postprocessor": "race_logit_offset",
+        "probability_sum": 3.0,
+        "race_id": 1128,
+        "status": "passed"
+      },
+      "readiness": {
+        "archive_through": 2024,
+        "database": "ok",
+        "model_bundle": "verified",
+        "model_card": "verified",
+        "model_version": "EXP-007+podium-count-v1",
+        "status": "passed"
+      },
+      "review": {
+        "brier_score": 0.04465273508022717,
+        "driver_count": 20,
+        "exact_podium_set": true,
+        "mean_absolute_error": 0.11535691372481534,
+        "race_id": 1128,
+        "status": "passed",
+        "top_three_hits": 3
+      },
+      "spa": {
+        "description_length": 105,
+        "immutable_asset": true,
+        "model_deep_link": true,
+        "status": "passed",
+        "title": "F1 Race Strategist | Historical Analytics"
+      }
+    },
+    "duration_ms": 18941.34,
+    "generated_at": "2026-09-10T21:22:13.144421+00:00",
+    "report": "reports/model_accountability_aws_release_final.json",
+    "report_sha256": "b1b8be9107b65a09efcc229d38c7c4230cee61a94d9cac7747cee04dfb42b885",
+    "schema_version": "f1-public-release-verification-v1",
+    "status": "passed"
+  },
+  "qa_fixes": [
+    {
+      "commit": "111f046",
+      "issue": "ISSUE-001",
+      "status": "verified_live",
+      "summary": "Raised Model Lab and race-round foreground contrast to pass accessibility checks."
+    },
+    {
+      "commit": "7a2b55f",
+      "issue": "ISSUE-002",
+      "status": "verified_live",
+      "summary": "Reserved lazy-route and async-table geometry to keep CLS below 0.10."
+    },
+    {
+      "commit": "fb1986b",
+      "issue": "ISSUE-003",
+      "status": "verified_cloudwatch",
+      "summary": "Paginated and time-bounded the Lightsail-to-CloudWatch log export."
+    }
+  ],
+  "quality_gates_after_final_change": {
+    "eslint": "passed",
+    "frontend": {
+      "test_duration_seconds": 0.634,
+      "test_files": 7,
+      "tests_passed": 15
+    },
+    "npm_production_known_vulnerabilities": 0,
+    "pip_audit_runtime_known_vulnerabilities": 0,
+    "postgres_integration": {
+      "duration_seconds": 3.44,
+      "passed": 4,
+      "skipped": 0,
+      "warnings": 5
+    },
+    "prettier": "passed",
+    "python_default": {
+      "duration_seconds": 8.6,
+      "passed": 154,
+      "skipped": 4,
+      "warnings": 5
+    },
+    "ruff_check": "passed",
+    "ruff_format": "passed",
+    "terraform_lightsail_validate": "passed",
+    "terraform_root_validate": "passed",
+    "terraform_version": "1.13.5",
+    "vite_build": "passed"
+  },
+  "repository_secret_scan": {
+    "configured_secret_values_checked": 3,
+    "documented_noncredential_provider_endpoint_occurrences_reviewed": 2,
+    "history_aws_access_key_hits": 0,
+    "history_exact_secret_hits": 0,
+    "history_intentional_test_fixture_url_hits": 1,
+    "history_unreviewed_credential_url_hits": 0,
+    "reachable_git_blobs_scanned": 371,
+    "status": "passed",
+    "tracked_and_intended_files_scanned": 178,
+    "worktree_aws_access_key_hits": 0,
+    "worktree_exact_secret_hits": 0,
+    "worktree_intentional_test_fixture_url_hits": 1,
+    "worktree_unreviewed_credential_url_hits": 0
+  },
+  "runtime_logs": {
+    "cloudwatch_snapshot_readback": {
+      "account": "148356747273",
+      "event_count": 210,
+      "first_event_timestamp_ms": 1789074814000,
+      "last_event_timestamp_ms": 1789075807000,
+      "last_ingestion_time_ms": 1789075831806,
+      "log_group": "/f1/dev/api",
+      "log_stream": "lightsail/20260910T213030991935Z",
+      "region": "eu-north-1",
+      "sensitive_literal_hits": 0,
+      "sensitive_marker_hits": {
+        "credential_markers": 0,
+        "database_urls": 0,
+        "question_content": 0,
+        "sql_text": 0
+      },
+      "sensitive_values_checked": 5,
+      "status": "passed",
+      "structured_event_counts": {
+        "chat_complete": 1,
+        "prediction_complete": 3,
+        "review_complete": 3
+      },
+      "structured_request_id_count": 7,
+      "structured_request_ids_unique": true
+    },
+    "export_tooling": {
+      "issue": "First-page-only export omitted later structured events.",
+      "pagination_test": "tests/test_release_lightsail.py",
+      "resolution_commit": "fb1986b85da20324b15c4388ffdc0f69a89b7465",
+      "status": "fixed_and_verified"
+    },
+    "lightsail_bounded_readback": {
+      "account": "148356747273",
+      "deployment_state": "ACTIVE",
+      "deployment_version": 13,
+      "event_count": 264,
+      "first_event_at": "2026-09-11T02:43:34+05:30",
+      "http_5xx_count": 0,
+      "image_tag": "91382f8b4895ff53cdcfeb66c0e7aa4689d7b531",
+      "last_event_at": "2026-09-11T03:08:38+05:30",
+      "region": "eu-north-1",
+      "retrieval_pages": 4,
+      "sensitive_literal_hits": 0,
+      "sensitive_marker_hits": {
+        "credential_markers": 0,
+        "database_urls": 0,
+        "question_content": 0,
+        "sql_text": 0
+      },
+      "sensitive_values_checked": 5,
+      "service_state": "RUNNING",
+      "status": "passed",
+      "structured_event_counts": {
+        "chat_complete": 1,
+        "prediction_complete": 4,
+        "review_complete": 3
+      },
+      "structured_request_id_count": 8,
+      "structured_request_ids_unique": true
+    }
+  },
+  "schema_version": "f1-model-accountability-cloud-verification-v1",
+  "scope": "Immutable AWS build and deployment, public contracts, desktop/mobile UI, Lighthouse, runtime logs, dependency and infrastructure gates.",
+  "source_control": {
+    "application_validation": {
+      "conclusion": "success",
+      "created_at": "2026-09-10T19:36:28Z",
+      "head_sha": "91382f8b4895ff53cdcfeb66c0e7aa4689d7b531",
+      "jobs": [
+        {
+          "conclusion": "success",
+          "duration_seconds": 57.0,
+          "name": "python",
+          "url": "https://github.com/rayyanpasha89/F1/actions/runs/34521407938/job/103019552780"
+        },
+        {
+          "conclusion": "success",
+          "duration_seconds": 24.0,
+          "name": "infrastructure",
+          "url": "https://github.com/rayyanpasha89/F1/actions/runs/34521407938/job/103019553047"
+        },
+        {
+          "conclusion": "success",
+          "duration_seconds": 19.0,
+          "name": "frontend",
+          "url": "https://github.com/rayyanpasha89/F1/actions/runs/34521407938/job/103019553048"
+        }
+      ],
+      "run_id": 34521407938,
+      "status": "completed",
+      "updated_at": "2026-09-10T19:37:28Z",
+      "url": "https://github.com/rayyanpasha89/F1/actions/runs/34521407938",
+      "workflow": "Validate project"
+    },
+    "deployed_application_commit": "91382f8b4895ff53cdcfeb66c0e7aa4689d7b531",
+    "release_tooling_commit": "fb1986b85da20324b15c4388ffdc0f69a89b7465",
+    "repository": "https://github.com/rayyanpasha89/F1"
+  },
+  "status": "passed"
+}

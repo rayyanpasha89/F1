@@ -255,6 +255,6 @@
 - [x] Merge `feat/model-accountability` to `main` without squashing or rewriting history, push, and wait for all GitHub jobs.
 - [x] Before each AWS mutation, run the guarded account/profile/region checks. Build the exact merge SHA in CodeBuild and wait for `SUCCEEDED`.
 - [x] Deploy the immutable image to `f1-strategist-demo`; require Lightsail `RUNNING`/`ACTIVE` and the exact image SHA.
-- [ ] Run the public verifier with bounded chat, desktop/mobile browser flows, console/network checks, and Lighthouse. Require accessibility 100, best practices 100, and CLS at most 0.10.
-- [ ] Retrieve bounded Lightsail logs and export a new CloudWatch snapshot. Verify prediction/review/chat events exist and sensitive values are absent.
+- [x] Run the public verifier with bounded chat, desktop/mobile browser flows, console/network checks, and Lighthouse. Require accessibility 100, best practices 100, and CLS at most 0.10.
+- [x] Retrieve bounded Lightsail logs and export a new CloudWatch snapshot. Verify prediction/review/chat events exist and sensitive values are absent.
 - [ ] Write new AWS/cloud reports and worklog evidence, commit, push, wait for final CI, then reconfirm public readiness, deployed SHA, clean Git, and unchanged presentation hashes.

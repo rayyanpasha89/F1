@@ -6,10 +6,10 @@ This guide demonstrates the deployed application and the evidence behind it. The
 
 - Live application: https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/
 - GitHub repository: https://github.com/rayyanpasha89/F1
-- Deployed application commit: `4b3946451986f09fdd11d880a2de757366947989`
-- GitHub Actions: https://github.com/rayyanpasha89/F1/actions/runs/34456776706
-- CodeBuild: `f1-race-strategist-dev:cce52796-d309-4d3c-a536-4a97e796c0a1` (`SUCCEEDED`)
-- Lightsail: service `f1-strategist-demo`, deployment 9, `RUNNING` / `ACTIVE`
+- Deployed application commit: `91382f8b4895ff53cdcfeb66c0e7aa4689d7b531`
+- GitHub Actions: https://github.com/rayyanpasha89/F1/actions/runs/34521407938
+- CodeBuild: `f1-race-strategist-dev:291889a4-bf82-4c42-b77a-a73a2b4a6a8e` (`SUCCEEDED`)
+- Lightsail: service `f1-strategist-demo`, deployment 13, `RUNNING` / `ACTIVE`
 - Region and account: `eu-north-1`, F1 account `148356747273`
 
 The demo access code is stored outside Git in `outputs/chat-access-code.txt` in the Codex workspace. Do not put it in slides, screenshots, terminal history, or the repository.
@@ -39,7 +39,7 @@ Show:
 - driver comparison and strictly earlier recent form;
 - all 20 podium probabilities.
 
-Select **Charles Leclerc** in the prediction panel. Expected result: **76.4%** podium probability versus a **70.9%** grid-only baseline. Point out the real calibrated SHAP contributions and the note that they are associations in calibrated log-odds, not causal effects.
+Select **Charles Leclerc** in the prediction panel. Expected live result: **73.9%** projected podium probability versus a **70.8%** projected grid-only baseline. The raw selected-model output remains visible as **76.4%**. Point out the real calibrated SHAP contributions and the note that they are associations in calibrated log-odds, not causal effects. All 20 projected probabilities total three podium places.
 
 ### 3. Demonstrate typo-tolerant grounded statistics
 
@@ -89,19 +89,20 @@ Return to Monaco 2024 and ask:
 
 > Why is Lewis Hamliton given that podium probability?
 
-Expected result: the typo is corrected, the request routes to **Explanation**, and the response cites Lewis Hamilton's actual **2.9%** selected-race output, the **12.9%** grid-only baseline, and real model contributions. It does not generate a substitute probability with the language model.
+Expected result: the typo is corrected, the request routes to **Explanation**, and the response cites Lewis Hamilton's actual **2.6%** projected selected-race output, the **12.8%** projected grid-only baseline, the visible **2.9%** raw model output, and real model contributions. It does not generate a substitute probability with the language model.
 
 ### 8. Close with engineering evidence
 
-Open the final presentation and GitHub Actions run. Show:
+Open the live Model Lab and GitHub Actions run. The protected final presentation remains unchanged until an explicit presentation revision is requested. Show:
 
-- 113 Python tests, plus all four opt-in PostgreSQL integration checks;
-- nine frontend tests, ESLint, Prettier, and Vite production build;
+- 154 Python tests, plus all four opt-in PostgreSQL integration checks;
+- 15 frontend tests, ESLint, Prettier, and Vite production build;
 - Ruff and both Terraform roots;
 - fixed NL2SQL Run 09: 40/40, 3.651-second mean latency;
 - Agentic Run 01: 22/22, 3.013-second mean latency, 29 provider calls, zero live repair;
-- immutable CodeBuild image and active Lightsail deployment;
-- five privacy-safe completion records exported to CloudWatch.
+- immutable CodeBuild image and active Lightsail deployment 13;
+- 210 bounded runtime events exported and read back from CloudWatch, including prediction, review and chat completion records with no configured credential, provider-setting, database-URL, SQL or question-text matches;
+- Lighthouse accessibility and best-practices scores of 100 on the archive, Model Lab and Monaco routes, with maximum final CLS 0.003297.
 
 State that both benchmark suites were used during development and therefore do not estimate unseen generalization. The bounded one-repair path is covered by deterministic tests; no generated query in the reported live runs needed repair.
 
@@ -118,6 +119,9 @@ State that both benchmark suites were used during development and therefore do n
 | Local agentic verification | `reports/agentic_local_verification.json` |
 | AWS release | `reports/aws_agentic_release.json` |
 | Public cloud verification | `reports/aws_agentic_cloud_verification.json` |
+| Model-accountability local verification | `reports/model_accountability_local_verification.json` |
+| Model-accountability public release | `reports/model_accountability_aws_release_final.json` |
+| Model-accountability combined cloud verification | `reports/model_accountability_cloud_verification.json` |
 | Fixed NL2SQL result | `reports/nl2sql_run_09.json` |
 | Agentic result | `reports/agentic_run_01.json` |
 | Screenshots | `docs/presentations/assets/` |

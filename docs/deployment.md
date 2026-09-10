@@ -2,7 +2,7 @@
 
 ## Active Lightsail deployment
 
-The dev application is reachable at https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/ . Lightsail deployment 9 is `ACTIVE` on immutable image `4b3946451986f09fdd11d880a2de757366947989`. Public checks passed for frontend, deep links, health, seasons, standings, comparison, profiles, all 20 Monaco podium probabilities and the bounded agentic chat flow. GitHub Actions run `34456776706` and CodeBuild `cce52796-d309-4d3c-a536-4a97e796c0a1` passed for that source. Machine-readable evidence is in `reports/aws_agentic_release.json` and `reports/aws_agentic_cloud_verification.json`.
+The dev application is reachable at https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/ . Lightsail deployment 13 is `RUNNING` / `ACTIVE` on immutable application image `91382f8b4895ff53cdcfeb66c0e7aa4689d7b531`. Public checks passed for the frontend and deep links, archive APIs, readiness, all 20 Monaco probabilities summing to three, the 3/3 forecast review, the public model card, delivery headers and the bounded typo-tolerant chat flow. GitHub Actions run `34521407938` and CodeBuild `f1-race-strategist-dev:291889a4-bf82-4c42-b77a-a73a2b4a6a8e` passed for that source; ECR recorded digest `sha256:be81cc251318219892e77d0f381a46de14e0c4d509474f334b8e5aae0e738d8e`. Machine-readable evidence is in `reports/model_accountability_aws_release_final.json` and `reports/model_accountability_cloud_verification.json`; the prior agentic release reports remain as append-only history.
 
 The user authorized Lightsail after CloudFront required account verification and RDS rejected seven-day backup retention on the account plan. Terraform under `infra/lightsail/` manages the small container service, its narrowly scoped ECR pull policy, and an encrypted PostgreSQL 16 database through a CloudFormation resource. Database deletion/replacement is retained. This account is 148356747273, CLI default profile, region eu-north-1. Never use the Naaz configuration.
 
@@ -27,7 +27,7 @@ After the service reaches `RUNNING` and its deployment reaches `ACTIVE`, verify 
 ```sh
 python -m scripts.verify_public_release \
   --base-url https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com \
-  --output reports/model_accountability_aws_release.json \
+  --output reports/model_accountability_aws_release_final.json \
   --access-code-file /absolute/private/path/to/chat-access-code.txt
 ```
 
@@ -43,7 +43,7 @@ Lightsail retains continuous container stdout/stderr. CodeBuild writes to CloudW
 python -m scripts.release_lightsail logs
 ```
 
-This is a bounded snapshot of the first returned log page, not automatic continuous CloudWatch forwarding. CloudWatch retention is 14 days. Do not place access codes in URLs or logs. Chat budgets are per-process and reset after restart, so they are not a durable billing cap.
+The command bounds the snapshot to the active deployment window, follows every Lightsail page up to a fixed safety limit, orders the events, and refuses export when the service is not `RUNNING` / `ACTIVE`. It is an explicit snapshot rather than automatic continuous CloudWatch forwarding. The verified release exported 210 events to stream `lightsail/20260910T213030991935Z`; CloudWatch readback found prediction, review and chat completion records with zero configured-secret, provider-setting, database-URL, SQL or question-text matches. CloudWatch retention is 14 days. Do not place access codes in URLs or logs. Chat budgets are per-process and reset after restart, so they are not a durable billing cap.
 
 The small container service is approximately $15/month and the micro PostgreSQL bundle approximately $15/month, plus Bedrock and incidental storage/logging. Previously created ALB and supporting resources still incur charges; no destructive cleanup was authorized. The original architecture and its retained resources are documented below for traceability. Do not apply or destroy that stack casually.
 
