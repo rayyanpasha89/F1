@@ -201,14 +201,14 @@
 - Produces: `install_http_policy(app: FastAPI) -> None`
 - Every response receives a generated `X-Request-ID`; health/chat are `no-store`; historical GET APIs are short-cache; hashed assets are immutable
 
-- [ ] Write failing tests for request IDs, CSP, HSTS, nosniff, frame denial, referrer/permissions policy, gzip, cache rules, and immutable hashed assets.
-- [ ] Add failing frontend tests or DOM assertions for reserved standings loading geometry and metadata files.
-- [ ] Implement the middleware with server-generated identifiers and no request/header reflection.
-- [ ] Add safe `prediction_complete` and `review_complete` logs containing only request ID, race ID, model version, postprocessor, elapsed time, probability sum, and hit count.
-- [ ] Set asset cache headers, shell no-cache, valid meta description/title, and robots policy.
-- [ ] Add an accessible table skeleton/reserved layout that removes asynchronous standings shift without hiding status text.
-- [ ] Run HTTP/web/API/frontend tests and verify logs exclude sentinel secrets, SQL, paths, and question content.
-- [ ] Commit with `git commit -m "perf: harden delivery and inference telemetry"`.
+- [x] Write failing tests for request IDs, CSP, HSTS, nosniff, frame denial, referrer/permissions policy, gzip, cache rules, and immutable hashed assets.
+- [x] Add failing frontend tests or DOM assertions for reserved standings loading geometry and metadata files.
+- [x] Implement the middleware with server-generated identifiers and no request/header reflection.
+- [x] Add safe `prediction_complete` and `review_complete` logs containing only request ID, race ID, model version, postprocessor, elapsed time, probability sum, and hit count.
+- [x] Set asset cache headers, shell no-cache, valid meta description/title, and robots policy.
+- [x] Add an accessible table skeleton/reserved layout that removes asynchronous standings shift without hiding status text.
+- [x] Run HTTP/web/API/frontend tests and verify logs exclude sentinel secrets, SQL, paths, and question content.
+- [x] Commit with `git commit -m "perf: harden delivery and inference telemetry"`.
 
 ### Task 9: Enforce dependency and release verification gates
 

@@ -182,6 +182,38 @@ main {
   background: white;
   border-top: 3px solid #193c67;
 }
+.table-loading {
+  position: relative;
+  min-height: 445px;
+  overflow: hidden;
+  background: white;
+  border-top: 3px solid #193c67;
+}
+.table-loading-status {
+  position: absolute;
+  z-index: 1;
+  inset: 16px auto auto 15px;
+  margin: 0;
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.94);
+}
+.table-skeleton {
+  display: grid;
+  padding-top: 40px;
+}
+.table-skeleton-row {
+  height: 40px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(
+    90deg,
+    #edf2f7 0 18%,
+    transparent 18% 22%,
+    #f3f6f9 22% 62%,
+    transparent 62% 68%,
+    #edf2f7 68% 82%,
+    transparent 82%
+  );
+}
 table {
   border-collapse: collapse;
   width: 100%;

@@ -176,6 +176,33 @@ def test_real_forecast_review_endpoint_and_safe_refusals(client):
     assert client.get("/api/predictions/-1/review").status_code == 404
 
 
+def test_prediction_and_review_logs_are_bounded_and_correlatable(client, caplog):
+    if not Path("models/podium_model.joblib").exists():
+        pytest.skip("Trained artifact required")
+    race_id = next(
+        race["race_id"]
+        for race in client.get("/api/races?year=2024").json()["data"]
+        if "Monaco" in race["name"]
+    )
+
+    with caplog.at_level("INFO", logger="uvicorn.error"):
+        prediction = client.get(f"/api/predictions/{race_id}")
+        review = client.get(f"/api/predictions/{race_id}/review")
+
+    messages = [record.getMessage() for record in caplog.records]
+    prediction_log = next(message for message in messages if "prediction_complete" in message)
+    review_log = next(message for message in messages if "review_complete" in message)
+    for event, response in ((prediction_log, prediction), (review_log, review)):
+        assert f"request_id={response.headers['x-request-id']}" in event
+        assert f"race_id={race_id}" in event
+        assert "model_version=EXP-007+podium-count-v1" in event
+        assert "postprocessor=race_logit_offset" in event
+        assert "elapsed_ms=" in event
+        assert "SELECT" not in event and "/Users/" not in event
+    assert "probability_sum=3.000000000000" in prediction_log
+    assert "hit_count=3" in review_log
+
+
 def test_chat_unsupported_path_without_live_llm(client):
     response = client.post("/api/chat", json={"question": "Who performs best in wet races?"})
     assert response.status_code == 200

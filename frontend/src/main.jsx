@@ -19,6 +19,7 @@ import Predictions from './Predictions';
 import ForecastReview from './ForecastReview';
 import DriverComparison from './DriverComparison';
 import StrategistChat from './StrategistChat';
+import LoadingTable from './LoadingTable';
 
 const ModelLab = React.lazy(() => import('./ModelLab'));
 
@@ -99,6 +100,11 @@ function SeasonSelect({ value, onChange }) {
 }
 function Standings({ kind, year }) {
   const state = useApi(`/standings/${kind}/${year}`);
+  if (state.loading) {
+    return (
+      <LoadingTable label={`Loading ${kind === 'drivers' ? 'driver' : 'constructor'} standings…`} />
+    );
+  }
   return (
     <DataState state={state}>
       {({ data }) => (

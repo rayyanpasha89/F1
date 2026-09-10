@@ -2,6 +2,7 @@ import logging
 import hmac
 import os
 from contextlib import asynccontextmanager
+from time import perf_counter
 from typing import Any, Literal
 
 from fastapi import FastAPI, Query, Request
@@ -14,6 +15,7 @@ from backend.database import SCHEMA, make_engine
 from backend.ai.chat import ChatService, ChatRequest
 from backend.ai.provider import ProviderError
 from backend.config import ConfigurationError
+from backend.http import install_http_policy
 from threading import BoundedSemaphore
 from backend.ai.limits import ChatLimiter
 from backend.ml.evidence import ModelBundleError, verify_model_bundle
@@ -70,6 +72,7 @@ def create_app(engine=None):
 
     app = FastAPI(title="F1 Race Strategist", version="0.1.0", lifespan=lifespan)
     app.state.engine = db
+    install_http_policy(app)
 
     @app.exception_handler(NotFound)
     async def missing(request: Request, exc: NotFound):
@@ -142,14 +145,38 @@ def create_app(engine=None):
             chat_slots.release()
 
     @app.get("/api/predictions/{race_id}")
-    def prediction(race_id: int):
+    def prediction(race_id: int, request: Request):
+        started_at = perf_counter()
         analytics.race(race_id)
-        return predictor.predict(race_id)
+        result = predictor.predict(race_id)
+        logger.info(
+            "prediction_complete request_id=%s race_id=%s model_version=%s "
+            "postprocessor=%s elapsed_ms=%.1f probability_sum=%.12f",
+            request.state.request_id,
+            race_id,
+            result["model_version"],
+            result["postprocessing"]["method"],
+            (perf_counter() - started_at) * 1000,
+            sum(row["probability"] for row in result["predictions"]),
+        )
+        return result
 
     @app.get("/api/predictions/{race_id}/review", response_model=RaceReview)
-    def prediction_review(race_id: int):
+    def prediction_review(race_id: int, request: Request):
+        started_at = perf_counter()
         analytics.race(race_id)
-        return review_service.review(race_id)
+        result = review_service.review(race_id)
+        logger.info(
+            "review_complete request_id=%s race_id=%s model_version=%s "
+            "postprocessor=%s elapsed_ms=%.1f hit_count=%s",
+            request.state.request_id,
+            race_id,
+            result.model_version,
+            result.postprocessor.method,
+            (perf_counter() - started_at) * 1000,
+            result.top_three_hits,
+        )
+        return result
 
     @app.get("/api/health")
     def health():
