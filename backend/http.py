@@ -44,12 +44,12 @@ def install_http_policy(app: FastAPI) -> None:
         response.headers["Permissions-Policy"] = (
             "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
         )
-        response.headers["Strict-Transport-Security"] = (
-            "max-age=31536000; includeSubDomains"
-        )
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
 
         path = request.url.path
-        sensitive = any(path == prefix or path.startswith(f"{prefix}/") for prefix in _NO_STORE_PREFIXES)
+        sensitive = any(
+            path == prefix or path.startswith(f"{prefix}/") for prefix in _NO_STORE_PREFIXES
+        )
         if request.method != "GET" or response.status_code >= 400 or sensitive:
             response.headers["Cache-Control"] = "no-store"
         elif "cache-control" not in response.headers:
@@ -57,4 +57,3 @@ def install_http_policy(app: FastAPI) -> None:
                 "public, max-age=300" if path.startswith("/api/") else "no-cache"
             )
         return response
-
