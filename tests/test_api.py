@@ -34,6 +34,8 @@ def test_season_standings_and_race_flow(client):
 
 
 def test_readiness_verifies_database_and_model_bundle(client):
+    if not Path("models/podium_model.joblib").exists():
+        pytest.skip("Trusted model bundle required")
     response = client.get("/api/health/ready")
 
     assert response.status_code == 200
@@ -41,7 +43,11 @@ def test_readiness_verifies_database_and_model_bundle(client):
         "status": "ready",
         "archive_through": 2024,
         "model_version": "EXP-007+podium-count-v1",
-        "checks": {"database": "ok", "model_bundle": "verified"},
+        "checks": {
+            "database": "ok",
+            "model_bundle": "verified",
+            "model_card": "verified",
+        },
     }
 
 
@@ -57,6 +63,38 @@ def test_readiness_failure_is_safe(client, monkeypatch):
 
     assert response.status_code == 503
     assert response.json() == {"status": "unavailable", "detail": "Model bundle unavailable."}
+    assert "secret" not in response.text and "/tmp" not in response.text
+
+
+def test_public_model_card_endpoint_is_bounded(client):
+    if not Path("models/podium_model.joblib").exists():
+        pytest.skip("Trusted model bundle required")
+
+    response = client.get("/api/model-card")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["schema_version"] == "f1-public-model-card-v1"
+    assert payload["identity"]["model_version"] == "EXP-007+podium-count-v1"
+    assert payload["evidence_boundary"]["unseen_holdout"] is False
+    assert payload["metrics"]["consumed_test"]["evidence_status"] == (
+        "consumed_post_test_iterative"
+    )
+    assert "database_url" not in response.text.lower()
+
+
+def test_model_card_failure_does_not_expose_internal_error(client, monkeypatch):
+    from backend.ml.model_card import ModelCardError
+
+    def fail(self):
+        raise ModelCardError("secret /tmp/evidence.json")
+
+    monkeypatch.setattr("backend.ml.model_card.ModelCardService.get", fail)
+
+    response = client.get("/api/model-card")
+
+    assert response.status_code == 503
+    assert response.json() == {"detail": "Model accountability evidence unavailable."}
     assert "secret" not in response.text and "/tmp" not in response.text
 
 

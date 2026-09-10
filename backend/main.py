@@ -17,6 +17,7 @@ from backend.config import ConfigurationError
 from threading import BoundedSemaphore
 from backend.ai.limits import ChatLimiter
 from backend.ml.evidence import ModelBundleError, verify_model_bundle
+from backend.ml.model_card import ModelCard, ModelCardError, ModelCardService
 from backend.ml.predictor import Predictor, PredictionUnavailable, load_artifacts
 from backend.ml.review import RaceReview, RaceReviewService
 from backend.services.analytics import Analytics, NotFound
@@ -34,6 +35,7 @@ def create_app(engine=None):
     analytics = Analytics(db)
     predictor = Predictor(db)
     review_service = RaceReviewService(predictor, analytics)
+    model_card_service = ModelCardService()
     chat_service = ChatService(db)
     chat_slots = BoundedSemaphore(2)
     chat_limiter = ChatLimiter()
@@ -55,8 +57,13 @@ def create_app(engine=None):
             logger.warning("Production PostgreSQL reader privileges verified")
             try:
                 load_artifacts()
+                model_card_service.get()
             except PredictionUnavailable as error:
                 raise RuntimeError("Production model bundle must verify") from error
+            except ModelCardError as error:
+                raise RuntimeError(
+                    "Production model accountability evidence must verify"
+                ) from error
             logger.warning("Production model bundle verified")
         yield
         db.dispose()
@@ -81,6 +88,13 @@ def create_app(engine=None):
     @app.exception_handler(PredictionUnavailable)
     async def prediction_error(request: Request, exc: PredictionUnavailable):
         return JSONResponse(status_code=422, content={"detail": str(exc)})
+
+    @app.exception_handler(ModelCardError)
+    async def model_card_error(request: Request, exc: ModelCardError):
+        return JSONResponse(
+            status_code=503,
+            content={"detail": "Model accountability evidence unavailable."},
+        )
 
     @app.exception_handler(ProviderError)
     @app.exception_handler(ConfigurationError)
@@ -152,7 +166,8 @@ def create_app(engine=None):
         try:
             manifest = verify_model_bundle()
             load_artifacts()
-        except (ModelBundleError, PredictionUnavailable):
+            model_card_service.get()
+        except (ModelBundleError, PredictionUnavailable, ModelCardError):
             return JSONResponse(
                 status_code=503,
                 content={"status": "unavailable", "detail": "Model bundle unavailable."},
@@ -161,8 +176,16 @@ def create_app(engine=None):
             "status": "ready",
             "archive_through": int(archive_through),
             "model_version": manifest.model_version,
-            "checks": {"database": "ok", "model_bundle": "verified"},
+            "checks": {
+                "database": "ok",
+                "model_bundle": "verified",
+                "model_card": "verified",
+            },
         }
+
+    @app.get("/api/model-card", response_model=ModelCard)
+    def model_card():
+        return model_card_service.get()
 
     @app.get("/api/seasons", response_model=Rows)
     def seasons():

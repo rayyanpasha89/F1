@@ -152,12 +152,12 @@
 - Produces: `GET /api/model-card`
 - The response allowlists identity, lineage hashes, temporal split, features, metrics, bootstrap intervals, calibration, intended use, and limitations
 
-- [ ] Write failing tests for exact allowlisted top-level fields, manifest/report agreement, finite metrics, temporal ordering, consumed-test disclosure, and absence of paths/secrets/serialized objects.
-- [ ] Run the focused tests and confirm the missing service/route failures.
-- [ ] Implement Pydantic model-card contracts and deterministic assembly from validated committed evidence.
-- [ ] Add the API route and make readiness validate that the card can be assembled.
-- [ ] Run model-card, API, and bundle tests.
-- [ ] Commit with `git commit -m "feat: publish verified model accountability data"`.
+- [x] Write failing tests for exact allowlisted top-level fields, manifest/report agreement, finite metrics, temporal ordering, consumed-test disclosure, and absence of paths/secrets/serialized objects.
+- [x] Run the focused tests and confirm the missing service/route failures.
+- [x] Implement Pydantic model-card contracts and deterministic assembly from validated committed evidence.
+- [x] Add the API route and make readiness validate that the card can be assembled.
+- [x] Run model-card, API, and bundle tests.
+- [x] Commit with `git commit -m "feat: publish verified model accountability data"`.
 
 ### Task 7: Add the Model Accountability and Race Lab frontend
 
