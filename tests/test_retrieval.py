@@ -263,3 +263,14 @@ def test_driver_constructor_association_prefers_results_over_standings_summaries
     assert {"drivers", "results", "constructors", "races"} <= set(result.tables)
     assert "driver_standings" not in result.tables
     assert "constructor_results" not in result.tables
+
+
+def test_race_classification_uses_results_instead_of_championship_standings():
+    result = rank_schema(
+        "Which driver has the best average classification order at Monaco from 2015 through 2024?",
+        entities=[{"kind": "circuits", "id": 6, "name": "Circuit de Monaco"}],
+        router_hints=["drivers", "driver_standings", "races", "results"],
+    )
+
+    assert {"drivers", "results", "races", "circuits"} <= set(result.tables)
+    assert "driver_standings" not in result.tables

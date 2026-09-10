@@ -308,6 +308,8 @@ SCHEMA_TERMS = {
         "points",
         "grid",
         "classified",
+        "classification",
+        "classifications",
     },
     "qualifying": {"qualifying", "qualification", "quali", "pole", "q1", "q2", "q3"},
     "constructor_results": {"constructor result", "team result"},
@@ -338,7 +340,14 @@ def _shortest_path(graph, start, targets, scores):
         node, path = queue.popleft()
         if node in targets:
             return path
-        for neighbor in sorted(graph[node], key=lambda name: (-scores.get(name, 0), name)):
+        for neighbor in sorted(
+            graph[node],
+            key=lambda name: (
+                -scores.get(name, 0),
+                0 if name == "results" else 1,
+                name,
+            ),
+        ):
             if neighbor not in visited:
                 visited.add(neighbor)
                 queue.append((neighbor, path + [neighbor]))
