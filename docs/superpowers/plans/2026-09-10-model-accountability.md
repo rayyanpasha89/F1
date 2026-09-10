@@ -248,10 +248,10 @@
 - Consumes: every artifact and verifier above
 - Produces: clean synchronized `main`, exact ECR/Lightsail deployment, append-only machine-readable evidence
 
-- [ ] Re-run 100% of Python tests with skip reasons, then all four PostgreSQL integration tests using the isolated admin and SELECT-only reader URLs without printing either value.
-- [ ] Run Ruff check/format, all frontend tests/lint/format/build, both Terraform validations, model evidence regeneration comparison, whole-archive sweep, JSON parse checks, presentation hash comparison, and a sensitive-value scan.
-- [ ] Record exact counts, durations, hashes, dependency audit results, projection gates, and presentation non-modification in `reports/model_accountability_local_verification.json`.
-- [ ] Review the complete feature diff for leakage, fabricated evidence, artifact trust, unsafe report loading, Pydantic overexposure, cache mistakes, response/log secrets, performance regressions, and README disagreement.
+- [x] Re-run 100% of Python tests with skip reasons, then all four PostgreSQL integration tests using the isolated admin and SELECT-only reader URLs without printing either value.
+- [x] Run Ruff check/format, all frontend tests/lint/format/build, both Terraform validations, model evidence regeneration comparison, whole-archive sweep, JSON parse checks, presentation hash comparison, and a sensitive-value scan.
+- [x] Record exact counts, durations, hashes, dependency audit results, projection gates, and presentation non-modification in `reports/model_accountability_local_verification.json`.
+- [x] Review the complete feature diff for leakage, fabricated evidence, artifact trust, unsafe report loading, Pydantic overexposure, cache mistakes, response/log secrets, performance regressions, and README disagreement.
 - [ ] Merge `feat/model-accountability` to `main` without squashing or rewriting history, push, and wait for all GitHub jobs.
 - [ ] Before each AWS mutation, run the guarded account/profile/region checks. Build the exact merge SHA in CodeBuild and wait for `SUCCEEDED`.
 - [ ] Deploy the immutable image to `f1-strategist-demo`; require Lightsail `RUNNING`/`ACTIVE` and the exact image SHA.

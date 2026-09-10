@@ -1,0 +1,436 @@
+{
+  "adversarial_review": {
+    "areas": [
+      "target/future leakage",
+      "artifact trust before deserialization",
+      "report allowlisting and Pydantic bounds",
+      "same-race result separation",
+      "cache sensitivity",
+      "request and log secrets",
+      "release archive exclusions",
+      "documentation consistency"
+    ],
+    "finding_fixed": {
+      "commit": "ca48ae2d68814e424c842c7da5eb4e3118f9d67f",
+      "summary": "Unexpected runtime errors now receive safe correlated responses; chat completion records include the generated request ID."
+    },
+    "independent_review": false,
+    "status": "passed_after_fix"
+  },
+  "artifact_and_secret_integrity": {
+    "configured_protected_values_checked": 5,
+    "evidence_hashes": {
+      "data_audit": "df756da849688394d7c95c9601ed1aa157b462c64b7aed0ab7eafc4addd3a10c",
+      "final_test_metrics": "1a6e56c30d58191a00721b8cea110f0dfdf70646de00b3547857b79f5d34de58",
+      "model_selection": "e8b7c11726b85b316fa122b2f24eecbbbbd46ebeb233147d6f6af6d1327a401e",
+      "race_constraint_evaluation": "0986c607a9c25a286987fb1d4618c8e3a8ac00178426cf97ffee0e33bdab86bf"
+    },
+    "exact_secret_matches": 0,
+    "generic_credential_matches": 0,
+    "model_artifact_hashes": {
+      "grid_baseline_sha256": "f448baafb46effb5c2b94d9d5936e3c78b1f3fba6478e517d34a7f06eb5cd6bd",
+      "podium_model_sha256": "465c11b41ba40231cbc5eb019202b8c87858f935c40024a6b15927f153f9389f"
+    },
+    "model_version": "EXP-007+podium-count-v1",
+    "presentation_files_modified": false,
+    "presentation_hashes": {
+      "final": "d7a042fce3ea5999ef7b8d61b0d92b3e931269b6974633b05b85f816b6b1df84",
+      "interim": "2e1700f802c51ac29a6a186de10c3a610015b9e72e9b9785b488dfd45a873737"
+    },
+    "reachable_git_blobs_scanned": 359,
+    "release_archive_entries": 199,
+    "release_archive_forbidden_entries": 0,
+    "source_commit": "ca48ae2d68814e424c842c7da5eb4e3118f9d67f",
+    "status": "passed",
+    "tracked_json_documents_parsed": 38
+  },
+  "branch": "feat/model-accountability",
+  "dataset": {
+    "archive_years": [
+      1950,
+      2024
+    ],
+    "rows": 701433,
+    "source_files_committed": false,
+    "tables": 14
+  },
+  "dependency_audits": {
+    "npm_production_high_or_critical_vulnerabilities": 0,
+    "pip_audit_version": "2.9.0",
+    "pip_scope": "requirements.runtime.lock with --no-deps --disable-pip",
+    "runtime_known_vulnerabilities": 0
+  },
+  "generated_at": "2026-09-10T18:40:14Z",
+  "infrastructure": {
+    "aws_account": "148356747273",
+    "aws_profile": "default",
+    "lightsail_format": "passed",
+    "lightsail_validate": "passed",
+    "mutations_performed": false,
+    "release_region": "eu-north-1",
+    "root_format": "passed",
+    "root_validate": "passed",
+    "terraform_version": "1.13.5"
+  },
+  "known_warnings": [
+    "Starlette TestClient/httpx deprecation",
+    "AnyIO BlockingPortal alias deprecation",
+    "three SHAP colormap pending deprecations"
+  ],
+  "local_public_contract": {
+    "base_url": "http://127.0.0.1:8123",
+    "checks": {
+      "archive": {
+        "first_year": 1950,
+        "last_year": 2024,
+        "race_count_2024": 24,
+        "race_id": 1128,
+        "race_name": "Monaco Grand Prix",
+        "season_count": 75,
+        "status": "passed"
+      },
+      "delivery": {
+        "cache_policy": true,
+        "gzip_responses": 9,
+        "request_ids_unique": true,
+        "response_count": 10,
+        "security_headers": true,
+        "server_generated_request_ids": true,
+        "status": "passed"
+      },
+      "model_card": {
+        "archive_races": 1125,
+        "archive_years": [
+          1950,
+          2024
+        ],
+        "audited_tables": 14,
+        "hash_count": 6,
+        "model_version": "EXP-007+podium-count-v1",
+        "schema_version": "f1-public-model-card-v1",
+        "season_evidence_count": 6,
+        "status": "passed",
+        "unseen_holdout": false
+      },
+      "prediction": {
+        "driver_count": 20,
+        "model_version": "EXP-007+podium-count-v1",
+        "postprocessor": "race_logit_offset",
+        "probability_sum": 3.0,
+        "race_id": 1128,
+        "status": "passed"
+      },
+      "readiness": {
+        "archive_through": 2024,
+        "database": "ok",
+        "model_bundle": "verified",
+        "model_card": "verified",
+        "model_version": "EXP-007+podium-count-v1",
+        "status": "passed"
+      },
+      "review": {
+        "brier_score": 0.04465273508022716,
+        "driver_count": 20,
+        "exact_podium_set": true,
+        "mean_absolute_error": 0.11535691372481534,
+        "race_id": 1128,
+        "status": "passed",
+        "top_three_hits": 3
+      },
+      "spa": {
+        "description_length": 105,
+        "immutable_asset": true,
+        "model_deep_link": true,
+        "status": "passed",
+        "title": "F1 Race Strategist | Historical Analytics"
+      }
+    },
+    "duration_ms": 788.36,
+    "generated_at": "2026-09-10T18:38:54.719767+00:00",
+    "schema_version": "f1-public-release-verification-v1",
+    "status": "passed"
+  },
+  "model_evidence_reproduction": {
+    "bootstrap_replicates": 5000,
+    "duration_seconds": 0.406,
+    "manifest_byte_equivalent": true,
+    "maximum_absolute_sum_error": 8.881784197001252e-16,
+    "report_byte_equivalent": true,
+    "seed": 42,
+    "ship_gates": {
+      "all_race_sums_exact": true,
+      "all_rankings_preserved": true,
+      "validation_brier_improved": true,
+      "validation_log_loss_improved": true
+    },
+    "status": "passed"
+  },
+  "model_metrics": {
+    "consumed_test_projected_baseline": {
+      "brier_score": 0.07377184564313176,
+      "ece_10_bins": 0.01987913372776723,
+      "exact_podium_set_rate": 0.16176470588235295,
+      "log_loss": 0.24980399706675682,
+      "positive_rate": 0.15011037527593818,
+      "races": 68,
+      "roc_auc": 0.9138761565232154,
+      "rows": 1359,
+      "top3_hit_rate": 0.6519607843137255
+    },
+    "consumed_test_selected_projected": {
+      "brier_score": 0.06904448185716242,
+      "ece_10_bins": 0.011096445819665518,
+      "exact_podium_set_rate": 0.16176470588235295,
+      "log_loss": 0.2189183348692018,
+      "positive_rate": 0.15011037527593818,
+      "races": 68,
+      "roc_auc": 0.936552499787794,
+      "rows": 1359,
+      "top3_hit_rate": 0.6470588235294118
+    },
+    "consumed_test_selected_raw": {
+      "brier_score": 0.06928511251858477,
+      "ece_10_bins": 0.014594834418321843,
+      "exact_podium_set_rate": 0.16176470588235295,
+      "log_loss": 0.21984562010656894,
+      "positive_rate": 0.15011037527593818,
+      "races": 68,
+      "roc_auc": 0.9353641456582634,
+      "rows": 1359,
+      "top3_hit_rate": 0.6470588235294118
+    },
+    "evidence_status": "post_test_iterative_evidence",
+    "paired_race_bootstrap": {
+      "comparison": "projected_selected_minus_projected_baseline",
+      "limitation": "Intervals quantify sampled-race variation only; they do not remove model-selection bias or create an unseen holdout.",
+      "metrics": {
+        "brier_score": {
+          "estimate": -0.0047273637859693435,
+          "lower_95": -0.00848957662327953,
+          "upper_95": -0.0008945325790775182
+        },
+        "log_loss": {
+          "estimate": -0.030885662197555036,
+          "lower_95": -0.04927358263935769,
+          "upper_95": -0.013970594126641641
+        },
+        "top3_hit_rate": {
+          "estimate": -0.004901960784313725,
+          "lower_95": -0.03431372549019608,
+          "upper_95": 0.024509803921568627
+        }
+      },
+      "replicates": 5000,
+      "seed": 42,
+      "split": "consumed_test",
+      "unit": "whole_race"
+    },
+    "ship_gates": {
+      "all_race_sums_exact": true,
+      "all_rankings_preserved": true,
+      "validation_brier_improved": true,
+      "validation_log_loss_improved": true
+    },
+    "unseen_holdout": false,
+    "validation_selected_projected": {
+      "brier_score": 0.06204271572142995,
+      "ece_10_bins": 0.016667196369935543,
+      "exact_podium_set_rate": 0.38333333333333336,
+      "log_loss": 0.2087715152078423,
+      "positive_rate": 0.15,
+      "races": 60,
+      "roc_auc": 0.9400381263616557,
+      "rows": 1200,
+      "top3_hit_rate": 0.7277777777777777
+    },
+    "validation_selected_raw": {
+      "brier_score": 0.06217250144651866,
+      "ece_10_bins": 0.0204065222619551,
+      "exact_podium_set_rate": 0.38333333333333336,
+      "log_loss": 0.2095571154139735,
+      "positive_rate": 0.15,
+      "races": 60,
+      "roc_auc": 0.9395261437908498,
+      "rows": 1200,
+      "top3_hit_rate": 0.7277777777777777
+    }
+  },
+  "presentation_non_modification": {
+    "final": "d7a042fce3ea5999ef7b8d61b0d92b3e931269b6974633b05b85f816b6b1df84",
+    "interim": "2e1700f802c51ac29a6a186de10c3a610015b9e72e9b9785b488dfd45a873737"
+  },
+  "schema_version": "f1-model-accountability-local-verification-v1",
+  "scope": "Complete local, isolated PostgreSQL, model-evidence, archive, delivery, dependency, and infrastructure validation before merge.",
+  "static_and_build": {
+    "docker_local": "unavailable; exact Linux container verification is delegated to CodeBuild before deployment",
+    "eslint": "passed",
+    "frontend_assets": [
+      {
+        "bytes": 10806,
+        "name": "ModelLab-CM3wGsdD.js",
+        "sha256": "37aa53037768facb3150f0dd0ee9d2de86d8159bc078904e22c582981a4d2aaf"
+      },
+      {
+        "bytes": 23692,
+        "name": "index-D5sosFtS.css",
+        "sha256": "a597581b76f24982c200dd1ca611fdc811b9c09b58be041c63a8c5f2ff1cfbc1"
+      },
+      {
+        "bytes": 263756,
+        "name": "index-aLcKSz87.js",
+        "sha256": "5cf57ab3bc20e1670bc8bfe15f49b704f4d5a210ea36a9ab45bd1eb11671f029"
+      }
+    ],
+    "prettier": "passed",
+    "ruff_check": "passed",
+    "ruff_format": "passed",
+    "vite_build": "passed"
+  },
+  "status": "passed",
+  "tests": {
+    "command_results": [
+      {
+        "check": "python_default",
+        "duration_seconds": 8.843,
+        "exit_code": 0
+      },
+      {
+        "check": "postgres_integration",
+        "duration_seconds": 3.581,
+        "exit_code": 0
+      },
+      {
+        "check": "ruff_check",
+        "duration_seconds": 0.056,
+        "exit_code": 0
+      },
+      {
+        "check": "ruff_format",
+        "duration_seconds": 0.027,
+        "exit_code": 0
+      },
+      {
+        "check": "frontend_tests",
+        "duration_seconds": 0.847,
+        "exit_code": 0
+      },
+      {
+        "check": "frontend_lint",
+        "duration_seconds": 0.608,
+        "exit_code": 0
+      },
+      {
+        "check": "frontend_format",
+        "duration_seconds": 0.272,
+        "exit_code": 0
+      },
+      {
+        "check": "frontend_build",
+        "duration_seconds": 0.559,
+        "exit_code": 0
+      },
+      {
+        "check": "terraform_root_fmt",
+        "duration_seconds": 0.125,
+        "exit_code": 0
+      },
+      {
+        "check": "terraform_root_init",
+        "duration_seconds": 0.452,
+        "exit_code": 0
+      },
+      {
+        "check": "terraform_root_validate",
+        "duration_seconds": 1.361,
+        "exit_code": 0
+      },
+      {
+        "check": "terraform_lightsail_fmt",
+        "duration_seconds": 0.018,
+        "exit_code": 0
+      },
+      {
+        "check": "terraform_lightsail_init",
+        "duration_seconds": 0.439,
+        "exit_code": 0
+      },
+      {
+        "check": "terraform_lightsail_validate",
+        "duration_seconds": 1.331,
+        "exit_code": 0
+      },
+      {
+        "check": "pip_audit",
+        "duration_seconds": 0.34,
+        "exit_code": 0
+      },
+      {
+        "check": "npm_audit",
+        "duration_seconds": 0.544,
+        "exit_code": 0
+      }
+    ],
+    "command_total_duration_seconds": 19.403,
+    "default_skip_reasons": [
+      "Four opt-in PostgreSQL tests require F1_TEST_POSTGRES_URL; each passed separately below."
+    ],
+    "frontend": {
+      "test_files": 7,
+      "tests": 15
+    },
+    "postgres_contracts": [
+      "14-table count and analytics parity",
+      "SQLite/PostgreSQL feature parity",
+      "SELECT-only DELETE/CREATE denial",
+      "production startup writable-role rejection"
+    ],
+    "postgres_integration": {
+      "passed": 4,
+      "skipped": 0,
+      "warnings": 5
+    },
+    "python_default": {
+      "passed": 153,
+      "skipped": 4,
+      "warnings": 5
+    }
+  },
+  "validated_application_commit": "ca48ae2d68814e424c842c7da5eb4e3118f9d67f",
+  "whole_archive_sweep": {
+    "all_rankings_preserved": true,
+    "archive_years": [
+      1950,
+      2024
+    ],
+    "correctly_refused_training_or_selection_races": 1057,
+    "coverage_races": {
+      "grid": 1125,
+      "pit_stops": 285,
+      "qualifying": 494,
+      "results": 1125
+    },
+    "duration_seconds": 1.769,
+    "maximum_baseline_sum_error": 1.3322676295501878e-15,
+    "maximum_selected_sum_error": 1.3322676295501878e-15,
+    "maximum_shap_reconstruction_error": 1.4432899320127035e-15,
+    "races": 1125,
+    "result_rows": 26759,
+    "review_brier_range": [
+      0.01682748564821071,
+      0.18202246098802327
+    ],
+    "review_mae_range": [
+      0.07343442990433147,
+      0.25630929932440394
+    ],
+    "review_top_three_hits_distribution": {
+      "1": 15,
+      "2": 42,
+      "3": 11
+    },
+    "seasons": 75,
+    "status": "passed",
+    "supported_forecasts": 68,
+    "supported_reviews": 68
+  }
+}
