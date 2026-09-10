@@ -60,17 +60,22 @@ def entity_context(analytics, question):
     return matches
 
 
-def resolve_entities(analytics, question):
-    """Conservative spelling repair against stored names, with explicit ambiguity."""
-    catalog = {
+def entity_catalog(analytics):
+    """Load canonical entity labels once from the supplied database."""
+    return {
         "drivers": analytics.rows(
-            "SELECT driver_id,driver_ref,forename,surname,forename || ' ' || surname AS name FROM drivers"
+            "SELECT driver_id,driver_ref,code,forename,surname,forename || ' ' || surname AS name FROM drivers"
         ),
         "constructors": analytics.rows(
             "SELECT constructor_id,constructor_ref,name FROM constructors"
         ),
         "circuits": analytics.rows("SELECT circuit_id,circuit_ref,name,country FROM circuits"),
     }
+
+
+def resolve_entities(analytics, question):
+    """Conservative spelling repair against stored names, with explicit ambiguity."""
+    catalog = entity_catalog(analytics)
     aliases = {}
     for kind, rows in catalog.items():
         for row in rows:

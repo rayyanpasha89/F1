@@ -44,16 +44,16 @@
 - Create: `tests/test_retrieval.py`
 - Modify: `backend/ai/grounding.py`
 
-- [ ] Write failing tests for `augment_question` that require deduplicated original/corrected variants, contextual variants only for follow-up markers, selected-race context, a four-variant limit, and no mutation of the original question.
-- [ ] Write failing tests for `rank_entities` using a tiny database-backed catalog. Require exact full-name selection, conservative typo ranking, prior-turn boost, selected-race participant boost, shared-surname ambiguity, deterministic reasons, and stable ordering.
-- [ ] Run `.venv/bin/pytest tests/test_retrieval.py -q` and confirm collection or assertion failures because `backend.ai.retrieval` does not exist.
-- [ ] Implement `QueryVariant`, `RankedEntity`, and `RetrievalContext` Pydantic models in `backend/ai/retrieval.py`.
-- [ ] Implement `augment_question(original, corrected, previous_question=None, race_id=None)` with a maximum of four unique variants and explicit `source` labels.
-- [ ] Refactor the catalog query in `grounding.py` into `entity_catalog(analytics)` so spelling resolution and ranking use the same database rows.
-- [ ] Implement `rank_entities(analytics, variants, prior_entities=(), race_id=None)` with normalized exact/reference/component similarity, full-name evidence, prior-turn and selected-race boosts, a confidence threshold, separation check, and ambiguity output.
-- [ ] Keep `resolve_entities` backward-compatible while returning the catalog-free existing response shape.
-- [ ] Run `.venv/bin/pytest tests/test_retrieval.py tests/test_entity_resolution.py -q` and require all tests to pass.
-- [ ] Commit with `git add backend/ai/retrieval.py backend/ai/grounding.py tests/test_retrieval.py && git commit -m "feat: add deterministic query and entity retrieval"`.
+- [x] Write failing tests for `augment_question` that require deduplicated original/corrected variants, contextual variants only for follow-up markers, selected-race context, a four-variant limit, and no mutation of the original question.
+- [x] Write failing tests for `rank_entities` using a tiny database-backed catalog. Require exact full-name selection, conservative typo ranking, prior-turn boost, selected-race participant boost, shared-surname ambiguity, deterministic reasons, and stable ordering.
+- [x] Run `.venv/bin/pytest tests/test_retrieval.py -q` and confirm collection or assertion failures because `backend.ai.retrieval` does not exist.
+- [x] Implement `QueryVariant`, `RankedEntity`, and `EntityRanking` Pydantic models in `backend/ai/retrieval.py`.
+- [x] Implement `augment_question(original, corrected, previous_question=None, race_id=None)` with a maximum of four unique variants and explicit `source` labels.
+- [x] Refactor the catalog query in `grounding.py` into `entity_catalog(analytics)` so spelling resolution and ranking use the same database rows.
+- [x] Implement `rank_entities(analytics, variants, prior_entities=(), race_id=None)` with normalized exact/reference/component similarity, full-name evidence, prior-turn and selected-race boosts, a confidence threshold, and ambiguity output.
+- [x] Keep `resolve_entities` backward-compatible while returning the catalog-free existing response shape.
+- [x] Run `.venv/bin/pytest tests/test_retrieval.py tests/test_entity_resolution.py -q` and require all tests to pass.
+- [x] Commit with `git add backend/ai/retrieval.py backend/ai/grounding.py tests/test_retrieval.py docs/superpowers/plans/2026-09-10-agentic-retrieval.md && git commit -m "feat: add deterministic query and entity retrieval"`.
 
 ### Task 3: Add relationship-aware schema ranking
 
