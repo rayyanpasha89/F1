@@ -1,0 +1,59 @@
+{
+  "artifacts": {
+    "grid_baseline_sha256": "f448baafb46effb5c2b94d9d5936e3c78b1f3fba6478e517d34a7f06eb5cd6bd",
+    "podium_model_sha256": "465c11b41ba40231cbc5eb019202b8c87858f935c40024a6b15927f153f9389f"
+  },
+  "calibration": {
+    "intercept": 0.16146366373559082,
+    "method": "temporal training OOF sigmoid",
+    "slope": 1.1117370012197019
+  },
+  "evidence_sha256": {
+    "data_audit": "df756da849688394d7c95c9601ed1aa157b462c64b7aed0ab7eafc4addd3a10c",
+    "final_test_metrics": "1a6e56c30d58191a00721b8cea110f0dfdf70646de00b3547857b79f5d34de58",
+    "model_selection": "e8b7c11726b85b316fa122b2f24eecbbbbd46ebeb233147d6f6af6d1327a401e",
+    "race_constraint_evaluation": "0986c607a9c25a286987fb1d4618c8e3a8ac00178426cf97ffee0e33bdab86bf"
+  },
+  "evidence_status": "post_test_iterative_evidence",
+  "experiment_id": "EXP-007",
+  "features": [
+    "grid_position",
+    "driver_recent_podium",
+    "driver_recent_finish",
+    "driver_recent_dnf",
+    "constructor_recent_podium",
+    "driver_circuit_podium",
+    "driver_career_podium"
+  ],
+  "generated_at": "2026-09-10T13:38:56.934840+00:00",
+  "model_version": "EXP-007+podium-count-v1",
+  "postprocessor": {
+    "expected_count": 3,
+    "name": "race_logit_offset",
+    "version": "v1"
+  },
+  "schema_version": "f1-model-manifest-v1",
+  "selection_frozen_at": "2026-09-08T10:35:42.927103+00:00",
+  "source_coverage": {
+    "archive_years": [
+      1950,
+      2024
+    ],
+    "audited_tables": 14,
+    "races": 1125
+  },
+  "temporal_split": {
+    "inference_years": [
+      2022,
+      2024
+    ],
+    "selection_years": [
+      2019,
+      2021
+    ],
+    "training_years": [
+      2010,
+      2018
+    ]
+  }
+}

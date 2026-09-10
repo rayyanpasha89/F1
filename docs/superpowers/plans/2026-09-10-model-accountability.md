@@ -79,14 +79,14 @@
 - Produces: `build_manifest(root: Path) -> dict`
 - Manifest schema: `f1-model-manifest-v1` with artifact/report/source hashes, split years, features, calibration, and postprocessor
 
-- [ ] Add failing tests for deterministic whole-race bootstrap output, rank preservation, validation ship gates, explicit consumed-test labeling, required hashes, and no secret/path fields.
-- [ ] Run `.venv/bin/pytest tests/test_model_evidence.py -q` and confirm the missing implementations fail.
-- [ ] Implement evaluation for raw/projected selected model and raw/projected baseline on validation and consumed-test splits, per-season metrics, average probability sums, and paired whole-race bootstrap differences.
-- [ ] Implement manifest generation using SHA-256 and allowlisted model-selection metadata; add `!models/manifest.json` to `.gitignore`.
-- [ ] Execute both scripts from the trusted local artifacts. Require validation log loss and Brier improvement, unchanged rank, exact expected sums, and reproducible output apart from the explicit generation timestamp.
-- [ ] Document the structural method and the consumed-test evidence boundary in `EXPERIMENTS.md` and `docs/evaluation.md`.
-- [ ] Run the focused tests and JSON/schema checks.
-- [ ] Commit with `git commit -m "ml: record probability coherence and model lineage"`.
+- [x] Add failing tests for deterministic whole-race bootstrap output, rank preservation, validation ship gates, explicit consumed-test labeling, required hashes, and no secret/path fields.
+- [x] Run `.venv/bin/pytest tests/test_model_evidence.py -q` and confirm the missing implementations fail.
+- [x] Implement evaluation for raw/projected selected model and raw/projected baseline on validation and consumed-test splits, per-season metrics, average probability sums, and paired whole-race bootstrap differences.
+- [x] Implement manifest generation using SHA-256 and allowlisted model-selection metadata; add `!models/manifest.json` to `.gitignore`.
+- [x] Execute both scripts from the trusted local artifacts. Require validation log loss and Brier improvement, unchanged rank, exact expected sums, and reproducible output apart from the explicit generation timestamp.
+- [x] Document the structural method and the consumed-test evidence boundary in `EXPERIMENTS.md` and `docs/evaluation.md`.
+- [x] Run the focused tests and JSON/schema checks.
+- [x] Commit with `git commit -m "ml: record probability coherence and model lineage"`.
 
 ### Task 4: Verify model artifacts before deserialization and expose readiness
 
