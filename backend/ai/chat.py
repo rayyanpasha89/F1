@@ -115,6 +115,22 @@ class ChatService:
             self.client = BedrockClient()
         return self.client
 
+    def _execute_sql(self, dialect, sql):
+        if dialect == "sqlite":
+            return sqlite_query(self.engine.url.database, sql)
+        if self.readonly_engine is None:
+            import os
+
+            url = os.environ.get("SQL_READONLY_DATABASE_URL")
+            if not url:
+                raise QueryFailed("A dedicated read-only PostgreSQL connection is required.")
+            self.readonly_engine = make_engine(url)
+        return postgres_query(self.readonly_engine, sql)
+
+    @staticmethod
+    def _failure_category(exc):
+        return "validation_rejected" if isinstance(exc, UnsafeQuery) else "execution_rejected"
+
     @staticmethod
     def _trace(
         start,
@@ -386,43 +402,52 @@ Rules: {rules}"""
         plan, _ = budget.structured(prompt, context, SQLPlan)
         attempts = []
         try:
-            if dialect == "sqlite":
-                result = sqlite_query(self.engine.url.database, plan.sql)
-            else:
-                if self.readonly_engine is None:
-                    import os
-
-                    url = os.environ.get("SQL_READONLY_DATABASE_URL")
-                    if not url:
-                        raise QueryFailed(
-                            "A dedicated read-only PostgreSQL connection is required."
-                        )
-                    self.readonly_engine = make_engine(url)
-                result = postgres_query(self.readonly_engine, plan.sql)
+            result = self._execute_sql(dialect, plan.sql)
         except (UnsafeQuery, QueryFailed) as exc:
-            category = (
-                "validation_rejected" if isinstance(exc, UnsafeQuery) else "execution_rejected"
-            )
+            category = self._failure_category(exc)
             attempts.append({"number": 1, "outcome": "rejected", "failure_category": category})
-            return self._finish(
-                {
-                    "intent": "statistics",
-                    "status": "query_rejected",
-                    "answer": str(exc),
-                    "sql": plan.sql,
-                    "provider_calls": list(budget.metadata),
-                },
-                start=start,
-                original=original,
-                interpreted=question,
-                variants=variants,
-                route="statistics",
-                entities=entity_ranking.selected,
-                tables=schema_ranking.tables,
-                attempts=attempts,
-                budget=budget,
-            )
-        attempts.append({"number": 1, "outcome": "executed", "failure_category": None})
+            repair_prompt = f"""Repair one rejected {dialect} query. Return a single SELECT that answers the same question and conforms to the supplied schema. The failure category is coarse and complete; do not request or infer database credentials, raw errors, hidden tables, or another tool call. Preserve the factual request, explicit joins, aggregate grain, output columns, chronological rules, and resource limits. This is the only repair attempt.
+Schema: {json.dumps(selected)}
+Relationships: {(ROOT / "knowledge/relationships.json").read_text()}
+Terminology: {terms}
+Rules: {rules}"""
+            repair_context = {
+                **context_data,
+                "failed_sql": plan.sql,
+                "failure_category": category,
+            }
+            plan, _ = budget.structured(repair_prompt, json.dumps(repair_context), SQLPlan)
+            try:
+                result = self._execute_sql(dialect, plan.sql)
+            except (UnsafeQuery, QueryFailed) as repair_exc:
+                attempts.append(
+                    {
+                        "number": 2,
+                        "outcome": "rejected",
+                        "failure_category": self._failure_category(repair_exc),
+                    }
+                )
+                return self._finish(
+                    {
+                        "intent": "statistics",
+                        "status": "query_rejected",
+                        "answer": "The generated query could not pass the read-only analytics boundary after one repair.",
+                        "sql": plan.sql,
+                        "provider_calls": list(budget.metadata),
+                    },
+                    start=start,
+                    original=original,
+                    interpreted=question,
+                    variants=variants,
+                    route="statistics",
+                    entities=entity_ranking.selected,
+                    tables=schema_ranking.tables,
+                    attempts=attempts,
+                    budget=budget,
+                )
+            attempts.append({"number": 2, "outcome": "executed", "failure_category": None})
+        else:
+            attempts.append({"number": 1, "outcome": "executed", "failure_category": None})
         rows = result["rows"]
         if not rows:
             answer = "No matching records were found in the supplied snapshot. Missing records do not establish that an event never happened."

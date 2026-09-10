@@ -14,6 +14,7 @@ from backend.ai.chat import (
     SQLPlan,
 )
 from backend.ai.provider import ProviderError
+from backend.ai.sql_safety import QueryFailed
 from backend.database import make_engine
 
 
@@ -172,3 +173,124 @@ def test_provider_call_budget_refuses_a_fourth_call():
     with pytest.raises(ProviderError, match="call limit"):
         budget.structured("system", "user", Intent)
     assert budget.count == 3
+
+
+class RepairingProvider:
+    def __init__(self, plans):
+        self.plans = iter(plans)
+        self.calls = []
+
+    def structured(self, system, user, schema):
+        self.calls.append({"system": system, "user": user, "schema": schema.__name__})
+        meta = {"model": "test-model", "elapsed_ms": 5}
+        if schema is Intent:
+            return Intent(intent="statistics", tables=["races"]), meta
+        return SQLPlan(sql=next(self.plans)), meta
+
+
+def test_one_repair_can_replace_rejected_sql_and_execute(tmp_path):
+    path = tiny_database(tmp_path)
+    provider = RepairingProvider(["DELETE FROM races", "SELECT COUNT(*) AS races FROM races"])
+
+    result = ChatService(make_engine(f"sqlite:///{path}"), provider).answer(
+        ChatRequest(question="How many races?")
+    )
+
+    assert result["status"] == "executed"
+    assert result["result"]["rows"] == [[1]]
+    assert result["sql"] == "SELECT COUNT(*) AS races FROM races"
+    assert result["trace"]["provider_call_count"] == 3
+    assert result["trace"]["repair_count"] == 1
+    assert result["trace"]["attempts"] == [
+        {"number": 1, "outcome": "rejected", "failure_category": "validation_rejected"},
+        {"number": 2, "outcome": "executed", "failure_category": None},
+    ]
+    assert len(provider.calls) == 3
+
+
+def test_second_rejection_stops_without_a_fourth_provider_call(tmp_path):
+    path = tiny_database(tmp_path)
+    provider = RepairingProvider(["DELETE FROM races", "DROP TABLE races"])
+
+    result = ChatService(make_engine(f"sqlite:///{path}"), provider).answer(
+        ChatRequest(question="How many races?")
+    )
+
+    assert result["status"] == "query_rejected"
+    assert result["answer"] == (
+        "The generated query could not pass the read-only analytics boundary after one repair."
+    )
+    assert result["trace"]["provider_call_count"] == 3
+    assert result["trace"]["repair_count"] == 1
+    assert len(result["trace"]["attempts"]) == 2
+    assert len(provider.calls) == 3
+
+
+def test_empty_successful_query_is_not_repaired(tmp_path):
+    path = tiny_database(tmp_path)
+    provider = RepairingProvider(["SELECT race_id FROM races WHERE year=1900"])
+
+    result = ChatService(make_engine(f"sqlite:///{path}"), provider).answer(
+        ChatRequest(question="Which races were held in 1900?")
+    )
+
+    assert result["status"] == "executed"
+    assert result["result"]["rows"] == []
+    assert result["trace"]["repair_count"] == 0
+    assert result["trace"]["provider_call_count"] == 2
+    assert len(provider.calls) == 2
+
+
+def test_repair_receives_only_sanitized_failure_category(monkeypatch, tmp_path):
+    path = tiny_database(tmp_path)
+    provider = RepairingProvider(
+        ["SELECT COUNT(*) AS races FROM races", "SELECT COUNT(*) AS races FROM races"]
+    )
+    sentinel = "postgresql://reader:secret-SENTINEL@private.example/f1"
+    executions = 0
+
+    def flaky_query(path, sql):
+        nonlocal executions
+        executions += 1
+        if executions == 1:
+            raise QueryFailed(sentinel)
+        return {
+            "columns": ["races"],
+            "rows": [[1]],
+            "truncated": False,
+            "sql": sql,
+            "elapsed_ms": 1,
+        }
+
+    monkeypatch.setattr("backend.ai.chat.sqlite_query", flaky_query)
+    result = ChatService(make_engine(f"sqlite:///{path}"), provider).answer(
+        ChatRequest(question="How many races?")
+    )
+
+    repair_call = json.dumps(provider.calls[2])
+    assert "execution_rejected" in repair_call
+    assert sentinel not in repair_call
+    assert sentinel not in json.dumps(result)
+    assert result["status"] == "executed"
+
+
+def test_model_clarification_never_enters_sql_repair(tmp_path):
+    path = tiny_database(tmp_path)
+
+    class ClarifyingProvider:
+        def __init__(self):
+            self.calls = 0
+
+        def structured(self, system, user, schema):
+            self.calls += 1
+            return Intent(intent="clarify"), {"elapsed_ms": 1}
+
+    provider = ClarifyingProvider()
+    result = ChatService(make_engine(f"sqlite:///{path}"), provider).answer(
+        ChatRequest(question="Compare their results")
+    )
+
+    assert result["intent"] == "clarify"
+    assert result["trace"]["attempts"] == []
+    assert result["trace"]["repair_count"] == 0
+    assert provider.calls == 1

@@ -98,16 +98,16 @@
 - Modify: `backend/ai/chat.py`
 - Modify: `tests/test_agentic_chat.py`
 
-- [ ] Add a failing scripted-provider test where generation returns `DELETE FROM races`, repair returns `SELECT COUNT(*) AS races FROM races`, and the response executes with three calls and two trace attempts.
-- [ ] Add failing tests for two rejected SQL candidates, exactly one repair invocation, no repair for an empty valid result, no repair for unsupported/ambiguous/prediction routes, and no path above three provider calls.
-- [ ] Add a failing redaction test where the query executor raises from an exception containing a sentinel database URL and secret; require the repair prompt and serialized response to contain only `execution_rejected` and fixed safe guidance.
-- [ ] Run `.venv/bin/pytest tests/test_agentic_chat.py -q` and confirm the repair assertions fail.
-- [ ] Add a `RepairPlan` schema or reuse `SQLPlan` with a distinct repair system prompt that accepts only the failed candidate, sanitized category, selected schema, repository rules, and allowlisted retrieval context.
-- [ ] Refactor SQL execution into one helper that returns a result or a coarse failure category without exposing exception text.
-- [ ] Invoke repair exactly once for `UnsafeQuery` or `QueryFailed`, validate and execute the replacement through the unchanged boundary, and finish with `query_rejected` after a second failure.
-- [ ] Record both attempts, final safe SQL, provider call count, and repair count in the response trace.
-- [ ] Run `.venv/bin/pytest tests/test_agentic_chat.py tests/test_chat.py tests/test_sql_safety.py -q` and require all tests to pass.
-- [ ] Commit with `git add backend/ai/chat.py tests/test_agentic_chat.py && git commit -m "feat: repair one rejected SQL plan safely"`.
+- [x] Add a failing scripted-provider test where generation returns `DELETE FROM races`, repair returns `SELECT COUNT(*) AS races FROM races`, and the response executes with three calls and two trace attempts.
+- [x] Add failing tests for two rejected SQL candidates, exactly one repair invocation, no repair for an empty valid result, no repair for unsupported or clarify routes, and no path above three provider calls.
+- [x] Add a failing redaction test where the query executor raises from an exception containing a sentinel database URL and secret; require the repair prompt and serialized response to contain only `execution_rejected` and fixed safe guidance.
+- [x] Run `.venv/bin/pytest tests/test_agentic_chat.py -q` and confirm the repair assertions fail.
+- [x] Reuse `SQLPlan` with a distinct repair system prompt that accepts only the failed candidate, sanitized category, selected schema, repository rules, and allowlisted retrieval context.
+- [x] Refactor SQL execution into one helper and expose only a coarse failure category to the repair stage.
+- [x] Invoke repair exactly once for `UnsafeQuery` or `QueryFailed`, validate and execute the replacement through the unchanged boundary, and finish with `query_rejected` after a second failure.
+- [x] Record both attempts, final SQL, provider call count, and repair count in the response trace.
+- [x] Run `.venv/bin/pytest tests/test_agentic_chat.py tests/test_chat.py tests/test_sql_safety.py -q` and require all tests to pass.
+- [x] Commit with `git add backend/ai/chat.py tests/test_agentic_chat.py docs/superpowers/plans/2026-09-10-agentic-retrieval.md && git commit -m "feat: repair one rejected SQL plan safely"`.
 
 ### Task 6: Add privacy-safe structured application logging
 
