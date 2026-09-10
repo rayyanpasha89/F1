@@ -185,13 +185,15 @@
 - Create: `reports/agentic_run_01.json`
 - Modify after genuine results: `docs/worklog.md`
 
-- [ ] Confirm required Bedrock environment variables are present by checking variable names and nonempty status without printing values.
-- [ ] Run `.venv/bin/python scripts/benchmark_nl2sql.py --output reports/nl2sql_run_07.json` exactly once and preserve all passes, failures, call metadata, and latency.
-- [ ] Run `.venv/bin/python scripts/benchmark_agentic.py --output reports/agentic_run_01.json` exactly once and preserve all passes, failures, corrections, clarifications, selected entities, calls, repairs, and latency.
-- [ ] Compare Run 07 with Run 06 and agentic Run 01 with its explicit expectations. Describe regressions, improvements, and suite limitations without calling the results unseen accuracy.
-- [ ] Fix only demonstrated product defects through a new failing test. Write any repeat live execution to the next numbered report instead of editing an earlier report.
-- [ ] Update the worklog with the exact report names, hashes, Git SHA, result counts, mean latency, provider-call distribution, repair count, and preserved failures.
-- [ ] Commit with `git add reports/nl2sql_run_07.json reports/agentic_run_*.json docs/worklog.md && git commit -m "test: record agentic Bedrock evaluation"`.
+- [x] Confirm required Bedrock environment variables are present by checking variable names and nonempty status without printing values.
+- [x] Run the unchanged fixed suite as Run 07 and preserve its Q27 relationship-path failure, call metadata, and latency.
+- [x] Add a failing Q27 regression, fix the driver-constructor relationship path, and write the repeat to immutable Run 08; preserve its distinct Q28 classification-path failure.
+- [x] Add a failing Q28 regression, ground classification in race results, and write the repeat to immutable Run 09, which passed 40/40.
+- [x] Run `scripts.benchmark_agentic` as agentic Run 01 and preserve all 22 passes, corrections, clarifications, selected entities, calls, repairs, and latency.
+- [x] Compare Runs 07–09 with Run 06 and agentic Run 01 with its explicit expectations. Describe regressions, improvements, provider-call distribution, zero live repairs, and suite limitations without calling the results unseen accuracy.
+- [x] Fix only demonstrated product defects through new failing tests and never edit an earlier report.
+- [x] Update the worklog with exact report names, Git SHAs, result counts, mean latency, provider-call distribution, repair count, and preserved failures.
+- [x] Commit with `git add reports/nl2sql_run_09.json reports/agentic_run_01.json docs/worklog.md docs/superpowers/plans/2026-09-10-agentic-retrieval.md && git commit -m "test: record agentic Bedrock evaluation"`.
 
 ### Task 11: Review, merge, and verify GitHub CI
 
