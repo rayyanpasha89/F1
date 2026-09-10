@@ -18,6 +18,7 @@ from threading import BoundedSemaphore
 from backend.ai.limits import ChatLimiter
 from backend.ml.evidence import ModelBundleError, verify_model_bundle
 from backend.ml.predictor import Predictor, PredictionUnavailable, load_artifacts
+from backend.ml.review import RaceReview, RaceReviewService
 from backend.services.analytics import Analytics, NotFound
 
 logger = logging.getLogger("uvicorn.error")
@@ -32,6 +33,7 @@ def create_app(engine=None):
     db = engine or make_engine()
     analytics = Analytics(db)
     predictor = Predictor(db)
+    review_service = RaceReviewService(predictor, analytics)
     chat_service = ChatService(db)
     chat_slots = BoundedSemaphore(2)
     chat_limiter = ChatLimiter()
@@ -129,6 +131,11 @@ def create_app(engine=None):
     def prediction(race_id: int):
         analytics.race(race_id)
         return predictor.predict(race_id)
+
+    @app.get("/api/predictions/{race_id}/review", response_model=RaceReview)
+    def prediction_review(race_id: int):
+        analytics.race(race_id)
+        return review_service.review(race_id)
 
     @app.get("/api/health")
     def health():

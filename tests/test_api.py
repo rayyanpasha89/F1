@@ -118,6 +118,26 @@ def test_real_prediction_endpoint_and_training_era_refusal(client):
     assert client.get("/api/predictions/-1").status_code == 404
 
 
+def test_real_forecast_review_endpoint_and_safe_refusals(client):
+    if not Path("models/podium_model.joblib").exists():
+        pytest.skip("Trained artifact required")
+    races = client.get("/api/races?year=2024").json()["data"]
+    monaco = next(race for race in races if "Monaco" in race["name"])
+
+    response = client.get(f"/api/predictions/{monaco['race_id']}/review")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["review_type"] == "post_race_review"
+    assert payload["race"]["race_id"] == monaco["race_id"]
+    assert len(payload["predicted_podium"]) == 3
+    assert len(payload["recorded_podium"]) == 3
+    assert payload["top_three_hits"] == 3
+    earlier = client.get("/api/races?year=2018").json()["data"][0]["race_id"]
+    assert client.get(f"/api/predictions/{earlier}/review").status_code == 422
+    assert client.get("/api/predictions/-1/review").status_code == 404
+
+
 def test_chat_unsupported_path_without_live_llm(client):
     response = client.post("/api/chat", json={"question": "Who performs best in wet races?"})
     assert response.status_code == 200

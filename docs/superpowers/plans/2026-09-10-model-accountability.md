@@ -130,14 +130,14 @@
 - Produces: `GET /api/predictions/{race_id}/review`
 - `RaceReview` contains allowlisted race, predicted/recorded podiums, hit count, exact-set flag, Brier/MAE, deterministic surprises, driver rows, and leakage notes
 
-- [ ] Write failing synthetic tests for metric arithmetic, stable tie-breaking, missing podium rejection, unsupported model years, and bounded/allowlisted serialization.
-- [ ] Add failing mutation tests proving same-race outcome changes cannot alter forecast probabilities/factors and future outcomes cannot alter an earlier review.
-- [ ] Run `.venv/bin/pytest tests/test_race_review.py -q` and confirm missing service failures.
-- [ ] Implement Pydantic response models and the review service by joining the predictor output to recorded results after prediction is complete.
-- [ ] Add the API route and controlled exception behavior.
-- [ ] Add a real-data integration assertion that Monaco 2024 has three predicted-podium hits and deterministic Brier arithmetic without hard-coding the backend answer.
-- [ ] Run focused review/API/ML tests.
-- [ ] Commit with `git commit -m "feat: add forecast versus reality race review"`.
+- [x] Write failing synthetic tests for metric arithmetic, stable tie-breaking, missing podium rejection, unsupported model years, and bounded/allowlisted serialization.
+- [x] Add failing mutation tests proving same-race outcome changes cannot alter forecast probabilities/factors and future outcomes cannot alter an earlier review.
+- [x] Run `.venv/bin/pytest tests/test_race_review.py -q` and confirm missing service failures.
+- [x] Implement Pydantic response models and the review service by joining the predictor output to recorded results after prediction is complete.
+- [x] Add the API route and controlled exception behavior.
+- [x] Add a real-data integration assertion that Monaco 2024 has three predicted-podium hits and deterministic Brier arithmetic without hard-coding the backend answer.
+- [x] Run focused review/API/ML tests.
+- [x] Commit with `git commit -m "feat: add forecast versus reality race review"`.
 
 ### Task 6: Expose a bounded public model card
 
