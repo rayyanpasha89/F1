@@ -227,13 +227,13 @@
 - Produces: append-only CLI `python -m scripts.verify_public_release --base-url URL --output NEW.json [--access-code-file PATH]`
 - Verifier checks route/status/schema/header/model-sum/review/model-card/readiness and optional bounded chat; it never writes access codes or provider configuration
 
-- [ ] Write failing verifier tests using an in-process HTTP server for no-overwrite behavior, safe output, route contracts, headers, coherent probabilities, and optional chat redaction.
-- [ ] Implement the verifier with explicit timeouts and allowlisted summaries.
-- [ ] Add CI steps for `pip-audit==2.9.0` against the fully pinned runtime direct requirements with `--no-deps --disable-pip`, plus `npm audit --omit=dev --audit-level=high`.
-- [ ] Add monthly Dependabot configuration for pip, npm, and GitHub Actions with a conservative open-PR limit.
-- [ ] Update architecture, deployment, AI disclosure, README, and adversarial review with implemented behavior and evidence boundaries. Do not edit presentation documentation or files.
-- [ ] Run verifier tests, workflow syntax checks, dependency audits, and the full standard suites.
-- [ ] Commit with `git commit -m "ci: verify model accountability release"`.
+- [x] Write failing verifier tests using an in-process HTTP server for no-overwrite behavior, safe output, route contracts, headers, coherent probabilities, and optional chat redaction.
+- [x] Implement the verifier with explicit timeouts and allowlisted summaries.
+- [x] Add CI steps for `pip-audit==2.9.0` against the fully pinned runtime direct requirements with `--no-deps --disable-pip`, plus `npm audit --omit=dev --audit-level=high`.
+- [x] Add monthly Dependabot configuration for pip, npm, and GitHub Actions with a conservative open-PR limit.
+- [x] Update architecture, deployment, AI disclosure, README, and adversarial review with implemented behavior and evidence boundaries. Do not edit presentation documentation or files.
+- [x] Run verifier tests, workflow syntax checks, dependency audits, and the full standard suites.
+- [x] Commit with `git commit -m "ci: verify model accountability release"`.
 
 ### Task 10: Complete local, PostgreSQL, browser, and AWS release evidence
 

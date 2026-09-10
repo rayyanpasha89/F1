@@ -22,6 +22,17 @@ python -m scripts.release_lightsail deploy --terraform /absolute/path/to/terrafo
 
 Both stages explicitly check STS and the default profile before AWS mutations. ECR image tags are Git commit SHAs. Never archive `.env` or Terraform state. `scripts/bootstrap_lightsail.py` is the one-off ingestion routine, invoked inside the private service with the bootstrap URL, reader password and presigned source URL supplied through environment. It verifies CSV hashes and refuses to repair a nonempty inconsistent database. Do not rerun ingestion against unrelated data.
 
+After the service reaches `RUNNING` and its deployment reaches `ACTIVE`, verify the public origin into a brand-new report path:
+
+```sh
+python -m scripts.verify_public_release \
+  --base-url https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com \
+  --output reports/model_accountability_aws_release.json \
+  --access-code-file /absolute/private/path/to/chat-access-code.txt
+```
+
+The verifier uses explicit timeouts and fails closed on status, schema, headers, cache rules, request-ID reflection, archive coverage, model version, probability coherence, post-race review, evidence hashes, or model-card boundaries. The optional chat call checks the known `Verstapen` to `verstappen` repair and the three-call ceiling. It does not persist the access code, its path, question, answer, SQL, rows, or provider metadata. Output paths are append-only and cannot be overwritten.
+
 For rollback, deploy a previously verified existing image through the Lightsail API after the same account checks; do not restore or delete the database as an application rollback. Terraform creation and application image releases are separate operations. Production environment includes `DATABASE_URL`, `SQL_READONLY_DATABASE_URL`, `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_PROJECT_ID`, `OPENAI_MODEL`, `CHAT_ACCESS_CODE` and `F1_REQUIRE_READONLY=1`.
 
 ## Logging and costs

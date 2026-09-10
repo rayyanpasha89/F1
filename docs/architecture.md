@@ -10,7 +10,7 @@ flowchart LR
     L --> R[React application]
     L --> A[FastAPI analytics and chat]
     A --> P[(Private PostgreSQL)]
-    A --> M[Frozen calibrated podium model]
+    A --> M[Hash-verified model and evidence bundle]
     A --> B[Amazon Bedrock openai.gpt-oss-120b]
     A --> O[Lightsail runtime logs]
     O --> C[Bounded CloudWatch snapshots]
@@ -34,14 +34,20 @@ The frontend sends no more than three compact turns containing only question, in
 
 ## Data and model flow
 
-The ingestion pipeline audits the supplied CSV hashes and loads 701,433 rows across 14 relational tables transactionally. The same feature code serves training and inference. Chronological splits are fit 2010–2018, selection 2019–2021 and final test 2022–2024; same-date outcomes are unavailable until every row for that date is emitted. The final model and calibration were frozen before the final test evaluation. See `docs/evaluation.md` and `EXPERIMENTS.md` for metrics and limitations.
+The ingestion pipeline audits the supplied CSV hashes and loads 701,433 rows across 14 relational tables transactionally. The same feature code serves training and inference. Chronological splits are fit 2010–2018, selection 2019–2021 and final test 2022–2024; same-date outcomes are unavailable until every row for that date is emitted. The final model and calibration were frozen before the final test evaluation.
+
+The calibrated classifier first emits raw marginal podium probabilities. A deterministic clipped-logit offset then projects all entrants in one race onto an expected count of exactly three without changing their order. The same offset is added to the SHAP base value, preserving exact explanation reconstruction. Raw and projected values remain available in the API for auditability.
+
+`models/manifest.json` binds the model, grid baseline, evaluation reports, calibration, features, split, and postprocessor to SHA-256 hashes. The runtime verifies this manifest before deserializing joblib artifacts. `/api/health/ready` checks the database, bundle, and public model card; `/api/model-card` returns a bounded allowlisted evidence view. `/api/predictions/{race_id}/review` generates the forecast before reading same-race results, then returns predicted/recorded podiums and whole-grid scoring. Mutation tests prove same-race labels and future results cannot change an earlier forecast. See `docs/evaluation.md` and `EXPERIMENTS.md` for metrics and limitations.
 
 ## Release and operations
 
-GitHub Actions runs Ruff, Python tests, frontend lint/format/tests/build and Terraform validation. The guarded release uploads a clean Git archive plus trusted local model artifacts, and CodeBuild builds and pushes an ECR image tagged with the full Git SHA. The Lightsail release refuses an absent image or dirty working tree. Production startup rejects writable database credentials.
+GitHub Actions runs Ruff, Python tests, frontend lint/format/tests/build, high-severity npm audit, pinned-runtime pip audit, and Terraform validation. Monthly Dependabot checks Python, npm, and GitHub Actions dependencies with a small open-PR limit. The guarded release uploads a clean Git archive plus trusted local model artifacts, and CodeBuild builds and pushes an ECR image tagged with the full Git SHA. The Lightsail release refuses an absent image or dirty working tree. Production startup rejects writable database credentials.
 
-The verified application release is Git SHA `4b3946451986f09fdd11d880a2de757366947989`, CodeBuild `cce52796-d309-4d3c-a536-4a97e796c0a1`, and Lightsail deployment 9 in `eu-north-1`. Continuous stdout/stderr remains in Lightsail; an operator can export bounded snapshots to the 14-day CloudWatch group `/f1/dev/api`. Chat completion logs contain route, status, call count, repair count, allowlisted tables and elapsed time. They omit question text, SQL, prompts, provider payloads, credentials and connection strings.
+Every response receives a generated request ID and browser security headers. Health and chat are never cached; historical GET APIs use a five-minute cache; fingerprinted static assets are immutable for one year; SPA shells revalidate. Large responses use gzip. Prediction and review completion logs contain only the request ID, race ID, model version, postprocessor, elapsed time, probability sum, or hit count. The append-only `scripts.verify_public_release` command challenges request-ID reflection and verifies these delivery rules plus the SPA, archive, readiness, model, review, and model-card contracts from the public origin. Its optional single typo-correction chat probe writes only allowlisted counts and status fields.
+
+The verified application release before the model-accountability release is Git SHA `4b3946451986f09fdd11d880a2de757366947989`, CodeBuild `cce52796-d309-4d3c-a536-4a97e796c0a1`, and Lightsail deployment 9 in `eu-north-1`. Continuous stdout/stderr remains in Lightsail; an operator can export bounded snapshots to the 14-day CloudWatch group `/f1/dev/api`. Completion logs omit question text, SQL, prompts, provider payloads, credentials and connection strings. The next release SHA and checks belong in the new append-only release reports after deployment succeeds.
 
 ## Deliberate limits
 
-The archive has no dependable weather, tyre, fuel or telemetry data and ends in 2024. The public demo uses an access code and per-process rate/concurrency limits rather than individual accounts. The quota resets when a container restarts. The small service and database have no multi-region failover, durable distributed quota or notification subscriber. See `docs/deployment.md` for rollback, retained AWS resources and costs.
+The archive has no dependable weather, tyre, fuel or telemetry data and ends in 2024. The race-level projection constrains marginal probabilities; it is not a joint finishing-order distribution. The public demo uses an access code and per-process rate/concurrency limits rather than individual accounts. The quota resets when a container restarts. The small service and database have no multi-region failover, durable distributed quota or notification subscriber. See `docs/deployment.md` for rollback, retained AWS resources and costs.
