@@ -1,9 +1,11 @@
 """Shared HTTP delivery policy for the API and same-origin web application."""
 
+import logging
 from time import perf_counter
 from uuid import uuid4
 
 from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from starlette.middleware.gzip import GZipMiddleware
 
 
@@ -22,6 +24,7 @@ _CONTENT_SECURITY_POLICY = "; ".join(
     )
 )
 _NO_STORE_PREFIXES = ("/api/chat", "/api/health")
+logger = logging.getLogger("uvicorn.error")
 
 
 def install_http_policy(app: FastAPI) -> None:
@@ -34,7 +37,18 @@ def install_http_policy(app: FastAPI) -> None:
         request_id = uuid4().hex
         request.state.request_id = request_id
         request.state.started_at = perf_counter()
-        response = await call_next(request)
+        try:
+            response = await call_next(request)
+        except Exception as error:
+            logger.error(
+                "request_failed request_id=%s error_type=%s",
+                request_id,
+                type(error).__name__,
+            )
+            response = JSONResponse(
+                status_code=500,
+                content={"detail": "Internal server error."},
+            )
 
         response.headers["X-Request-ID"] = request_id
         response.headers["X-Content-Type-Options"] = "nosniff"

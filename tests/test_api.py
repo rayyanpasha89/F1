@@ -249,6 +249,7 @@ def test_chat_logs_safe_execution_evidence_without_request_secrets(client, monke
     assert "repairs=0" in event
     assert "tables=-" in event
     assert "elapsed_ms=" in event
+    assert f"request_id={response.headers['x-request-id']}" in event
     assert access_secret not in event
     assert question_secret not in event
     assert "SELECT" not in event and "postgresql://" not in event

@@ -132,7 +132,9 @@ def create_app(engine=None):
             trace = result.get("trace", {})
             tables = trace.get("tables") or []
             logger.info(
-                "chat_complete route=%s status=%s provider_calls=%s repairs=%s tables=%s elapsed_ms=%s",
+                "chat_complete request_id=%s route=%s status=%s provider_calls=%s "
+                "repairs=%s tables=%s elapsed_ms=%s",
+                request.state.request_id,
                 trace.get("route", result.get("intent", "unknown")),
                 result.get("status", result.get("intent", "unknown")),
                 trace.get("provider_call_count", 0),

@@ -26,6 +26,10 @@ def _client():
     def missing():
         raise HTTPException(404, "missing")
 
+    @app.get("/broken")
+    def broken():
+        raise RuntimeError("failure-SENTINEL SELECT /Users/private")
+
     return TestClient(app)
 
 
@@ -69,3 +73,19 @@ def test_gzip_and_cache_policy_follow_route_sensitivity():
     assert chat.headers["cache-control"] == "no-store"
     assert health.headers["cache-control"] == "no-store"
     assert missing.headers["cache-control"] == "no-store"
+
+
+def test_unhandled_errors_are_safe_correlated_and_receive_delivery_headers(caplog):
+    with caplog.at_level("INFO", logger="uvicorn.error"), _client() as client:
+        response = client.get("/broken")
+
+    assert response.status_code == 500
+    assert response.json() == {"detail": "Internal server error."}
+    assert response.headers["cache-control"] == "no-store"
+    assert response.headers["x-content-type-options"] == "nosniff"
+    event = next(
+        record.getMessage() for record in caplog.records if "request_failed" in record.getMessage()
+    )
+    assert f"request_id={response.headers['x-request-id']}" in event
+    assert "error_type=RuntimeError" in event
+    assert "SENTINEL" not in event and "SELECT" not in event and "/Users/" not in event
