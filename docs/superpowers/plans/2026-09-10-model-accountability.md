@@ -32,13 +32,13 @@
 - Consumes: approved design in `docs/superpowers/specs/2026-09-10-model-accountability-design.md`
 - Produces: isolated `feat/model-accountability` worktree and exact execution checklist
 
-- [ ] Record SHA-256 for both existing presentation files before implementation.
-- [ ] Detect whether the checkout is already a linked worktree and verify `.worktrees/` is ignored.
-- [ ] Create `.worktrees/model-accountability` on branch `feat/model-accountability` using `git worktree add` because no native worktree tool is available.
-- [ ] Copy only ignored local verification inputs required by the plan: the SQLite database, two trusted joblib artifacts, processed features, and audited source CSV directory. Do not copy `.env`, Terraform state, or credentials.
-- [ ] Reuse dependencies through safe ignored symlinks or install from lock files; do not commit environment directories.
-- [ ] Run `.venv/bin/pytest -q -rs`, frontend tests/lint/format/build, Ruff, and both Terraform validations. Require the same green baseline before feature code.
-- [ ] Commit this plan on the feature branch with `git commit -m "docs: plan model accountability release"`.
+- [x] Record SHA-256 for both existing presentation files before implementation.
+- [x] Detect whether the checkout is already a linked worktree and verify `.worktrees/` is ignored.
+- [x] Create `.worktrees/model-accountability` on branch `feat/model-accountability` using `git worktree add` because no native worktree tool is available.
+- [x] Copy only ignored local verification inputs required by the plan: the SQLite database, two trusted joblib artifacts, processed features, and audited source CSV directory. Do not copy `.env`, Terraform state, or credentials.
+- [x] Reuse dependencies through safe ignored symlinks or install from lock files; do not commit environment directories.
+- [x] Run `.venv/bin/pytest -q -rs`, frontend tests/lint/format/build, Ruff, and both Terraform validations. Require the same green baseline before feature code.
+- [x] Commit this plan on the feature branch with `git commit -m "docs: plan model accountability release"`.
 
 ### Task 2: Add the race-level podium probability projection
 
@@ -53,14 +53,14 @@
 - Produces: immutable `ProbabilityProjection(adjusted: np.ndarray, log_odds_offset: float, raw_sum: float, adjusted_sum: float, expected_count: int)`
 - Changes: `Predictor.predict(race_id)` adds `model_version`, `postprocessing`, per-driver `raw_probability`, and `raw_baseline_probability`; `probability` and `baseline_probability` become projected values
 
-- [ ] Write failing pure tests requiring deterministic finite output, exact sum within `1e-10`, strict bounds, stable ordering, symmetry for equal inputs, and controlled rejection of NaN, out-of-range values, too few entrants, or impossible expected counts.
-- [ ] Run `.venv/bin/pytest tests/test_probability.py -q` and capture the missing-module failure.
-- [ ] Implement clipped-logit monotonic bisection with no labels or outcomes and a maximum fixed iteration count.
-- [ ] Run the focused tests and require them to pass.
-- [ ] Add failing predictor tests requiring both selected and baseline sums to equal three and SHAP reconstruction to use `base_log_odds + postprocessing.log_odds_offset + sum(factors)` exactly.
-- [ ] Update `Predictor.predict` to project selected and baseline arrays, expose audit metadata, and adjust each driver's explanation base without changing factors or rank.
-- [ ] Run `.venv/bin/pytest tests/test_probability.py tests/test_ml.py tests/test_api.py -q` and require all focused tests to pass.
-- [ ] Commit with `git commit -m "ml: enforce coherent race podium probabilities"`.
+- [x] Write failing pure tests requiring deterministic finite output, exact sum within `1e-10`, strict bounds, stable ordering, symmetry for equal inputs, and controlled rejection of NaN, out-of-range values, too few entrants, or impossible expected counts.
+- [x] Run `.venv/bin/pytest tests/test_probability.py -q` and capture the missing-module failure.
+- [x] Implement clipped-logit monotonic bisection with no labels or outcomes and a maximum fixed iteration count.
+- [x] Run the focused tests and require them to pass.
+- [x] Add failing predictor tests requiring both selected and baseline sums to equal three and SHAP reconstruction to use `base_log_odds + postprocessing.log_odds_offset + sum(factors)` exactly.
+- [x] Update `Predictor.predict` to project selected and baseline arrays, expose audit metadata, and adjust each driver's explanation base without changing factors or rank.
+- [x] Run `.venv/bin/pytest tests/test_probability.py tests/test_ml.py tests/test_api.py -q` and require all focused tests to pass.
+- [x] Commit with `git commit -m "ml: enforce coherent race podium probabilities"`.
 
 ### Task 3: Generate the post-test projection evaluation and artifact manifest
 

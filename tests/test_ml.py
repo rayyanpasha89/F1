@@ -122,8 +122,17 @@ def test_real_shap_explanations_reconstruct_model_probability():
     race_id = int(frame.loc[frame.year == 2024, "race_id"].iloc[-1])
     result = predictor.predict(race_id)
     assert len(result["predictions"]) == 20
+    assert result["model_version"] == "EXP-007+podium-count-v1"
+    assert result["postprocessing"]["method"] == "race_logit_offset"
+    assert result["postprocessing"]["expected_podiums"] == 3
+    assert sum(row["probability"] for row in result["predictions"]) == pytest.approx(3)
+    assert sum(row["baseline_probability"] for row in result["predictions"]) == pytest.approx(3)
+    assert result["postprocessing"]["selected"]["adjusted_sum"] == pytest.approx(3)
+    assert result["postprocessing"]["baseline"]["adjusted_sum"] == pytest.approx(3)
     for row in result["predictions"]:
         assert 0 <= row["probability"] <= 1
+        assert 0 <= row["raw_probability"] <= 1
+        assert 0 <= row["raw_baseline_probability"] <= 1
         assert (
             abs(
                 expit(
