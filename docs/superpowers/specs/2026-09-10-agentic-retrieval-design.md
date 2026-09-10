@@ -1,7 +1,8 @@
 # Agentic Retrieval and Query Repair Design
 
-**Date:** 2026-09-10  
-**Status:** Approved for implementation  
+**Date:** 2026-09-10
+
+**Status:** Approved for implementation
 **Product:** F1 Race Strategist
 
 ## Purpose
