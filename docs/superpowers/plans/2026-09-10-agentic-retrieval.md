@@ -242,11 +242,11 @@
 - [x] Create a final editable presentation using the existing interim deck’s evidence style. Include verified agentic retrieval, query repair, UI trace, live benchmark comparison, GitHub CI, AWS architecture, and public deployment screenshots. Keep the interim deck unchanged as a historical snapshot.
 - [x] Validate the PowerPoint package, render every slide, inspect for overlap or clipping, verify native tables/charts and speaker notes, and record the SHA-256. State if native PowerPoint opening was not performed.
 - [x] Run the complete local verification one final time after documentation-only changes where applicable.
-- [ ] Commit all release evidence and presentation artifacts, push `main`, wait for the final documentation CI run, and confirm the application deployment still points to the verified code SHA.
+- [x] Commit all release evidence and presentation artifacts, push `main`, wait for the final documentation CI run, and confirm the application deployment still points to the verified code SHA.
 
 ### Task 14: Completion report
 
-- [ ] Confirm `git status --short` is clean on `main` and `git rev-parse HEAD` is pushed to `origin/main`.
-- [ ] Confirm all numbered evaluation and AWS evidence files are immutable and contain no secrets.
-- [ ] Confirm the public URL is healthy and the active Lightsail deployment is the verified application image.
-- [ ] Report what changed, full test results, live benchmark results with limitations, GitHub Actions and CodeBuild evidence, public cloud verification, presentation path, demo guide path, and any remaining operational limitations or AWS costs.
+- [x] Confirm `git status --short` is clean on `main` and `git rev-parse HEAD` is pushed to `origin/main`.
+- [x] Confirm all numbered evaluation and AWS evidence files are immutable and contain no secrets.
+- [x] Confirm the public URL is healthy and the active Lightsail deployment is the verified application image.
+- [x] Report what changed, full test results, live benchmark results with limitations, GitHub Actions and CodeBuild evidence, public cloud verification, presentation path, demo guide path, and any remaining operational limitations or AWS costs.
