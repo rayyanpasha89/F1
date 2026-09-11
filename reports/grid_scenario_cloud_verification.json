@@ -1,0 +1,271 @@
+{
+  "aws_guard": {
+    "account": "148356747273",
+    "account_check_before_build": true,
+    "account_check_before_deploy": true,
+    "account_check_before_log_exports": true,
+    "profile": "default",
+    "region": "eu-north-1"
+  },
+  "codebuild": {
+    "build_id": "f1-race-strategist-dev:a1c49bad-70f5-4a74-a080-8ec21fdee065",
+    "duration_seconds": 144.967,
+    "ecr_compressed_size_bytes": 268412292,
+    "ecr_digest": "sha256:49f9d2697fd0ea38cfd5563c4238c6e3263f20cbbbe32594ff28a79413fbc2fd",
+    "image_tag": "7738da72311a390509d92377ef11b24d8e95a0e1",
+    "source_sha256": "de796e11d68cb353685d5d9db129a4f797fdc8f3c0323fa9e5d83fa89e8ad5f8",
+    "status": "SUCCEEDED"
+  },
+  "evidence_boundaries": {
+    "durable_distributed_quota": false,
+    "historical_archive_through": 2024,
+    "multi_region_failover": false,
+    "scenario_is_causal": false,
+    "scenario_is_live_race_recommendation": false,
+    "scenario_is_unseen_validation": false,
+    "shared_demo_access_code": true
+  },
+  "generated_at": "2026-09-11T12:49:24.914013+00:00",
+  "github_actions": {
+    "clone_only_python": {
+      "failed": 0,
+      "passed": 134,
+      "skipped": 34
+    },
+    "head_sha": "7738da72311a390509d92377ef11b24d8e95a0e1",
+    "jobs": {
+      "frontend": "passed",
+      "infrastructure": "passed",
+      "python": "passed"
+    },
+    "pre_release_failure": {
+      "cause": "synthetic outcome-invariance test attempted to load private model artifacts in clone-only CI",
+      "resolution": "replaced the artifact dependency with a deterministic synthetic model, baseline, and additive explainer",
+      "resolved_by_commit": "7738da72311a390509d92377ef11b24d8e95a0e1",
+      "run_id": 34599084224
+    },
+    "status": "passed",
+    "successful_run_id": 34599337165,
+    "successful_run_url": "https://github.com/rayyanpasha89/F1/actions/runs/34599337165"
+  },
+  "lightsail": {
+    "database_replaced": false,
+    "deployed_image_matches_release_commit": true,
+    "deployment_state": "ACTIVE",
+    "deployment_version": 14,
+    "previous_deployment_state": "INACTIVE",
+    "previous_deployment_version": 13,
+    "service": "f1-strategist-demo",
+    "service_state": "RUNNING"
+  },
+  "live_browser_qa": {
+    "desktop": {
+      "axe_passes": 28,
+      "axe_violations": 0,
+      "button_height_px": 44,
+      "changed_rows": 2,
+      "console_errors": 0,
+      "document_horizontal_overflow_px": 0,
+      "failed_requests": 0,
+      "http_errors": 0,
+      "original_probability_sum": 3,
+      "scenario_horizontal_overflow_px": 0,
+      "scenario_probability_sum": 3.0000000000000013,
+      "scenario_rows": 20,
+      "viewport": {
+        "height": 1050,
+        "width": 1440
+      }
+    },
+    "mobile": {
+      "axe_passes": 29,
+      "axe_violations": 0,
+      "button_height_px": 44,
+      "changed_rows": 2,
+      "console_errors": 0,
+      "document_horizontal_overflow_px": 0,
+      "failed_requests": 0,
+      "http_errors": 0,
+      "original_probability_sum": 3,
+      "scenario_horizontal_overflow_px": 0,
+      "scenario_probability_sum": 3.0000000000000013,
+      "scenario_rows": 20,
+      "viewport": {
+        "height": 844,
+        "width": 390
+      }
+    },
+    "status": "passed"
+  },
+  "live_lighthouse": {
+    "desktop": {
+      "accessibility": 100,
+      "best_practices": 100,
+      "cumulative_layout_shift": 0.02376002894886612,
+      "largest_contentful_paint_ms": 388.276,
+      "performance": 100,
+      "seo": 100,
+      "total_blocking_time_ms": 0
+    },
+    "mobile": {
+      "accessibility": 100,
+      "best_practices": 100,
+      "cumulative_layout_shift": 0.037606440756418766,
+      "largest_contentful_paint_ms": 1677.525,
+      "performance": 100,
+      "seo": 100,
+      "total_blocking_time_ms": 0
+    }
+  },
+  "live_pit_lane_edge": {
+    "cache_control": "no-store",
+    "changed_driver_count": 2,
+    "model_proxy_input": 25,
+    "original_probability_sum": 3.0,
+    "recorded_pit_lane_position": 0,
+    "scenario_probability_sum": 3.0,
+    "status": "passed",
+    "year": 2022
+  },
+  "live_url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/",
+  "presentation_integrity": {
+    "files_modified": false,
+    "hashes": {
+      "final": "d7a042fce3ea5999ef7b8d61b0d92b3e931269b6974633b05b85f816b6b1df84",
+      "interim": "2e1700f802c51ac29a6a186de10c3a610015b9e72e9b9785b488dfd45a873737",
+      "scope": "7066b08512cd99919b228824b1b67b08dff2e48c387810d6a10afbcf2098c64a"
+    }
+  },
+  "public_release_report": {
+    "evidence": {
+      "base_url": "https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com",
+      "checks": {
+        "archive": {
+          "first_year": 1950,
+          "last_year": 2024,
+          "race_count_2024": 24,
+          "race_id": 1128,
+          "race_name": "Monaco Grand Prix",
+          "season_count": 75,
+          "status": "passed"
+        },
+        "chat": {
+          "correction_verified": true,
+          "intent": "statistics",
+          "provider_call_count": 2,
+          "repair_count": 0,
+          "status": "passed"
+        },
+        "delivery": {
+          "cache_policy": true,
+          "gzip_responses": 11,
+          "request_ids_unique": true,
+          "response_count": 12,
+          "security_headers": true,
+          "server_generated_request_ids": true,
+          "status": "passed"
+        },
+        "model_card": {
+          "archive_races": 1125,
+          "archive_years": [
+            1950,
+            2024
+          ],
+          "audited_tables": 14,
+          "hash_count": 6,
+          "model_version": "EXP-007+podium-count-v1",
+          "schema_version": "f1-public-model-card-v1",
+          "season_evidence_count": 6,
+          "status": "passed",
+          "unseen_holdout": false
+        },
+        "prediction": {
+          "driver_count": 20,
+          "model_version": "EXP-007+podium-count-v1",
+          "postprocessor": "race_logit_offset",
+          "probability_sum": 3.0,
+          "race_id": 1128,
+          "status": "passed"
+        },
+        "readiness": {
+          "archive_through": 2024,
+          "database": "ok",
+          "model_bundle": "verified",
+          "model_card": "verified",
+          "model_version": "EXP-007+podium-count-v1",
+          "status": "passed"
+        },
+        "review": {
+          "brier_score": 0.04465273508022717,
+          "driver_count": 20,
+          "exact_podium_set": true,
+          "mean_absolute_error": 0.11535691372481534,
+          "race_id": 1128,
+          "status": "passed",
+          "top_three_hits": 3
+        },
+        "scenario": {
+          "changed_driver_count": 2,
+          "driver_count": 20,
+          "original_probability_sum": 3.0,
+          "race_id": 1128,
+          "scenario_kind": "grid_swap",
+          "scenario_probability_sum": 3.0,
+          "status": "passed"
+        },
+        "spa": {
+          "description_length": 105,
+          "immutable_asset": true,
+          "model_deep_link": true,
+          "status": "passed",
+          "title": "F1 Race Strategist | Historical Analytics"
+        }
+      },
+      "duration_ms": 20761.806,
+      "generated_at": "2026-09-11T12:43:54.264435+00:00",
+      "schema_version": "f1-public-release-verification-v1",
+      "status": "passed"
+    },
+    "path": "reports/grid_scenario_aws_release.json",
+    "sha256": "038f2f26420ee957ef13dbb9634cb594ca39db8e573f4eb3618a30e4e562c5a6"
+  },
+  "release_archive": {
+    "bytes": 2943415,
+    "entries": 214,
+    "forbidden_entries": 0,
+    "model_hashes_match_manifest": true,
+    "status": "passed",
+    "trusted_model_entries": 2
+  },
+  "runtime_log_readback": {
+    "chat_complete": 1,
+    "cloudwatch_group": "/f1/dev/api",
+    "cloudwatch_stream": "lightsail/20260911T124703423050Z",
+    "events_exported": 212,
+    "events_read_back": 212,
+    "http_5xx_records": 0,
+    "prediction_complete": 5,
+    "review_complete": 5,
+    "scenario_complete": 6,
+    "scenario_records_allowlisted": true,
+    "sensitive_marker_matches": {
+      "credential_names": 0,
+      "database_urls": 0,
+      "known_typo_question": 0,
+      "protected_values": 0,
+      "question_text": 0,
+      "sql_text": 0
+    },
+    "status": "passed",
+    "unique_structured_request_ids": 17
+  },
+  "schema_version": "f1-grid-scenario-cloud-verification-v1",
+  "source": {
+    "branch": "main",
+    "implementation_commit": "8721d3da4d71ced6ed191b913221c3fe021f4d2c",
+    "local_verification_report": "reports/grid_scenario_local_verification.json",
+    "local_verification_sha256": "360c559733f4ce60d5aae508a6f583784c845589469bc0dc2f0bb76ecd8190d2",
+    "release_commit": "7738da72311a390509d92377ef11b24d8e95a0e1"
+  },
+  "status": "passed"
+}

@@ -6,10 +6,10 @@ This guide demonstrates the deployed application and the evidence behind it. The
 
 - Live application: https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/
 - GitHub repository: https://github.com/rayyanpasha89/F1
-- Deployed application commit: `91382f8b4895ff53cdcfeb66c0e7aa4689d7b531`
-- GitHub Actions: https://github.com/rayyanpasha89/F1/actions/runs/34521407938
-- CodeBuild: `f1-race-strategist-dev:291889a4-bf82-4c42-b77a-a73a2b4a6a8e` (`SUCCEEDED`)
-- Lightsail: service `f1-strategist-demo`, deployment 13, `RUNNING` / `ACTIVE`
+- Deployed application commit: `7738da72311a390509d92377ef11b24d8e95a0e1`
+- GitHub Actions: https://github.com/rayyanpasha89/F1/actions/runs/34599337165
+- CodeBuild: `f1-race-strategist-dev:a1c49bad-70f5-4a74-a080-8ec21fdee065` (`SUCCEEDED`)
+- Lightsail: service `f1-strategist-demo`, deployment 14, `RUNNING` / `ACTIVE`
 - Region and account: `eu-north-1`, F1 account `148356747273`
 
 The demo access code is stored outside Git in `outputs/chat-access-code.txt` in the Codex workspace. Do not put it in slides, screenshots, terminal history, or the repository.
@@ -41,7 +41,7 @@ Show:
 
 Select **Charles Leclerc** in the prediction panel. Expected live result: **73.9%** projected podium probability versus a **70.8%** projected grid-only baseline. The raw selected-model output remains visible as **76.4%**. Point out the real calibrated SHAP contributions and the note that they are associations in calibrated log-odds, not causal effects. All 20 projected probabilities total three podium places.
 
-After the new release is deployed, use the **Grid swap lab** below the forecast. Exchange two starters and show the full comparison: actual and scenario grid positions, exact transformed model inputs, released and scenario probabilities, rank movement, and the starting-grid SHAP change. Both probability columns total three. Explain that this is a controlled frozen-model sensitivity check; all other pre-race inputs stay fixed, and the result is not a causal estimate or future-race validation. Pit-lane grid `0` is shown separately from its fixed model proxy input `25`.
+Use the **Grid swap lab** below the forecast. Exchange two starters and show the full comparison: actual and scenario grid positions, exact transformed model inputs, released and scenario probabilities, rank movement, and the starting-grid SHAP change. Both probability columns total three. Explain that this is a controlled frozen-model sensitivity check; all other pre-race inputs stay fixed, and the result is not a causal estimate or future-race validation. Pit-lane grid `0` is shown separately from its fixed model proxy input `25`.
 
 ### 3. Demonstrate typo-tolerant grounded statistics
 
@@ -97,14 +97,14 @@ Expected result: the typo is corrected, the request routes to **Explanation**, a
 
 Open the live Model Lab and GitHub Actions run. The protected final presentation remains unchanged until an explicit presentation revision is requested. Show:
 
-- 154 Python tests, plus all four opt-in PostgreSQL integration checks;
-- 15 frontend tests, ESLint, Prettier, and Vite production build;
+- 164 Python tests, plus all four opt-in PostgreSQL integration checks;
+- 18 frontend tests, ESLint, Prettier, and Vite production build;
 - Ruff and both Terraform roots;
 - fixed NL2SQL Run 09: 40/40, 3.651-second mean latency;
 - Agentic Run 01: 22/22, 3.013-second mean latency, 29 provider calls, zero live repair;
-- immutable CodeBuild image and active Lightsail deployment 13;
-- 210 bounded runtime events exported and read back from CloudWatch, including prediction, review and chat completion records with no configured credential, provider-setting, database-URL, SQL or question-text matches;
-- Lighthouse accessibility and best-practices scores of 100 on the archive, Model Lab and Monaco routes, with maximum final CLS 0.003297.
+- immutable CodeBuild image and active Lightsail deployment 14;
+- 212 bounded runtime events exported and read back from CloudWatch, including prediction, scenario, review, and chat completion records with no configured credential, provider-setting, database-URL, SQL, or question-text matches;
+- live Monaco Lighthouse scores of 100 for performance, accessibility, best practices, and SEO at desktop and mobile sizes, with zero total blocking time.
 
 State that both benchmark suites were used during development and therefore do not estimate unseen generalization. The bounded one-repair path is covered by deterministic tests; no generated query in the reported live runs needed repair.
 
@@ -124,6 +124,9 @@ State that both benchmark suites were used during development and therefore do n
 | Model-accountability local verification | `reports/model_accountability_local_verification.json` |
 | Model-accountability public release | `reports/model_accountability_aws_release_final.json` |
 | Model-accountability combined cloud verification | `reports/model_accountability_cloud_verification.json` |
+| Grid Scenario local verification | `reports/grid_scenario_local_verification.json` |
+| Grid Scenario public release | `reports/grid_scenario_aws_release.json` |
+| Grid Scenario combined cloud verification | `reports/grid_scenario_cloud_verification.json` |
 | Fixed NL2SQL result | `reports/nl2sql_run_09.json` |
 | Agentic result | `reports/agentic_run_01.json` |
 | Screenshots | `docs/presentations/assets/` |
