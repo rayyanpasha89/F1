@@ -29,9 +29,21 @@ Production predictions apply a deterministic race-level logit offset after calib
 
 The maximum absolute sum error across evaluated races is `8.89e-16`; all rankings are preserved. A seed-42 paired bootstrap samples 5,000 whole races from the consumed test. For projected selected minus projected baseline, its 95% intervals are -0.049274 to -0.013971 for log loss, -0.008490 to -0.000895 for Brier score, and -0.034314 to 0.024510 for top-three hit rate. The first two intervals exclude zero for this archive sample; the ranking interval does not. This is post-test iterative evidence because these outcomes had already been inspected. It is not an unseen confirmation set and cannot support a fresh selection claim.
 
+## Maximum-entropy podium sets
+
+The Podium Outcome Lab derives a complete probability distribution over unordered three-driver subsets from the released race marginals. For a subset `S` of exactly three drivers, it uses
+
+`q(S) = exp(sum(theta_i for i in S)) / Z`
+
+and solves the parameters so each driver's total probability across all subsets containing that driver reconstructs the released marginal. One parameter is fixed because adding a constant to every parameter does not change a fixed-size distribution. The analytic Jacobian is the covariance matrix of the subset membership indicators. This is the maximum-entropy distribution subject to the released marginal constraints, so it adds no unsupported interaction preference beyond those constraints.
+
+The executable evaluation `python -m scripts.evaluate_podium_outcomes` covered all 68 supported races and 1,359 driver rows. It enumerated 77,349 complete sets; each race had 969–1,140 combinations and converged. Distribution mass summed to one, reconstructed marginals summed to three within `8.89e-16`, and maximum per-driver reconstruction error was `3.82e-13`. Full derivation averaged 3.620 ms per race and peaked at 15.424 ms on the local verification machine. Entropy ranged from 3.9937 to 5.8993 bits, corresponding to 15.93–59.69 effective outcomes. The aggregate report is `reports/podium_outcome_local_evaluation.json`.
+
+For Monaco 2024, the 1,140-set distribution has 4.7317 bits of entropy and 26.57 effective outcomes. The leading unordered set is Carlos Sainz, Charles Leclerc, and Oscar Piastri at 13.57%; the first 12 sets contain 79.94% of total mass. These are derived set probabilities, not observed-frequency validation metrics. The derivation reads no same-race outcome, fits no new parameters from result labels, does not predict the order within a set, and has not been independently validated as a joint finishing model.
+
 ## Reproduction
 
-After ingestion, execute `python -m scripts.train_baseline`, `python -m scripts.compare_models`, `python -m scripts.check_calibration`, then `python -m scripts.evaluate_final`. Generate structural release evidence with `python -m scripts.evaluate_probability_projection` and bind it to the trusted local artifacts with `python -m scripts.build_model_manifest`. These scripts write metrics from actual predictions. Re-running after seeing test results is reproduction, not a new untouched holdout. A genuinely new tuning exercise needs a new prospective evaluation protocol.
+After ingestion, execute `python -m scripts.train_baseline`, `python -m scripts.compare_models`, `python -m scripts.check_calibration`, then `python -m scripts.evaluate_final`. Generate structural release evidence with `python -m scripts.evaluate_probability_projection` and `python -m scripts.evaluate_podium_outcomes`, then bind the fitted artifacts and fit-time reports to the trusted local manifest with `python -m scripts.build_model_manifest`. These scripts write metrics from actual predictions and derivations. Re-running after seeing test results is reproduction, not a new untouched holdout. A genuinely new tuning exercise needs a new prospective evaluation protocol.
 
 ## Explanations
 

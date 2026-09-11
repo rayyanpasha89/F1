@@ -14,7 +14,7 @@ This guide demonstrates the deployed application and the evidence behind it. The
 
 The demo access code is stored outside Git in `outputs/chat-access-code.txt` in the Codex workspace. Do not put it in slides, screenshots, terminal history, or the repository.
 
-## Recommended 8–10 minute walkthrough
+## Recommended 10–12 minute walkthrough
 
 ### 1. Establish the real product and data boundary
 
@@ -40,6 +40,17 @@ Show:
 - all 20 podium probabilities.
 
 Select **Charles Leclerc** in the prediction panel. Expected live result: **73.9%** projected podium probability versus a **70.8%** projected grid-only baseline. The raw selected-model output remains visible as **76.4%**. Point out the real calibrated SHAP contributions and the note that they are associations in calibrated log-odds, not causal effects. All 20 projected probabilities total three podium places.
+
+Use **Build outcome map** in the **Podium Outcome Lab**. Show that all **1,140** unordered three-driver sets are included in the solution, while the interface ranks the leading 12. Expected Monaco results include:
+
+- Carlos Sainz + Charles Leclerc + Oscar Piastri at **13.6%**;
+- Charles Leclerc + Lando Norris + Oscar Piastri at **11.1%**;
+- Max Verstappen + Charles Leclerc + Oscar Piastri at **10.6%**;
+- Charles Leclerc + Oscar Piastri as the leading co-podium pair at **39.7%**;
+- **79.9%** cumulative mass across the 12 shown sets;
+- maximum marginal reconstruction error of about **1.94e-15**.
+
+Explain that maximum entropy supplies the least-assumptive coherent distribution that preserves every released driver probability and exactly three places. It uses no race outcome and fits no new model. The three drivers within each set are unordered; this is not a learned interaction model or a validated finishing-order forecast.
 
 Use the **Grid swap lab** below the forecast. Exchange two starters and show the full comparison: actual and scenario grid positions, exact transformed model inputs, released and scenario probabilities, rank movement, and the starting-grid SHAP change. Both probability columns total three. Explain that this is a controlled frozen-model sensitivity check; all other pre-race inputs stay fixed, and the result is not a causal estimate or future-race validation. Pit-lane grid `0` is shown separately from its fixed model proxy input `25`.
 
@@ -97,8 +108,9 @@ Expected result: the typo is corrected, the request routes to **Explanation**, a
 
 Open the live Model Lab and GitHub Actions run. The protected final presentation remains unchanged until an explicit presentation revision is requested. Show:
 
-- 164 Python tests, plus all four opt-in PostgreSQL integration checks;
-- 18 frontend tests, ESLint, Prettier, and Vite production build;
+- 184 Python tests in the complete local artifact/source-backed suite, plus all four opt-in PostgreSQL integration checks;
+- 22 frontend tests, ESLint, Prettier, and Vite production build;
+- all 77,349 podium sets across 68 supported races reconstructed with maximum driver error `3.82e-13`;
 - Ruff and both Terraform roots;
 - fixed NL2SQL Run 09: 40/40, 3.651-second mean latency;
 - Agentic Run 01: 22/22, 3.013-second mean latency, 29 provider calls, zero live repair;
@@ -127,6 +139,8 @@ State that both benchmark suites were used during development and therefore do n
 | Grid Scenario local verification | `reports/grid_scenario_local_verification.json` |
 | Grid Scenario public release | `reports/grid_scenario_aws_release_v17.json` |
 | Grid Scenario combined cloud verification | `reports/grid_scenario_cloud_verification.json` |
+| Podium Outcome numerical evaluation | `reports/podium_outcome_local_evaluation.json` |
+| Podium Outcome local public contract | `reports/podium_outcome_local_release.json` |
 | Fixed NL2SQL result | `reports/nl2sql_run_09.json` |
 | Agentic result | `reports/agentic_run_01.json` |
 | Screenshots | `docs/presentations/assets/` |
@@ -148,6 +162,10 @@ Features are emitted before same-date history is updated. Training is 2010–201
 **Does the grid swap predict what would really happen after a penalty?**
 
 No. It changes two model grid inputs while holding the remaining recorded pre-race features fixed. It demonstrates how the frozen model responds; it does not model causal race dynamics, strategy changes, or an alternate historical outcome.
+
+**Did the model learn the probability of each three-driver podium set?**
+
+No. The fitted model emits individual driver marginals. The outcome map derives the maximum-entropy distribution over unordered three-driver sets that exactly preserves those marginals. It is coherent under that stated assumption, but it does not learn driver dependence or predict first, second, and third order.
 
 **Did the final model improve everything?**
 
