@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import pytest
 from pydantic import ValidationError
@@ -236,6 +237,44 @@ def test_same_race_and_future_outcomes_cannot_change_grid_scenario(monkeypatch):
     changed = Predictor(make_engine("sqlite:///:memory:"))
     monkeypatch.setattr(original, "frame", lambda: original_features)
     monkeypatch.setattr(changed, "frame", lambda: changed_features)
+
+    features = ["grid_position", "driver_recent_podium"]
+
+    class SyntheticSelectedModel:
+        @staticmethod
+        def decision_function(frame):
+            return (
+                -0.2 * frame["grid_position"].to_numpy()
+                + 0.3 * frame["driver_recent_podium"].to_numpy()
+            )
+
+    class SyntheticBaseline:
+        @staticmethod
+        def predict_proba(frame):
+            probability = 1 / (1 + np.exp(0.2 * frame["grid_position"].to_numpy()))
+            return np.column_stack((1 - probability, probability))
+
+    class SyntheticExplainer:
+        expected_value = 0.0
+
+        @staticmethod
+        def shap_values(frame):
+            values = np.zeros((len(frame), len(features)))
+            values[:, 0] = -0.2 * frame["grid_position"].to_numpy()
+            values[:, 1] = 0.3 * frame["driver_recent_podium"].to_numpy()
+            return values
+
+    artifact = {
+        "experiment_id": "SYNTHETIC",
+        "features": features,
+        "inference_years": (2022, 2024),
+        "calibration": {"slope": 1.0, "intercept": 0.0},
+        "model": SyntheticSelectedModel(),
+    }
+    monkeypatch.setattr(
+        "backend.ml.predictor.load_artifacts",
+        lambda: (artifact, SyntheticBaseline(), SyntheticExplainer()),
+    )
 
     first = original.predict_grid_swap(2022, 1, 2)["scenario"]
     second = changed.predict_grid_swap(2022, 1, 2)["scenario"]
