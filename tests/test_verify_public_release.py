@@ -93,6 +93,76 @@ def _payloads():
             },
             "predictions": predictions,
         },
+        "/api/predictions/1128/scenario": {
+            "schema_version": "f1-grid-scenario-v1",
+            "scenario_type": "counterfactual_grid_swap",
+            "race_id": 1128,
+            "year": 2024,
+            "experiment_id": "EXP-007",
+            "model_version": MODEL_VERSION,
+            "modification": {
+                "kind": "swap_recorded_grid_positions",
+                "drivers": [
+                    {
+                        "driver_id": 1,
+                        "recorded_grid_position": 1,
+                        "scenario_grid_position": 2,
+                        "original_grid_input": 1,
+                        "scenario_grid_input": 2,
+                    },
+                    {
+                        "driver_id": 2,
+                        "recorded_grid_position": 2,
+                        "scenario_grid_position": 1,
+                        "original_grid_input": 2,
+                        "scenario_grid_input": 1,
+                    },
+                ],
+            },
+            "postprocessing": {
+                "method": "race_logit_offset",
+                "expected_podiums": 3,
+                "original_sum": 3.0,
+                "scenario_sum": 3.0,
+            },
+            "predictions": [
+                {
+                    "driver_id": driver_id,
+                    "constructor_id": driver_id,
+                    "recorded_grid_position": driver_id,
+                    "scenario_grid_position": 3 - driver_id if driver_id <= 2 else driver_id,
+                    "original_grid_input": driver_id,
+                    "scenario_grid_input": 3 - driver_id if driver_id <= 2 else driver_id,
+                    "original_rank": driver_id,
+                    "scenario_rank": driver_id,
+                    "original_probability": original_probability,
+                    "scenario_probability": scenario_probability,
+                    "probability_delta": scenario_probability - original_probability,
+                    "starting_grid_contribution": {
+                        "original": 0.3 - driver_id * 0.05,
+                        "scenario": 0.3 - (3 - driver_id if driver_id <= 2 else driver_id) * 0.05,
+                        "delta": (
+                            (0.3 - (3 - driver_id if driver_id <= 2 else driver_id) * 0.05)
+                            - (0.3 - driver_id * 0.05)
+                        ),
+                    },
+                }
+                for driver_id, original_probability, scenario_probability in (
+                    (1, 0.9, 0.85),
+                    (2, 0.8, 0.85),
+                    (3, 0.7, 0.7),
+                    (4, 0.6, 0.6),
+                )
+            ],
+            "evidence_boundary": {
+                "input_scope": "recorded pre-race features with two grid positions swapped",
+                "outcome_data_used": False,
+                "causal": False,
+                "validated_forecast": False,
+                "statement": "Frozen-model sensitivity only.",
+            },
+            "notes": ["Only two grid inputs changed."],
+        },
         "/api/predictions/1128/review": {
             "review_type": "post_race_review",
             "race": {"race_id": 1128},
@@ -183,7 +253,8 @@ def _release_server():
                     "body": body,
                 }
             )
-            if path not in self.server.payloads or (method == "POST") != (path == "/api/chat"):
+            post_paths = {"/api/chat", "/api/predictions/1128/scenario"}
+            if path not in self.server.payloads or (method == "POST") != (path in post_paths):
                 self.send_error(404)
                 return
             payload = self.server.payloads[path]
@@ -218,7 +289,11 @@ def _release_server():
                 cache = "no-cache"
             elif path.startswith("/assets/"):
                 cache = "public, max-age=31536000, immutable"
-            elif path in {"/api/health/ready", "/api/chat"}:
+            elif path in {
+                "/api/health/ready",
+                "/api/chat",
+                "/api/predictions/1128/scenario",
+            }:
                 cache = "no-store"
             else:
                 cache = "public, max-age=300"
@@ -256,6 +331,15 @@ def test_verifier_checks_public_contract_and_writes_allowlisted_report(tmp_path)
     assert report["checks"]["readiness"]["archive_through"] == 2024
     assert report["checks"]["archive"]["race_id"] == 1128
     assert report["checks"]["prediction"]["probability_sum"] == 3.0
+    assert report["checks"]["scenario"] == {
+        "status": "passed",
+        "race_id": 1128,
+        "driver_count": 4,
+        "changed_driver_count": 2,
+        "scenario_kind": "grid_swap",
+        "original_probability_sum": 3.0,
+        "scenario_probability_sum": 3.0,
+    }
     assert report["checks"]["review"]["top_three_hits"] == 3
     assert report["checks"]["model_card"]["unseen_holdout"] is False
     assert report["checks"]["delivery"]["request_ids_unique"] is True
@@ -270,10 +354,16 @@ def test_verifier_checks_public_contract_and_writes_allowlisted_report(tmp_path)
         "/api/races",
         "/api/races/1128",
         "/api/predictions/1128",
+        "/api/predictions/1128/scenario",
         "/api/predictions/1128/review",
         "/api/model-card",
     }
     assert all(request["request_id"] == "verifier-untrusted" for request in server.requests)
+    scenario_request = next(
+        request for request in server.requests if request["path"].endswith("/scenario")
+    )
+    assert scenario_request["method"] == "POST"
+    assert json.loads(scenario_request["body"]) == {"driver_a_id": 1, "driver_b_id": 2}
 
 
 def test_optional_chat_verifies_typo_repair_without_persisting_sensitive_content(tmp_path):
@@ -319,3 +409,15 @@ def test_invalid_probability_contract_fails_closed_without_report(tmp_path):
             verify_release(base_url, output, timeout=2)
     assert not output.exists()
     assert any(request["path"] == "/api/predictions/1128" for request in server.requests)
+
+
+def test_invalid_grid_scenario_contract_fails_closed_without_report(tmp_path):
+    output = tmp_path / "invalid-scenario.json"
+    with _release_server() as (server, base_url):
+        server.payloads["/api/predictions/1128/scenario"]["predictions"][0][
+            "scenario_grid_position"
+        ] = 1
+        with pytest.raises(VerificationError):
+            verify_release(base_url, output, timeout=2)
+    assert not output.exists()
+    assert any(request["path"].endswith("/scenario") for request in server.requests)

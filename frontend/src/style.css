@@ -538,6 +538,325 @@ summary {
     position: static;
   }
 }
+
+/* A controlled pre-race counterfactual, presented like an engineering workbench. */
+.grid-scenario-lab {
+  margin-top: 54px;
+  padding: 34px;
+  background: #e7eef7;
+  border-top: 5px solid #3977c4;
+}
+.scenario-heading,
+.scenario-result-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+.scenario-heading h2,
+.scenario-result-heading h3 {
+  margin: 0;
+}
+.scenario-heading h2 {
+  font-size: clamp(34px, 4vw, 52px);
+}
+.scenario-heading > span {
+  border: 1px solid #8098b2;
+  padding: 8px 10px;
+  color: #2c537e;
+  font:
+    600 11px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.scenario-intro {
+  max-width: 730px;
+  color: #47617b;
+  line-height: 1.6;
+  margin: 16px 0 27px;
+}
+.scenario-workbench {
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(260px, 0.7fr);
+  gap: 1px;
+  background: #8fa5bc;
+  border: 1px solid #8fa5bc;
+}
+.scenario-controls,
+.scenario-explainer {
+  padding: 28px;
+  background: #f8fbff;
+}
+.scenario-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+  align-items: end;
+  gap: 15px;
+}
+.scenario-controls label {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.scenario-controls label > span {
+  color: #526b85;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.scenario-controls select {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #9eb1c5;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+.scenario-swap-mark {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  color: #356da9;
+  font-size: 26px;
+}
+.scenario-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+.scenario-actions button {
+  min-height: 44px;
+  padding: 11px 18px;
+  border: 1px solid #173d70;
+  background: #173d70;
+  color: #fff;
+  font-weight: 600;
+}
+.scenario-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.scenario-actions .scenario-reset {
+  background: transparent;
+  color: #173d70;
+}
+.scenario-inline-error,
+.scenario-control-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 12px;
+}
+.scenario-inline-error {
+  color: #872f2f;
+}
+.scenario-control-note {
+  color: #526a82;
+}
+.scenario-explainer {
+  background: #173552;
+  color: #d9e7f5;
+  line-height: 1.55;
+}
+.scenario-explainer .eyebrow {
+  color: #7ec9ee;
+}
+.scenario-explainer h3 {
+  color: #fff;
+  margin-top: 0;
+  font-size: 27px;
+}
+.scenario-explainer p:last-child {
+  color: #a9bfd4;
+  font-size: 13px;
+}
+.scenario-status,
+.scenario-error {
+  margin: 20px 0 0;
+}
+.scenario-result {
+  margin-top: 34px;
+  border-top: 1px solid #a9bacb;
+  padding-top: 28px;
+}
+.scenario-result-heading h3 {
+  font-size: 32px;
+}
+.scenario-coherence {
+  display: grid;
+  gap: 4px;
+  text-align: right;
+}
+.scenario-coherence b {
+  color: #205e52;
+  font-size: 16px;
+}
+.scenario-coherence span {
+  color: #4c637a;
+  font:
+    10px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.scenario-movers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 24px 0;
+  background: #91a7bd;
+  border: 1px solid #91a7bd;
+}
+.scenario-movers article {
+  padding: 20px;
+  background: #fff;
+}
+.scenario-movers article > span {
+  color: #3971ad;
+  font:
+    600 12px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.scenario-movers h4 {
+  margin: 8px 0 10px;
+  font-size: 25px;
+}
+.scenario-movers p {
+  margin: 0 0 5px;
+  font-size: 19px;
+}
+.scenario-movers small {
+  color: var(--muted);
+}
+.scenario-table {
+  border-top-color: #3977c4;
+}
+.scenario-table td {
+  font-variant-numeric: tabular-nums;
+}
+.scenario-table td small {
+  display: block;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.scenario-table tr.scenario-changed {
+  background: #e3f1ff;
+  box-shadow: inset 3px 0 #3977c4;
+}
+.scenario-boundary {
+  margin-top: 24px;
+  padding: 22px;
+  border-left: 5px solid #c88c30;
+  background: #f5eddf;
+  color: #4d5e70;
+  line-height: 1.55;
+}
+.scenario-boundary b {
+  color: var(--ink);
+}
+.scenario-boundary p {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+.scenario-state {
+  min-height: 180px;
+}
+
+@media (max-width: 760px) {
+  .grid-scenario-lab {
+    margin-inline: -20px;
+    padding: 28px 20px;
+  }
+  .scenario-heading,
+  .scenario-result-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .scenario-workbench,
+  .scenario-movers {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .scenario-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .scenario-swap-mark {
+    min-height: auto;
+    transform: rotate(90deg);
+  }
+  .scenario-coherence {
+    text-align: left;
+  }
+  .scenario-table {
+    overflow: visible;
+  }
+  .scenario-table table {
+    min-width: 0;
+  }
+  .scenario-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .scenario-table tbody {
+    display: grid;
+    gap: 10px;
+    padding-top: 10px;
+  }
+  .scenario-table tbody tr,
+  .scenario-table tbody td {
+    display: grid;
+  }
+  .scenario-table tbody tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 18px;
+    padding: 16px;
+    border: 1px solid #b8c7d7;
+    background: #fff;
+  }
+  .scenario-table tr.scenario-changed {
+    background: #e3f1ff;
+  }
+  .scenario-table tbody td {
+    gap: 4px;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .scenario-table tbody td::before {
+    content: attr(data-label);
+    color: #657c94;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .scenario-table tbody td:nth-child(2) {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    color: var(--ink);
+    font:
+      600 21px 'Barlow Condensed',
+      sans-serif;
+  }
+  .scenario-table tbody td:nth-child(1) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+}
 .chat-toggle {
   position: fixed;
   bottom: 22px;

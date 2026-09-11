@@ -76,16 +76,19 @@ class Predictor:
     def frame(self):
         return build_features(source_frame(self.engine))
 
-    def predict(self, race_id):
-        artifact, baseline, explainer = load_artifacts()
+    def _race_frame(self, race_id, artifact):
         data = self.frame()
-        race = data.loc[data.race_id == race_id]
+        race = data.loc[data.race_id == race_id].copy()
         if race.empty:
             raise PredictionUnavailable("No supported prediction inputs for this race.")
         if not race.year.between(*artifact["inference_years"]).all():
             raise PredictionUnavailable(
                 "The frozen model supports historical 2022–2024 races only; earlier races overlap training or model selection."
             )
+        return race
+
+    @staticmethod
+    def _predict_race(race_id, race, artifact, baseline, explainer):
         cols = artifact["features"]
         x = race[cols]
         slope, intercept = artifact["calibration"]["slope"], artifact["calibration"]["intercept"]
@@ -152,4 +155,38 @@ class Predictor:
                 "Model fit 2010–2018; model selection 2019–2021. No 2022–2024 outcomes fit parameters.",
                 "Earlier completed races may inform the next race in this sequential backtest.",
             ],
+        }
+
+    def predict(self, race_id):
+        artifact, baseline, explainer = load_artifacts()
+        race = self._race_frame(race_id, artifact)
+        return self._predict_race(race_id, race, artifact, baseline, explainer)
+
+    def predict_grid_swap(self, race_id, driver_a_id, driver_b_id):
+        """Compare the released forecast with two copied grid inputs exchanged."""
+
+        if driver_a_id == driver_b_id:
+            raise PredictionUnavailable("Choose two different drivers.")
+        artifact, baseline, explainer = load_artifacts()
+        original_frame = self._race_frame(race_id, artifact)
+        driver_ids = set(original_frame.driver_id.astype(int))
+        if driver_a_id not in driver_ids or driver_b_id not in driver_ids:
+            raise PredictionUnavailable("Both drivers must be starters in this race.")
+
+        scenario_frame = original_frame.copy()
+        a_mask = scenario_frame.driver_id == driver_a_id
+        b_mask = scenario_frame.driver_id == driver_b_id
+        a_grid = float(scenario_frame.loc[a_mask, "grid_position"].iloc[0])
+        b_grid = float(scenario_frame.loc[b_mask, "grid_position"].iloc[0])
+        if a_grid == b_grid:
+            raise PredictionUnavailable("Choose drivers with different model grid inputs.")
+        scenario_frame.loc[a_mask, "grid_position"] = b_grid
+        scenario_frame.loc[b_mask, "grid_position"] = a_grid
+
+        return {
+            "original": self._predict_race(race_id, original_frame, artifact, baseline, explainer),
+            "scenario": self._predict_race(race_id, scenario_frame, artifact, baseline, explainer),
+            "recorded_grid": {
+                int(row.driver_id): int(row.grid) for row in original_frame.itertuples()
+            },
         }

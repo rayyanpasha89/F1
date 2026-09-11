@@ -41,6 +41,8 @@ Show:
 
 Select **Charles Leclerc** in the prediction panel. Expected live result: **73.9%** projected podium probability versus a **70.8%** projected grid-only baseline. The raw selected-model output remains visible as **76.4%**. Point out the real calibrated SHAP contributions and the note that they are associations in calibrated log-odds, not causal effects. All 20 projected probabilities total three podium places.
 
+After the new release is deployed, use the **Grid swap lab** below the forecast. Exchange two starters and show the full comparison: actual and scenario grid positions, exact transformed model inputs, released and scenario probabilities, rank movement, and the starting-grid SHAP change. Both probability columns total three. Explain that this is a controlled frozen-model sensitivity check; all other pre-race inputs stay fixed, and the result is not a causal estimate or future-race validation. Pit-lane grid `0` is shown separately from its fixed model proxy input `25`.
+
 ### 3. Demonstrate typo-tolerant grounded statistics
 
 Open **Ask the archive**, enter the external access code, and submit:
@@ -139,6 +141,10 @@ Generated SQL passes SQLGlot policy checks, row and time bounds, and a separate 
 **Does the model leak the race result?**
 
 Features are emitted before same-date history is updated. Training is 2010–2018, selection is 2019–2021, and the final test is 2022–2024. Explicit tests cover same-race, future, and teammate leakage.
+
+**Does the grid swap predict what would really happen after a penalty?**
+
+No. It changes two model grid inputs while holding the remaining recorded pre-race features fixed. It demonstrates how the frozen model responds; it does not model causal race dynamics, strategy changes, or an alternate historical outcome.
 
 **Did the final model improve everything?**
 

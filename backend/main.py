@@ -22,6 +22,7 @@ from backend.ml.evidence import ModelBundleError, verify_model_bundle
 from backend.ml.model_card import ModelCard, ModelCardError, ModelCardService
 from backend.ml.predictor import Predictor, PredictionUnavailable, load_artifacts
 from backend.ml.review import RaceReview, RaceReviewService
+from backend.ml.scenario import GridScenario, GridScenarioRequest, GridScenarioService
 from backend.services.analytics import Analytics, NotFound
 
 logger = logging.getLogger("uvicorn.error")
@@ -37,6 +38,7 @@ def create_app(engine=None):
     analytics = Analytics(db)
     predictor = Predictor(db)
     review_service = RaceReviewService(predictor, analytics)
+    scenario_service = GridScenarioService(predictor)
     model_card_service = ModelCardService()
     chat_service = ChatService(db)
     chat_slots = BoundedSemaphore(2)
@@ -177,6 +179,23 @@ def create_app(engine=None):
             result.postprocessor.method,
             (perf_counter() - started_at) * 1000,
             result.top_three_hits,
+        )
+        return result
+
+    @app.post("/api/predictions/{race_id}/scenario", response_model=GridScenario)
+    def prediction_scenario(race_id: int, body: GridScenarioRequest, request: Request):
+        started_at = perf_counter()
+        analytics.race(race_id)
+        result = scenario_service.swap(race_id, body)
+        logger.info(
+            "scenario_complete request_id=%s race_id=%s model_version=%s "
+            "scenario=grid_swap elapsed_ms=%.1f driver_count=%s probability_sum=%.12f",
+            request.state.request_id,
+            race_id,
+            result.model_version,
+            (perf_counter() - started_at) * 1000,
+            len(result.predictions),
+            result.postprocessing.scenario_sum,
         )
         return result
 

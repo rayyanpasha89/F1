@@ -295,6 +295,269 @@ def _verify_prediction(verifier, race_id, model_version):
     }
 
 
+def _verify_scenario(verifier, race_id, prediction, model_version):
+    forecast_rows = _sequence(prediction.get("predictions"), "scenario_forecast_rows")
+    _require(len(forecast_rows) >= 2, "scenario_forecast_rows")
+    selected_ids = [
+        _integer(_mapping(row, "scenario_forecast_row").get("driver_id"), "scenario_driver")
+        for row in forecast_rows[:2]
+    ]
+    body = json.dumps(
+        {"driver_a_id": selected_ids[0], "driver_b_id": selected_ids[1]},
+        separators=(",", ":"),
+    ).encode()
+    payload = verifier.json(
+        f"/api/predictions/{race_id}/scenario",
+        cache="no-store",
+        data=body,
+        headers={"Content-Type": "application/json"},
+    )
+    _require(
+        set(payload)
+        == {
+            "schema_version",
+            "scenario_type",
+            "race_id",
+            "year",
+            "experiment_id",
+            "model_version",
+            "modification",
+            "postprocessing",
+            "predictions",
+            "evidence_boundary",
+            "notes",
+        },
+        "scenario_fields",
+    )
+    _require(payload.get("schema_version") == "f1-grid-scenario-v1", "scenario_schema")
+    _require(payload.get("scenario_type") == "counterfactual_grid_swap", "scenario_type")
+    _require(payload.get("race_id") == race_id, "scenario_race")
+    _require(payload.get("year") == 2024, "scenario_year")
+    _require(payload.get("model_version") == model_version, "scenario_model")
+    _require(isinstance(payload.get("experiment_id"), str), "scenario_experiment")
+
+    modification = _mapping(payload.get("modification"), "scenario_modification")
+    _require(set(modification) == {"kind", "drivers"}, "scenario_modification_fields")
+    _require(
+        modification.get("kind") == "swap_recorded_grid_positions",
+        "scenario_modification_kind",
+    )
+    changes = [
+        _mapping(change, "scenario_change")
+        for change in _sequence(modification.get("drivers"), "scenario_changes")
+    ]
+    _require(len(changes) == 2, "scenario_change_count")
+    _require(
+        all(
+            set(change)
+            == {
+                "driver_id",
+                "recorded_grid_position",
+                "scenario_grid_position",
+                "original_grid_input",
+                "scenario_grid_input",
+            }
+            for change in changes
+        ),
+        "scenario_change_fields",
+    )
+    changed_ids = [_integer(change.get("driver_id"), "scenario_driver") for change in changes]
+    _require(changed_ids == selected_ids, "scenario_changed_drivers")
+    recorded_positions = [
+        _integer(change.get("recorded_grid_position"), "scenario_recorded_grid")
+        for change in changes
+    ]
+    scenario_positions = [
+        _integer(change.get("scenario_grid_position"), "scenario_grid") for change in changes
+    ]
+    _require(all(0 <= value <= 40 for value in recorded_positions), "scenario_recorded_grid")
+    _require(scenario_positions == list(reversed(recorded_positions)), "scenario_grid_swap")
+    original_inputs = [
+        _integer(change.get("original_grid_input"), "scenario_original_grid_input")
+        for change in changes
+    ]
+    scenario_inputs = [
+        _integer(change.get("scenario_grid_input"), "scenario_grid_input") for change in changes
+    ]
+    _require(all(1 <= value <= 40 for value in original_inputs), "scenario_original_grid_input")
+    _require(scenario_inputs == list(reversed(original_inputs)), "scenario_grid_input_swap")
+    _require(original_inputs[0] != original_inputs[1], "scenario_grid_change")
+
+    postprocessor = _mapping(payload.get("postprocessing"), "scenario_postprocessor")
+    _require(
+        set(postprocessor) == {"method", "expected_podiums", "original_sum", "scenario_sum"},
+        "scenario_postprocessor_fields",
+    )
+    _require(postprocessor.get("method") == "race_logit_offset", "scenario_postprocessor")
+    _require(postprocessor.get("expected_podiums") == 3, "scenario_expected_count")
+
+    rows = [
+        _mapping(row, "scenario_row")
+        for row in _sequence(payload.get("predictions"), "scenario_rows")
+    ]
+    _require(len(rows) == len(forecast_rows), "scenario_row_count")
+    required_row_fields = {
+        "driver_id",
+        "constructor_id",
+        "recorded_grid_position",
+        "scenario_grid_position",
+        "original_grid_input",
+        "scenario_grid_input",
+        "original_rank",
+        "scenario_rank",
+        "original_probability",
+        "scenario_probability",
+        "probability_delta",
+        "starting_grid_contribution",
+    }
+    _require(all(set(row) == required_row_fields for row in rows), "scenario_row_fields")
+    forecast_by_id = {
+        _integer(row.get("driver_id"), "scenario_driver"): (
+            rank,
+            _number(row.get("probability"), "scenario_original_probability"),
+        )
+        for rank, row in enumerate(
+            (_mapping(item, "scenario_forecast_row") for item in forecast_rows), start=1
+        )
+    }
+    scenario_driver_ids = []
+    original_ranks = []
+    scenario_ranks = []
+    original_probabilities = []
+    scenario_probabilities = []
+    deltas = []
+    changes_by_id = {change["driver_id"]: change for change in changes}
+    for row in rows:
+        driver_id = _integer(row.get("driver_id"), "scenario_driver")
+        scenario_driver_ids.append(driver_id)
+        _integer(row.get("constructor_id"), "scenario_constructor")
+        original_rank = _integer(row.get("original_rank"), "scenario_original_rank")
+        scenario_rank = _integer(row.get("scenario_rank"), "scenario_rank")
+        original_ranks.append(original_rank)
+        scenario_ranks.append(scenario_rank)
+        original_probability = _number(
+            row.get("original_probability"), "scenario_original_probability"
+        )
+        scenario_probability = _number(row.get("scenario_probability"), "scenario_probability")
+        delta = _number(row.get("probability_delta"), "scenario_probability_delta")
+        _require(0 < original_probability < 1, "scenario_original_probability")
+        _require(0 < scenario_probability < 1, "scenario_probability")
+        _require(
+            driver_id in forecast_by_id
+            and original_rank == forecast_by_id[driver_id][0]
+            and math.isclose(original_probability, forecast_by_id[driver_id][1], abs_tol=1e-12),
+            "scenario_original_consistency",
+        )
+        _require(
+            math.isclose(scenario_probability - original_probability, delta, abs_tol=1e-12),
+            "scenario_probability_delta",
+        )
+        recorded_grid = _integer(row.get("recorded_grid_position"), "scenario_recorded_grid")
+        scenario_grid = _integer(row.get("scenario_grid_position"), "scenario_grid")
+        original_grid_input = _integer(
+            row.get("original_grid_input"), "scenario_original_grid_input"
+        )
+        scenario_grid_input = _integer(row.get("scenario_grid_input"), "scenario_grid_input")
+        _require(
+            0 <= recorded_grid <= 40
+            and 0 <= scenario_grid <= 40
+            and 1 <= original_grid_input <= 40
+            and 1 <= scenario_grid_input <= 40,
+            "scenario_grid_bounds",
+        )
+        if driver_id in changes_by_id:
+            change = changes_by_id[driver_id]
+            _require(
+                recorded_grid == change["recorded_grid_position"]
+                and scenario_grid == change["scenario_grid_position"]
+                and original_grid_input == change["original_grid_input"]
+                and scenario_grid_input == change["scenario_grid_input"]
+                and original_grid_input != scenario_grid_input,
+                "scenario_changed_grid",
+            )
+        else:
+            _require(
+                recorded_grid == scenario_grid and original_grid_input == scenario_grid_input,
+                "scenario_unchanged_grid",
+            )
+        contribution = _mapping(row.get("starting_grid_contribution"), "scenario_grid_contribution")
+        _require(
+            set(contribution) == {"original", "scenario", "delta"},
+            "scenario_grid_contribution_fields",
+        )
+        contribution_original = _number(contribution.get("original"), "scenario_grid_contribution")
+        contribution_scenario = _number(contribution.get("scenario"), "scenario_grid_contribution")
+        contribution_delta = _number(contribution.get("delta"), "scenario_grid_contribution")
+        _require(
+            math.isclose(
+                contribution_scenario - contribution_original,
+                contribution_delta,
+                abs_tol=1e-12,
+            ),
+            "scenario_grid_contribution_delta",
+        )
+        original_probabilities.append(original_probability)
+        scenario_probabilities.append(scenario_probability)
+        deltas.append(delta)
+
+    row_count = len(rows)
+    _require(set(scenario_driver_ids) == set(forecast_by_id), "scenario_driver_set")
+    _require(set(original_ranks) == set(range(1, row_count + 1)), "scenario_original_ranks")
+    _require(scenario_ranks == list(range(1, row_count + 1)), "scenario_ranks")
+    _require(
+        scenario_probabilities == sorted(scenario_probabilities, reverse=True),
+        "scenario_probability_order",
+    )
+    original_sum = sum(original_probabilities)
+    scenario_sum = sum(scenario_probabilities)
+    _require(math.isclose(original_sum, 3, abs_tol=1e-9), "scenario_original_sum")
+    _require(math.isclose(scenario_sum, 3, abs_tol=1e-9), "scenario_probability_sum")
+    _require(math.isclose(sum(deltas), 0, abs_tol=1e-9), "scenario_delta_sum")
+    _require(
+        math.isclose(
+            _number(postprocessor.get("original_sum"), "scenario_original_sum"),
+            original_sum,
+            abs_tol=1e-9,
+        )
+        and math.isclose(
+            _number(postprocessor.get("scenario_sum"), "scenario_probability_sum"),
+            scenario_sum,
+            abs_tol=1e-9,
+        ),
+        "scenario_postprocessor_sums",
+    )
+    boundary = _mapping(payload.get("evidence_boundary"), "scenario_boundary")
+    _require(
+        set(boundary)
+        == {"input_scope", "outcome_data_used", "causal", "validated_forecast", "statement"},
+        "scenario_boundary_fields",
+    )
+    _require(
+        boundary.get("input_scope") == "recorded pre-race features with two grid positions swapped",
+        "scenario_input_scope",
+    )
+    _require(boundary.get("outcome_data_used") is False, "scenario_outcome_boundary")
+    _require(boundary.get("causal") is False, "scenario_causal_boundary")
+    _require(boundary.get("validated_forecast") is False, "scenario_validation_boundary")
+    _require(
+        isinstance(boundary.get("statement"), str) and bool(boundary["statement"]),
+        "scenario_boundary_statement",
+    )
+    notes = _sequence(payload.get("notes"), "scenario_notes")
+    _require(
+        1 <= len(notes) <= 4 and all(isinstance(note, str) for note in notes), "scenario_notes"
+    )
+    return {
+        "status": "passed",
+        "race_id": race_id,
+        "driver_count": row_count,
+        "changed_driver_count": len(changes),
+        "scenario_kind": "grid_swap",
+        "original_probability_sum": round(original_sum, 12),
+        "scenario_probability_sum": round(scenario_sum, 12),
+    }
+
+
 def _verify_review(verifier, race_id, prediction, model_version):
     payload = verifier.json(f"/api/predictions/{race_id}/review")
     _require(payload.get("review_type") == "post_race_review", "review_type")
@@ -480,6 +743,9 @@ def verify_release(base_url, output, *, access_code_file=None, timeout=15):
     prediction_payload, prediction = _verify_prediction(
         verifier, archive["race_id"], readiness["model_version"]
     )
+    scenario = _verify_scenario(
+        verifier, archive["race_id"], prediction_payload, readiness["model_version"]
+    )
     review = _verify_review(
         verifier, archive["race_id"], prediction_payload, readiness["model_version"]
     )
@@ -497,6 +763,7 @@ def verify_release(base_url, output, *, access_code_file=None, timeout=15):
         "readiness": readiness,
         "archive": archive,
         "prediction": prediction,
+        "scenario": scenario,
         "review": review,
         "model_card": model_card,
     }

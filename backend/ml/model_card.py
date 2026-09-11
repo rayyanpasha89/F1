@@ -264,6 +264,7 @@ class ModelCardService:
                 intended_use=(
                     "Explore historical 2022-2024 podium probabilities after the recorded starting grid.",
                     "Compare a frozen selected model with a grid-only baseline.",
+                    "Inspect frozen-model sensitivity when two recorded grid inputs are exchanged.",
                     "Teach temporal evaluation, calibration, explanations, and post-race error analysis.",
                 ),
                 excluded_uses=(
@@ -300,6 +301,7 @@ class ModelCardService:
                     "The 2022-2024 outcomes were already consumed before the postprocessor assessment.",
                     "Bootstrap intervals describe sampled-race variation and do not remove selection bias.",
                     "SHAP explains fitted associations and does not establish causation.",
+                    "Grid-swap scenarios are controlled model sensitivity checks, not causal or validated race forecasts.",
                 ),
             )
         except ModelCardError:

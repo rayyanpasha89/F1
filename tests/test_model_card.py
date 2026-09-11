@@ -58,6 +58,8 @@ def test_model_card_is_allowlisted_finite_and_matches_manifest(monkeypatch):
         "consumed_post_test_iterative"
     )
     assert payload["evidence_boundary"]["unseen_holdout"] is False
+    assert any("grid inputs are exchanged" in item for item in payload["intended_use"])
+    assert any("Grid-swap scenarios" in item for item in payload["limitations"])
     assert set(payload["per_season"]) == {"2019", "2020", "2021", "2022", "2023", "2024"}
 
     def assert_finite(value):

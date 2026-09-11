@@ -26,7 +26,12 @@ function ComparisonResult({ raceId, left, right }) {
   const { drivers, notes } = state.data;
   return (
     <>
-      <div className="table-scroll">
+      <div
+        className="table-scroll"
+        role="region"
+        tabIndex={0}
+        aria-label="Scrollable driver comparison"
+      >
         <table>
           <thead>
             <tr>

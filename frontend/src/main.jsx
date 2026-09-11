@@ -16,6 +16,7 @@ import '@fontsource/barlow-condensed/700.css';
 import './style.css';
 import { useApi } from './api';
 import Predictions from './Predictions';
+import GridScenarioLab from './GridScenarioLab';
 import ForecastReview from './ForecastReview';
 import DriverComparison from './DriverComparison';
 import StrategistChat from './StrategistChat';
@@ -325,6 +326,7 @@ function Race() {
           </div>
           <DriverComparison key={`comparison-${id}`} raceId={id} />
           <Predictions key={id} raceId={id} year={r.year} />
+          <GridScenarioLab key={`scenario-${id}`} raceId={id} year={r.year} />
           <ForecastReview key={`review-${id}`} raceId={id} year={r.year} />
         </>
       )}
