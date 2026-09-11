@@ -265,6 +265,7 @@ class ModelCardService:
                     "Explore historical 2022-2024 podium probabilities after the recorded starting grid.",
                     "Compare a frozen selected model with a grid-only baseline.",
                     "Inspect frozen-model sensitivity when two recorded grid inputs are exchanged.",
+                    "Explore maximum-entropy probabilities for unordered podium sets derived from the released marginals.",
                     "Teach temporal evaluation, calibration, explanations, and post-race error analysis.",
                 ),
                 excluded_uses=(
@@ -302,6 +303,7 @@ class ModelCardService:
                     "Bootstrap intervals describe sampled-race variation and do not remove selection bias.",
                     "SHAP explains fitted associations and does not establish causation.",
                     "Grid-swap scenarios are controlled model sensitivity checks, not causal or validated race forecasts.",
+                    "Derived podium sets are not a separately trained, validated, or ordered joint finishing-order model.",
                 ),
             )
         except ModelCardError:
