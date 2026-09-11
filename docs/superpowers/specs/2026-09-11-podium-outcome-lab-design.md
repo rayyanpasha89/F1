@@ -18,7 +18,7 @@ q(S) = exp(sum(theta_i for i in S)) / Z
 
 subject to each reconstructed marginal `sum(q(S) for S containing i) = p_i`.
 
-The distribution uses only the already released marginal probabilities. It does not read race outcomes, retrain or modify the frozen model, infer the order of the three drivers, or claim independent validation as a joint forecast. Maximum entropy adds only the dependence required by the fact that every podium contains exactly three distinct drivers; it avoids adding an unsupported interaction preference between drivers.
+The distribution uses only the already released marginal probabilities. The derivation does not read the selected race's outcome, retrain or modify the frozen model, infer the order of the three drivers, or claim independent validation as a joint forecast. Maximum entropy adds only the dependence required by the fact that every podium contains exactly three distinct drivers; it avoids adding an unsupported interaction preference between drivers.
 
 The implementation canonicalizes drivers by ID, enumerates combinations deterministically, solves the identifiable `n - 1` parameter system with one parameter fixed to zero, and calculates the analytic covariance Jacobian. It refuses non-finite, infeasible, or non-convergent inputs. A successful result must have total probability one, complete unique combinations, reconstructed marginals within `1e-8`, and a reconstructed marginal sum of three.
 

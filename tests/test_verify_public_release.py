@@ -85,6 +85,7 @@ def _payloads():
         "/api/predictions/1128": {
             "race_id": 1128,
             "year": 2024,
+            "experiment_id": "EXP-007",
             "model_version": MODEL_VERSION,
             "postprocessing": {
                 "method": "race_logit_offset",
@@ -521,6 +522,10 @@ def test_invalid_grid_scenario_contract_fails_closed_without_report(tmp_path):
         (
             lambda payload: payload["outcomes"][0].update(driver_ids=[3, 2, 1]),
             "podium_outcome_driver_order",
+        ),
+        (
+            lambda payload: payload.update(experiment_id="EXP-999"),
+            "podium_outcome_experiment",
         ),
         (
             lambda payload: payload["evidence_boundary"].update(jointly_trained_model=True),

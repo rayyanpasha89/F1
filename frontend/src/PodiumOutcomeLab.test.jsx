@@ -109,6 +109,9 @@ it('lazily builds and explains an accessible podium outcome map', async () => {
   expect(screen.getByText('237.6')).toBeInTheDocument();
   expect(screen.getByText('55.0%')).toBeInTheDocument();
   expect(screen.getByText('3.80e-13')).toBeInTheDocument();
+  expect(screen.getByRole('status')).toHaveTextContent(
+    'Outcome map ready. 1,140 complete sets calculated; showing 3.',
+  );
 
   const outcomes = screen.getByRole('list', { name: 'Most likely unordered podium sets' });
   const firstOutcome = within(outcomes).getAllByRole('listitem')[0];

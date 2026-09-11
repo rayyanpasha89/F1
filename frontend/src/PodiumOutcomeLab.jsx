@@ -103,7 +103,7 @@ function SupportedPodiumOutcomeLab({ raceId }) {
                   ? 'Try outcome map again'
                   : 'Build outcome map'}
             </button>
-            <p>No outcome labels · no model retraining</p>
+            <p>No same-race labels · no model retraining</p>
           </div>
         </div>
       )}
@@ -120,7 +120,11 @@ function SupportedPodiumOutcomeLab({ raceId }) {
       )}
 
       {outcomeMap && (
-        <div className="outcome-result" aria-live="polite">
+        <div className="outcome-result">
+          <p role="status" className="visually-hidden">
+            Outcome map ready. {outcomeMap.diagnostics.combination_count.toLocaleString('en-US')}{' '}
+            complete sets calculated; showing {outcomeMap.diagnostics.returned_outcome_count}.
+          </p>
           <div className="outcome-result-heading">
             <div>
               <p className="eyebrow">Complete distribution</p>

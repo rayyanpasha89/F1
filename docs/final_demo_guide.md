@@ -108,7 +108,7 @@ Expected result: the typo is corrected, the request routes to **Explanation**, a
 
 Open the live Model Lab and GitHub Actions run. The protected final presentation remains unchanged until an explicit presentation revision is requested. Show:
 
-- 184 Python tests in the complete local artifact/source-backed suite, plus all four opt-in PostgreSQL integration checks;
+- 185 Python tests in the complete local artifact/source-backed suite, plus all four opt-in PostgreSQL integration checks;
 - 22 frontend tests, ESLint, Prettier, and Vite production build;
 - all 77,349 podium sets across 68 supported races reconstructed with maximum driver error `3.82e-13`;
 - Ruff and both Terraform roots;

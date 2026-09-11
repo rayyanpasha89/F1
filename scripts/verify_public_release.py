@@ -321,9 +321,13 @@ def _verify_podium_outcomes(verifier, race_id, prediction, model_version):
         "podium_outcome_type",
     )
     _require(payload.get("race_id") == race_id, "podium_outcome_race")
-    _require(payload.get("year") == 2024, "podium_outcome_year")
+    _require(payload.get("year") == prediction.get("year") == 2024, "podium_outcome_year")
     _require(payload.get("model_version") == model_version, "podium_outcome_model")
-    _require(isinstance(payload.get("experiment_id"), str), "podium_outcome_experiment")
+    _require(
+        isinstance(payload.get("experiment_id"), str)
+        and payload.get("experiment_id") == prediction.get("experiment_id"),
+        "podium_outcome_experiment",
+    )
 
     forecast_rows = [
         _mapping(row, "podium_outcome_forecast_row")

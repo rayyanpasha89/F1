@@ -153,6 +153,7 @@ export default function StrategistChat() {
       <button
         className="chat-toggle"
         onClick={() => setOpen(!open)}
+        aria-label={open ? 'Close strategist' : 'Ask the strategist'}
         aria-expanded={open}
         aria-controls="strategist-chat"
       >
