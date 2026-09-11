@@ -1,0 +1,234 @@
+{
+  "automated_tests": {
+    "eslint": "passed",
+    "frontend": {
+      "failed": 0,
+      "files_passed": 8,
+      "tests_passed": 18
+    },
+    "postgresql_opt_in": {
+      "failed": 0,
+      "passed": 4,
+      "skipped": 0
+    },
+    "prettier": "passed",
+    "python_default": {
+      "failed": 0,
+      "passed": 164,
+      "skipped": 4
+    },
+    "ruff_ci_scope": "passed",
+    "ruff_format_ci_scope": "passed",
+    "vite_production_build": "passed"
+  },
+  "branch": "feat/grid-scenario-lab",
+  "browser_qa": {
+    "desktop": {
+      "axe_passes": 28,
+      "axe_violations": 0,
+      "button_height_px": 44,
+      "changed_rows": 2,
+      "console_errors": 0,
+      "document_horizontal_overflow_px": 0,
+      "failed_requests": 0,
+      "http_errors": 0,
+      "original_probability_sum": 3.0000000000000013,
+      "scenario_horizontal_overflow_px": 0,
+      "scenario_probability_sum": 3.0000000000000004,
+      "scenario_rows": 20,
+      "viewport": {
+        "height": 1050,
+        "width": 1440
+      }
+    },
+    "mobile": {
+      "axe_passes": 29,
+      "axe_violations": 0,
+      "button_height_px": 44,
+      "changed_rows": 2,
+      "console_errors": 0,
+      "document_horizontal_overflow_px": 0,
+      "failed_requests": 0,
+      "http_errors": 0,
+      "original_probability_sum": 3.0000000000000013,
+      "scenario_horizontal_overflow_px": 0,
+      "scenario_probability_sum": 3.0000000000000004,
+      "scenario_rows": 20,
+      "viewport": {
+        "height": 844,
+        "width": 390
+      }
+    },
+    "status": "passed"
+  },
+  "cloud_release": {
+    "status": "pending_at_this_checkpoint"
+  },
+  "dependency_audits": {
+    "production_npm_vulnerabilities": 0,
+    "python_scope": "requirements.runtime.lock with --no-deps --disable-pip",
+    "runtime_python_known_vulnerabilities": 0
+  },
+  "evaluation_window_sweep": {
+    "controlled_grid_changes": 136,
+    "max_original_probability_sum_error": 1.3322676295501878e-15,
+    "max_probability_delta_net_error": 1.5161483180037294e-15,
+    "max_scenario_probability_sum_error": 1.3322676295501878e-15,
+    "pit_lane_proxy_races": 29,
+    "pit_lane_proxy_rows": 40,
+    "prediction_rows": 1359,
+    "races": 68,
+    "status": "passed"
+  },
+  "feature": {
+    "actual_grid_and_model_input_separated": true,
+    "arbitrary_feature_input": false,
+    "causal": false,
+    "mutates_storage": false,
+    "name": "Grid Scenario Lab",
+    "outcome_data_used": false,
+    "scenario_type": "counterfactual_grid_swap",
+    "supported_years": [
+      2022,
+      2024
+    ],
+    "validated_forecast": false
+  },
+  "generated_at": "2026-09-11T12:26:24.366209+00:00",
+  "implementation_commit": "8721d3da4d71ced6ed191b913221c3fe021f4d2c",
+  "infrastructure": {
+    "aws_account": "148356747273",
+    "aws_profile": "default",
+    "lightsail_format": "passed",
+    "lightsail_validate": "passed",
+    "mutations_performed": false,
+    "release_region": "eu-north-1",
+    "root_format": "passed",
+    "root_validate": "passed",
+    "terraform_version": "1.13.5"
+  },
+  "known_warnings": [
+    "Starlette TestClient/httpx deprecation",
+    "AnyIO BlockingPortal alias deprecation",
+    "three SHAP colormap pending deprecations",
+    "Vite reports ignored React Router use-client directives during bundling"
+  ],
+  "lighthouse": {
+    "desktop": {
+      "accessibility": 100,
+      "best_practices": 100,
+      "cumulative_layout_shift": 0.001589899089396725,
+      "largest_contentful_paint_ms": 584.975,
+      "performance": 100,
+      "seo": 100,
+      "total_blocking_time_ms": 0
+    },
+    "mobile": {
+      "accessibility": 100,
+      "best_practices": 100,
+      "cumulative_layout_shift": 0.03638171738662387,
+      "largest_contentful_paint_ms": 2445.888,
+      "performance": 96,
+      "seo": 100,
+      "total_blocking_time_ms": 0
+    }
+  },
+  "local_public_contract": {
+    "base_url": "http://127.0.0.1:8011",
+    "checks": {
+      "archive": {
+        "first_year": 1950,
+        "last_year": 2024,
+        "race_count_2024": 24,
+        "race_id": 1128,
+        "race_name": "Monaco Grand Prix",
+        "season_count": 75,
+        "status": "passed"
+      },
+      "delivery": {
+        "cache_policy": true,
+        "gzip_responses": 10,
+        "request_ids_unique": true,
+        "response_count": 11,
+        "security_headers": true,
+        "server_generated_request_ids": true,
+        "status": "passed"
+      },
+      "model_card": {
+        "archive_races": 1125,
+        "archive_years": [
+          1950,
+          2024
+        ],
+        "audited_tables": 14,
+        "hash_count": 6,
+        "model_version": "EXP-007+podium-count-v1",
+        "schema_version": "f1-public-model-card-v1",
+        "season_evidence_count": 6,
+        "status": "passed",
+        "unseen_holdout": false
+      },
+      "prediction": {
+        "driver_count": 20,
+        "model_version": "EXP-007+podium-count-v1",
+        "postprocessor": "race_logit_offset",
+        "probability_sum": 3.0,
+        "race_id": 1128,
+        "status": "passed"
+      },
+      "readiness": {
+        "archive_through": 2024,
+        "database": "ok",
+        "model_bundle": "verified",
+        "model_card": "verified",
+        "model_version": "EXP-007+podium-count-v1",
+        "status": "passed"
+      },
+      "review": {
+        "brier_score": 0.04465273508022716,
+        "driver_count": 20,
+        "exact_podium_set": true,
+        "mean_absolute_error": 0.11535691372481534,
+        "race_id": 1128,
+        "status": "passed",
+        "top_three_hits": 3
+      },
+      "scenario": {
+        "changed_driver_count": 2,
+        "driver_count": 20,
+        "original_probability_sum": 3.0,
+        "race_id": 1128,
+        "scenario_kind": "grid_swap",
+        "scenario_probability_sum": 3.0,
+        "status": "passed"
+      },
+      "spa": {
+        "description_length": 105,
+        "immutable_asset": true,
+        "model_deep_link": true,
+        "status": "passed",
+        "title": "F1 Race Strategist | Historical Analytics"
+      }
+    },
+    "duration_ms": 790.497,
+    "generated_at": "2026-09-11T05:45:03.795657+00:00",
+    "schema_version": "f1-public-release-verification-v1",
+    "status": "passed"
+  },
+  "schema_version": "f1-grid-scenario-local-verification-v1",
+  "security_and_artifact_integrity": {
+    "actual_credential_exact_matches": 0,
+    "actual_credential_values_checked": 2,
+    "generic_credential_match": "one deliberate sentinel URL in a security regression test",
+    "presentation_files_modified": false,
+    "presentation_hashes": {
+      "final": "d7a042fce3ea5999ef7b8d61b0d92b3e931269b6974633b05b85f816b6b1df84",
+      "interim": "2e1700f802c51ac29a6a186de10c3a610015b9e72e9b9785b488dfd45a873737",
+      "scope": "7066b08512cd99919b228824b1b67b08dff2e48c387810d6a10afbcf2098c64a"
+    },
+    "reachable_git_blobs_scanned": 403,
+    "staged_credential_findings": 0,
+    "staged_feature_files_scanned": 21
+  },
+  "status": "passed"
+}

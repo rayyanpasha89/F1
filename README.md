@@ -78,7 +78,7 @@ python -m scripts.verify_public_release \
   --output reports/public_release_new.json
 ```
 
-At the model-accountability cloud checkpoint, 154 Python tests pass in the default artifact-backed suite and all four opt-in PostgreSQL integration tests pass separately against an isolated PostgreSQL 16.15 database with a dedicated `SELECT`-only role. Seven frontend files supply 15 passing tests. Some source/model integration tests skip when local artifacts are absent; a lightweight clone-only run is not full data/ML verification. Upstream TestClient/SHAP deprecation warnings are recorded. Final browser checks exercised the archive, Model Lab, all 20 Monaco predictions, the forecast review, spelling correction, the expanded agent trace and 390-pixel layout with no console errors, failed requests or horizontal overflow.
+At the Grid Scenario Lab local checkpoint, 164 Python tests pass in the default artifact-backed suite and all four opt-in PostgreSQL integration tests pass separately against an isolated PostgreSQL 16.15 database with a dedicated `SELECT`-only role. Eight frontend files supply 18 passing tests. Some source/model integration tests skip when local artifacts are absent; a lightweight clone-only run is not full data/ML verification. Upstream TestClient/SHAP deprecation warnings are recorded. Final local browser checks exercised the complete 20-driver scenario at desktop and 390-pixel widths with no console errors, failed requests, accessibility violations, or horizontal overflow. The append-only cloud evidence remains authoritative for the currently deployed release until this feature is deployed.
 
 ## Architecture
 
