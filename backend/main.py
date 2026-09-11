@@ -20,6 +20,7 @@ from threading import BoundedSemaphore
 from backend.ai.limits import ChatLimiter
 from backend.ml.evidence import ModelBundleError, verify_model_bundle
 from backend.ml.model_card import ModelCard, ModelCardError, ModelCardService
+from backend.ml.outcomes import PodiumOutcomes, PodiumOutcomeService
 from backend.ml.predictor import Predictor, PredictionUnavailable, load_artifacts
 from backend.ml.review import RaceReview, RaceReviewService
 from backend.ml.scenario import GridScenario, GridScenarioRequest, GridScenarioService
@@ -37,6 +38,7 @@ def create_app(engine=None):
     db = engine or make_engine()
     analytics = Analytics(db)
     predictor = Predictor(db)
+    podium_outcome_service = PodiumOutcomeService(predictor)
     review_service = RaceReviewService(predictor, analytics)
     scenario_service = GridScenarioService(predictor)
     model_card_service = ModelCardService()
@@ -179,6 +181,33 @@ def create_app(engine=None):
             result.postprocessor.method,
             (perf_counter() - started_at) * 1000,
             result.top_three_hits,
+        )
+        return result
+
+    @app.get("/api/predictions/{race_id}/podium-outcomes", response_model=PodiumOutcomes)
+    def podium_outcomes(
+        race_id: int,
+        request: Request,
+        limit: int = Query(default=12, ge=3, le=25),
+    ):
+        started_at = perf_counter()
+        analytics.race(race_id)
+        result = podium_outcome_service.derive(race_id, limit=limit)
+        diagnostics = result.diagnostics
+        logger.info(
+            "podium_outcomes_complete request_id=%s race_id=%s model_version=%s "
+            "method=%s elapsed_ms=%.1f driver_count=%s combination_count=%s "
+            "returned_count=%s probability_sum=%.12f maximum_marginal_error=%.3e",
+            request.state.request_id,
+            race_id,
+            result.model_version,
+            diagnostics.method,
+            (perf_counter() - started_at) * 1000,
+            diagnostics.driver_count,
+            diagnostics.combination_count,
+            diagnostics.returned_outcome_count,
+            diagnostics.probability_sum,
+            diagnostics.maximum_marginal_error,
         )
         return result
 
