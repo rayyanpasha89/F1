@@ -1,0 +1,49 @@
+{
+  "distribution": {
+    "combination_count_range": [
+      969,
+      1140
+    ],
+    "complete_outcome_count": 77349,
+    "effective_outcome_count_range": [
+      15.930558859167043,
+      59.68504090864604
+    ],
+    "entropy_bits_range": [
+      3.9937249737535003,
+      5.899297483476234
+    ],
+    "method": "maximum_entropy_fixed_size",
+    "podium_size": 3
+  },
+  "evidence_boundary": {
+    "joint_forecast_validated": false,
+    "ordering": "unordered_podium_set",
+    "outcome_data_used": false,
+    "separately_trained_joint_model": false,
+    "source": "released frozen-model marginals"
+  },
+  "generated_at": "2026-09-11T18:08:26.187850+00:00",
+  "integrity": {
+    "all_races_converged": true,
+    "maximum_distribution_sum_error": 0.0,
+    "maximum_marginal_error": 3.8113956435381624e-13,
+    "maximum_reconstructed_sum_error": 8.881784197001252e-16
+  },
+  "model_version": "EXP-007+podium-count-v1",
+  "schema_version": "f1-podium-outcome-evaluation-v1",
+  "status": "passed",
+  "support": {
+    "driver_rows": 1359,
+    "race_count": 68,
+    "years": [
+      2022,
+      2024
+    ]
+  },
+  "timing_ms": {
+    "maximum_race": 15.424,
+    "mean_per_race": 3.62,
+    "total": 246.418
+  }
+}
