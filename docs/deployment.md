@@ -2,13 +2,15 @@
 
 ## Active Lightsail deployment
 
-The dev application is reachable at https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/ . Lightsail deployment 14 is `RUNNING` / `ACTIVE` on immutable application image `7738da72311a390509d92377ef11b24d8e95a0e1`. Public checks passed for the frontend and deep links, archive APIs, readiness, all 20 Monaco probabilities summing to three, the two-driver Grid Scenario Lab, the pit-lane `0` versus model-input `25` boundary, the 3/3 forecast review, the public model card, delivery headers, and the bounded typo-tolerant chat flow. GitHub Actions run `34599337165` and CodeBuild `f1-race-strategist-dev:a1c49bad-70f5-4a74-a080-8ec21fdee065` passed for that source; ECR recorded digest `sha256:49f9d2697fd0ea38cfd5563c4238c6e3263f20cbbbe32594ff28a79413fbc2fd`. Machine-readable evidence is in `reports/grid_scenario_aws_release.json` and `reports/grid_scenario_cloud_verification.json`; prior release reports remain as append-only history.
+The dev application is reachable at https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/ . Lightsail deployment 17 is `RUNNING` / `ACTIVE` on immutable application image `7738da72311a390509d92377ef11b24d8e95a0e1`. Public checks passed for the frontend and deep links, archive APIs, readiness, all 20 Monaco probabilities summing to three, the two-driver Grid Scenario Lab, the pit-lane `0` versus model-input `25` boundary, the 3/3 forecast review, the public model card, delivery headers, and the bounded typo-tolerant chat flow. GitHub Actions run `34599337165` and CodeBuild `f1-race-strategist-dev:a1c49bad-70f5-4a74-a080-8ec21fdee065` passed for that source; ECR recorded digest `sha256:49f9d2697fd0ea38cfd5563c4238c6e3263f20cbbbe32594ff28a79413fbc2fd`. Current machine-readable evidence is in `reports/grid_scenario_aws_release_v17.json` and `reports/grid_scenario_cloud_verification.json`; prior release reports remain as append-only history.
 
 The user authorized Lightsail after CloudFront required account verification and RDS rejected seven-day backup retention on the account plan. Terraform under `infra/lightsail/` manages the small container service, its narrowly scoped ECR pull policy, and an encrypted PostgreSQL 16 database through a CloudFormation resource. Database deletion/replacement is retained. This account is 148356747273, CLI default profile, region eu-north-1. Never use the Naaz configuration.
 
 React and FastAPI share one HTTPS origin. The database remains private; a real container TCP probe succeeded without public database mode. Strict ingestion loaded 701,433 rows and verified all 14 counts. The bootstrap container uses a short-lived presigned source URL and a temporary master credential, then the master password is rotated. Application containers receive only SELECT-only database credentials, with TLS `verify-full`. Production startup independently rejects writable credentials.
 
 Lightsail does not accept ECS secret references or task roles. The operator retrieves the F1 runtime secret from Secrets Manager and passes approved values as Lightsail environment variables. Principals allowed to inspect deployment configuration can view those values; limit that access. No long-lived AWS access keys are placed in containers. The bootstrap deployment's now-rotated master credential remains in deployment history; preserve this distinction when reviewing security.
+
+After an operator metadata query returned the former runtime environment values, the Bedrock API key, SELECT-only database reader password, and shared demo access code were all treated as compromised and rotated. The old Bedrock key and access code return unauthorized responses. The database rotation ran inside the private Lightsail network, proved that the old password fails, and rechecked the new reader's read-only default. Deployment 17 removed the temporary rotation container and contains only `web`. The canonical local access-code file remains outside Git with mode `0600`.
 
 ## Build and release
 
@@ -27,7 +29,7 @@ After the service reaches `RUNNING` and its deployment reaches `ACTIVE`, verify 
 ```sh
 python -m scripts.verify_public_release \
   --base-url https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com \
-  --output reports/grid_scenario_aws_release.json \
+  --output reports/grid_scenario_aws_release_vNEXT.json \
   --access-code-file /absolute/private/path/to/chat-access-code.txt
 ```
 
@@ -43,7 +45,7 @@ Lightsail retains continuous container stdout/stderr. CodeBuild writes to CloudW
 python -m scripts.release_lightsail logs
 ```
 
-The command bounds the snapshot to the active deployment window, follows every Lightsail page up to a fixed safety limit, orders the events, and refuses export when the service is not `RUNNING` / `ACTIVE`. It is an explicit snapshot rather than automatic continuous CloudWatch forwarding. The Grid Scenario release exported and read back 212 events from stream `lightsail/20260911T124703423050Z`, including six scenario, five prediction, five review, and one chat completion records with 17 unique structured request IDs and no 5xx response. Configured secrets, provider settings, database URLs, SQL, question text, and the typo-probe text had zero matches. CloudWatch retention is 14 days. Do not place access codes in URLs or logs. Chat budgets are per-process and reset after restart, so they are not a durable billing cap.
+The command bounds the snapshot to the active deployment window, follows every returned page up to a fixed safety limit, orders the events, and refuses export when the service is not `RUNNING` / `ACTIVE`. It is an explicit snapshot rather than automatic continuous CloudWatch forwarding. The final Grid Scenario snapshot exported and read back 355 events from stream `lightsail/20260911T132027240680Z`, including one prediction, one scenario, one review, and four successful chat completion records with seven unique structured request IDs and no 5xx response. Four traceback markers came from expected application startup attempts during the reader-password handoff; deployment 17 has zero traceback and zero error-level records. Configured protected values, credential names, database URLs, SQL, question text, and typo-probe text had zero matches. CloudWatch retention is 14 days. Do not place access codes in URLs or logs. Chat budgets are per-process and reset after restart, so they are not a durable billing cap.
 
 The small container service is approximately $15/month and the micro PostgreSQL bundle approximately $15/month, plus Bedrock and incidental storage/logging. Previously created ALB and supporting resources still incur charges; no destructive cleanup was authorized. The original architecture and its retained resources are documented below for traceability. Do not apply or destroy that stack casually.
 

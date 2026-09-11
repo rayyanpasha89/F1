@@ -25,12 +25,18 @@
     "scenario_is_unseen_validation": false,
     "shared_demo_access_code": true
   },
-  "generated_at": "2026-09-11T12:49:24.914013+00:00",
+  "generated_at": "2026-09-11T13:24:45.989811+00:00",
   "github_actions": {
     "clone_only_python": {
       "failed": 0,
       "passed": 134,
       "skipped": 34
+    },
+    "evidence_run": {
+      "head_sha": "b6880ff720df17f925f853b0b49b23c5ec7453b0",
+      "run_id": 34601210138,
+      "run_url": "https://github.com/rayyanpasha89/F1/actions/runs/34601210138",
+      "status": "passed"
     },
     "head_sha": "7738da72311a390509d92377ef11b24d8e95a0e1",
     "jobs": {
@@ -52,9 +58,9 @@
     "database_replaced": false,
     "deployed_image_matches_release_commit": true,
     "deployment_state": "ACTIVE",
-    "deployment_version": 14,
+    "deployment_version": 17,
     "previous_deployment_state": "INACTIVE",
-    "previous_deployment_version": 13,
+    "previous_deployment_version": 16,
     "service": "f1-strategist-demo",
     "service_state": "RUNNING"
   },
@@ -221,13 +227,13 @@
           "title": "F1 Race Strategist | Historical Analytics"
         }
       },
-      "duration_ms": 20761.806,
-      "generated_at": "2026-09-11T12:43:54.264435+00:00",
+      "duration_ms": 21661.081,
+      "generated_at": "2026-09-11T13:20:07.732863+00:00",
       "schema_version": "f1-public-release-verification-v1",
       "status": "passed"
     },
-    "path": "reports/grid_scenario_aws_release.json",
-    "sha256": "038f2f26420ee957ef13dbb9634cb594ca39db8e573f4eb3618a30e4e562c5a6"
+    "path": "reports/grid_scenario_aws_release_v17.json",
+    "sha256": "49e4fe125f443fc3c50f46250d5569c1b99daa9ad29ca96bba8b0f03fc03a91e"
   },
   "release_archive": {
     "bytes": 2943415,
@@ -237,16 +243,51 @@
     "status": "passed",
     "trusted_model_entries": 2
   },
+  "runtime_credential_rotation": {
+    "access_code_file_mode": "0600",
+    "bedrock_key_reset": true,
+    "canonical_typo_correction_verified": true,
+    "chat_access_code_rotated": true,
+    "database_reader_password_rotated": true,
+    "database_reader_read_only_preserved": true,
+    "failed_intermediate_deployment": {
+      "cause": "The first rotation command did not override the session default before ALTER ROLE.",
+      "state": "FAILED",
+      "version": 15
+    },
+    "final_clean_deployment": {
+      "container_names": [
+        "web"
+      ],
+      "state": "ACTIVE",
+      "version": 17
+    },
+    "new_bedrock_key_accepted": true,
+    "new_chat_access_code_accepted": true,
+    "old_bedrock_key_rejected": true,
+    "old_chat_access_code_rejected": true,
+    "old_database_reader_password_rejected": true,
+    "reason": "Runtime environment values were returned by an operator metadata query and were treated as compromised.",
+    "secret_values_recorded": false,
+    "status": "passed",
+    "verified_rotation_deployment": {
+      "state": "INACTIVE",
+      "version": 16
+    }
+  },
   "runtime_log_readback": {
-    "chat_complete": 1,
+    "chat_complete": 4,
     "cloudwatch_group": "/f1/dev/api",
-    "cloudwatch_stream": "lightsail/20260911T124703423050Z",
-    "events_exported": 212,
-    "events_read_back": 212,
+    "cloudwatch_stream": "lightsail/20260911T132027240680Z",
+    "events_exported": 355,
+    "events_read_back": 355,
+    "final_deployment_error_level_records": 0,
+    "final_deployment_traceback_markers": 0,
     "http_5xx_records": 0,
-    "prediction_complete": 5,
-    "review_complete": 5,
-    "scenario_complete": 6,
+    "prediction_complete": 1,
+    "review_complete": 1,
+    "rotation_startup_traceback_markers": 4,
+    "scenario_complete": 1,
     "scenario_records_allowlisted": true,
     "sensitive_marker_matches": {
       "credential_names": 0,
@@ -257,7 +298,7 @@
       "sql_text": 0
     },
     "status": "passed",
-    "unique_structured_request_ids": 17
+    "unique_structured_request_ids": 7
   },
   "schema_version": "f1-grid-scenario-cloud-verification-v1",
   "source": {

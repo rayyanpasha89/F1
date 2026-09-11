@@ -9,7 +9,7 @@ This guide demonstrates the deployed application and the evidence behind it. The
 - Deployed application commit: `7738da72311a390509d92377ef11b24d8e95a0e1`
 - GitHub Actions: https://github.com/rayyanpasha89/F1/actions/runs/34599337165
 - CodeBuild: `f1-race-strategist-dev:a1c49bad-70f5-4a74-a080-8ec21fdee065` (`SUCCEEDED`)
-- Lightsail: service `f1-strategist-demo`, deployment 14, `RUNNING` / `ACTIVE`
+- Lightsail: service `f1-strategist-demo`, deployment 17, `RUNNING` / `ACTIVE`
 - Region and account: `eu-north-1`, F1 account `148356747273`
 
 The demo access code is stored outside Git in `outputs/chat-access-code.txt` in the Codex workspace. Do not put it in slides, screenshots, terminal history, or the repository.
@@ -102,8 +102,8 @@ Open the live Model Lab and GitHub Actions run. The protected final presentation
 - Ruff and both Terraform roots;
 - fixed NL2SQL Run 09: 40/40, 3.651-second mean latency;
 - Agentic Run 01: 22/22, 3.013-second mean latency, 29 provider calls, zero live repair;
-- immutable CodeBuild image and active Lightsail deployment 14;
-- 212 bounded runtime events exported and read back from CloudWatch, including prediction, scenario, review, and chat completion records with no configured credential, provider-setting, database-URL, SQL, or question-text matches;
+- immutable CodeBuild image and active Lightsail deployment 17;
+- 355 bounded runtime events exported and read back from CloudWatch, including prediction, scenario, review, and chat completion records with no configured credential, database-URL, SQL, or question-text matches; the final deployment window has zero traceback or error-level records;
 - live Monaco Lighthouse scores of 100 for performance, accessibility, best practices, and SEO at desktop and mobile sizes, with zero total blocking time.
 
 State that both benchmark suites were used during development and therefore do not estimate unseen generalization. The bounded one-repair path is covered by deterministic tests; no generated query in the reported live runs needed repair.
@@ -125,7 +125,7 @@ State that both benchmark suites were used during development and therefore do n
 | Model-accountability public release | `reports/model_accountability_aws_release_final.json` |
 | Model-accountability combined cloud verification | `reports/model_accountability_cloud_verification.json` |
 | Grid Scenario local verification | `reports/grid_scenario_local_verification.json` |
-| Grid Scenario public release | `reports/grid_scenario_aws_release.json` |
+| Grid Scenario public release | `reports/grid_scenario_aws_release_v17.json` |
 | Grid Scenario combined cloud verification | `reports/grid_scenario_cloud_verification.json` |
 | Fixed NL2SQL result | `reports/nl2sql_run_09.json` |
 | Agentic result | `reports/agentic_run_01.json` |
