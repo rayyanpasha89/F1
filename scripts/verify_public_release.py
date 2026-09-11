@@ -295,6 +295,331 @@ def _verify_prediction(verifier, race_id, model_version):
     }
 
 
+def _verify_podium_outcomes(verifier, race_id, prediction, model_version):
+    payload = verifier.json(f"/api/predictions/{race_id}/podium-outcomes?limit=12")
+    _require(
+        set(payload)
+        == {
+            "schema_version",
+            "outcome_type",
+            "race_id",
+            "year",
+            "experiment_id",
+            "model_version",
+            "diagnostics",
+            "outcomes",
+            "driver_marginals",
+            "co_podium_pairs",
+            "evidence_boundary",
+            "notes",
+        },
+        "podium_outcome_fields",
+    )
+    _require(payload.get("schema_version") == "f1-podium-outcomes-v1", "podium_outcome_schema")
+    _require(
+        payload.get("outcome_type") == "derived_unordered_podium_set_distribution",
+        "podium_outcome_type",
+    )
+    _require(payload.get("race_id") == race_id, "podium_outcome_race")
+    _require(payload.get("year") == 2024, "podium_outcome_year")
+    _require(payload.get("model_version") == model_version, "podium_outcome_model")
+    _require(isinstance(payload.get("experiment_id"), str), "podium_outcome_experiment")
+
+    forecast_rows = [
+        _mapping(row, "podium_outcome_forecast_row")
+        for row in _sequence(prediction.get("predictions"), "podium_outcome_forecast_rows")
+    ]
+    forecast_by_id = {
+        _integer(row.get("driver_id"), "podium_outcome_driver"): _number(
+            row.get("probability"), "podium_outcome_released_probability"
+        )
+        for row in forecast_rows
+    }
+    driver_count = len(forecast_rows)
+
+    diagnostics = _mapping(payload.get("diagnostics"), "podium_outcome_diagnostics")
+    _require(
+        set(diagnostics)
+        == {
+            "method",
+            "driver_count",
+            "podium_size",
+            "combination_count",
+            "probability_sum",
+            "reconstructed_marginal_sum",
+            "maximum_marginal_error",
+            "entropy_bits",
+            "effective_outcome_count",
+            "returned_outcome_count",
+            "returned_probability_sum",
+        },
+        "podium_outcome_diagnostic_fields",
+    )
+    _require(
+        diagnostics.get("method") == "maximum_entropy_fixed_size",
+        "podium_outcome_method",
+    )
+    _require(
+        _integer(diagnostics.get("driver_count"), "podium_outcome_driver_count") == driver_count,
+        "podium_outcome_driver_count",
+    )
+    _require(diagnostics.get("podium_size") == 3, "podium_outcome_size")
+    combination_count = _integer(
+        diagnostics.get("combination_count"), "podium_outcome_combination_count"
+    )
+    _require(
+        combination_count == math.comb(driver_count, 3),
+        "podium_outcome_combination_count",
+    )
+    probability_sum = _number(diagnostics.get("probability_sum"), "podium_outcome_probability_sum")
+    _require(
+        math.isclose(probability_sum, 1, abs_tol=1e-12),
+        "podium_outcome_probability_sum",
+    )
+    reconstructed_sum = _number(
+        diagnostics.get("reconstructed_marginal_sum"),
+        "podium_outcome_reconstructed_sum",
+    )
+    _require(
+        math.isclose(reconstructed_sum, 3, abs_tol=1e-9),
+        "podium_outcome_reconstructed_sum",
+    )
+    maximum_error = _number(
+        diagnostics.get("maximum_marginal_error"), "podium_outcome_maximum_error"
+    )
+    _require(0 <= maximum_error <= 1e-8, "podium_outcome_maximum_error")
+    entropy_bits = _number(diagnostics.get("entropy_bits"), "podium_outcome_entropy")
+    _require(
+        0 <= entropy_bits <= math.log2(combination_count) + 1e-10,
+        "podium_outcome_entropy",
+    )
+    effective_count = _number(
+        diagnostics.get("effective_outcome_count"), "podium_outcome_effective_count"
+    )
+    _require(
+        1 <= effective_count <= combination_count
+        and math.isclose(effective_count, 2**entropy_bits, rel_tol=1e-9, abs_tol=1e-9),
+        "podium_outcome_effective_count",
+    )
+    returned_count = _integer(
+        diagnostics.get("returned_outcome_count"), "podium_outcome_returned_count"
+    )
+    _require(
+        returned_count == min(12, combination_count),
+        "podium_outcome_returned_count",
+    )
+    returned_sum = _number(
+        diagnostics.get("returned_probability_sum"), "podium_outcome_returned_sum"
+    )
+    _require(0 < returned_sum <= 1, "podium_outcome_returned_sum")
+
+    outcomes = [
+        _mapping(row, "podium_outcome_row")
+        for row in _sequence(payload.get("outcomes"), "podium_outcome_rows")
+    ]
+    _require(len(outcomes) == returned_count, "podium_outcome_returned_count")
+    outcome_keys = []
+    outcome_probabilities = []
+    cumulative = 0.0
+    known_drivers = set(forecast_by_id)
+    for rank, row in enumerate(outcomes, start=1):
+        _require(
+            set(row) == {"rank", "driver_ids", "probability", "cumulative_probability"},
+            "podium_outcome_row_fields",
+        )
+        _require(row.get("rank") == rank, "podium_outcome_ranks")
+        driver_ids = _sequence(row.get("driver_ids"), "podium_outcome_drivers")
+        _require(
+            len(driver_ids) == 3
+            and all(isinstance(value, int) and not isinstance(value, bool) for value in driver_ids),
+            "podium_outcome_drivers",
+        )
+        driver_key = tuple(driver_ids)
+        _require(driver_key == tuple(sorted(driver_ids)), "podium_outcome_driver_order")
+        _require(
+            len(set(driver_ids)) == 3 and set(driver_ids).issubset(known_drivers),
+            "podium_outcome_drivers",
+        )
+        probability = _number(row.get("probability"), "podium_outcome_probability")
+        _require(0 < probability < 1, "podium_outcome_probability")
+        outcome_keys.append(driver_key)
+        outcome_probabilities.append(probability)
+        cumulative = math.fsum((cumulative, probability))
+        _require(
+            math.isclose(
+                _number(
+                    row.get("cumulative_probability"),
+                    "podium_outcome_cumulative_probability",
+                ),
+                cumulative,
+                abs_tol=1e-12,
+            ),
+            "podium_outcome_cumulative_probability",
+        )
+    _require(len(set(outcome_keys)) == len(outcome_keys), "podium_outcome_uniqueness")
+    _require(
+        list(zip(outcome_probabilities, outcome_keys, strict=True))
+        == sorted(
+            zip(outcome_probabilities, outcome_keys, strict=True),
+            key=lambda item: (-item[0], item[1]),
+        ),
+        "podium_outcome_order",
+    )
+    _require(math.isclose(cumulative, returned_sum, abs_tol=1e-12), "podium_outcome_returned_sum")
+
+    marginals = [
+        _mapping(row, "podium_outcome_marginal")
+        for row in _sequence(payload.get("driver_marginals"), "podium_outcome_marginals")
+    ]
+    _require(len(marginals) == driver_count, "podium_outcome_marginal_count")
+    marginal_ids = []
+    released_values = []
+    reconstructed_values = []
+    errors = []
+    for rank, (row, forecast_row) in enumerate(zip(marginals, forecast_rows, strict=True), start=1):
+        _require(
+            set(row)
+            == {
+                "driver_id",
+                "forecast_rank",
+                "released_probability",
+                "reconstructed_probability",
+                "absolute_error",
+            },
+            "podium_outcome_marginal_fields",
+        )
+        driver_id = _integer(row.get("driver_id"), "podium_outcome_driver")
+        _require(
+            driver_id == forecast_row.get("driver_id") and row.get("forecast_rank") == rank,
+            "podium_outcome_marginal_order",
+        )
+        released = _number(row.get("released_probability"), "podium_outcome_released_probability")
+        reconstructed = _number(
+            row.get("reconstructed_probability"),
+            "podium_outcome_reconstructed_probability",
+        )
+        error = _number(row.get("absolute_error"), "podium_outcome_marginal_error")
+        _require(
+            math.isclose(released, forecast_by_id[driver_id], abs_tol=1e-12),
+            "podium_outcome_released_probability",
+        )
+        _require(
+            abs(reconstructed - released) <= 1e-8
+            and math.isclose(error, abs(reconstructed - released), abs_tol=1e-15),
+            "podium_outcome_marginal_reconstruction",
+        )
+        marginal_ids.append(driver_id)
+        released_values.append(released)
+        reconstructed_values.append(reconstructed)
+        errors.append(error)
+    _require(len(set(marginal_ids)) == driver_count, "podium_outcome_marginal_uniqueness")
+    _require(
+        math.isclose(math.fsum(released_values), 3, abs_tol=1e-9), "podium_outcome_released_sum"
+    )
+    _require(
+        math.isclose(math.fsum(reconstructed_values), reconstructed_sum, abs_tol=1e-9),
+        "podium_outcome_reconstructed_sum",
+    )
+    _require(
+        math.isclose(max(errors), maximum_error, abs_tol=1e-15),
+        "podium_outcome_maximum_error",
+    )
+
+    pairs = [
+        _mapping(row, "podium_outcome_pair")
+        for row in _sequence(payload.get("co_podium_pairs"), "podium_outcome_pairs")
+    ]
+    pair_count = min(10, math.comb(driver_count, 2))
+    _require(len(pairs) == pair_count, "podium_outcome_pair_count")
+    pair_keys = []
+    pair_probabilities = []
+    for rank, row in enumerate(pairs, start=1):
+        _require(
+            set(row) == {"rank", "driver_ids", "probability"},
+            "podium_outcome_pair_fields",
+        )
+        _require(row.get("rank") == rank, "podium_outcome_pair_ranks")
+        driver_ids = _sequence(row.get("driver_ids"), "podium_outcome_pair_drivers")
+        _require(
+            len(driver_ids) == 2
+            and all(isinstance(value, int) and not isinstance(value, bool) for value in driver_ids),
+            "podium_outcome_pair_drivers",
+        )
+        pair_key = tuple(driver_ids)
+        _require(pair_key == tuple(sorted(driver_ids)), "podium_outcome_pair_order")
+        _require(
+            len(set(driver_ids)) == 2 and set(driver_ids).issubset(known_drivers),
+            "podium_outcome_pair_drivers",
+        )
+        probability = _number(row.get("probability"), "podium_outcome_pair_probability")
+        first, second = (forecast_by_id[driver_id] for driver_id in driver_ids)
+        _require(
+            max(0, first + second - 1) - 1e-12 <= probability <= min(first, second) + 1e-12,
+            "podium_outcome_pair_probability",
+        )
+        pair_keys.append(pair_key)
+        pair_probabilities.append(probability)
+    _require(len(set(pair_keys)) == pair_count, "podium_outcome_pair_uniqueness")
+    _require(
+        list(zip(pair_probabilities, pair_keys, strict=True))
+        == sorted(
+            zip(pair_probabilities, pair_keys, strict=True),
+            key=lambda item: (-item[0], item[1]),
+        ),
+        "podium_outcome_pair_order",
+    )
+
+    boundary = _mapping(payload.get("evidence_boundary"), "podium_outcome_boundary")
+    _require(
+        set(boundary)
+        == {
+            "derived_from",
+            "outcome_data_used",
+            "separately_trained_joint_model",
+            "joint_forecast_validated",
+            "causal",
+            "ordering",
+            "statement",
+        },
+        "podium_outcome_boundary_fields",
+    )
+    _require(
+        boundary.get("derived_from") == "released race-level marginal podium probabilities",
+        "podium_outcome_boundary_source",
+    )
+    _require(boundary.get("outcome_data_used") is False, "podium_outcome_boundary_outcomes")
+    _require(
+        boundary.get("separately_trained_joint_model") is False,
+        "podium_outcome_boundary_training",
+    )
+    _require(
+        boundary.get("joint_forecast_validated") is False,
+        "podium_outcome_boundary_validation",
+    )
+    _require(boundary.get("causal") is False, "podium_outcome_boundary_causal")
+    _require(boundary.get("ordering") == "unordered_podium_set", "podium_outcome_boundary_order")
+    _require(
+        isinstance(boundary.get("statement"), str) and bool(boundary["statement"]),
+        "podium_outcome_boundary_statement",
+    )
+    notes = _sequence(payload.get("notes"), "podium_outcome_notes")
+    _require(
+        1 <= len(notes) <= 4 and all(isinstance(note, str) and note for note in notes),
+        "podium_outcome_notes",
+    )
+    return {
+        "status": "passed",
+        "race_id": race_id,
+        "driver_count": driver_count,
+        "combination_count": combination_count,
+        "returned_outcome_count": returned_count,
+        "probability_sum": round(probability_sum, 12),
+        "reconstructed_marginal_sum": round(reconstructed_sum, 12),
+        "maximum_marginal_error": maximum_error,
+        "ordering": "unordered_podium_set",
+    }
+
+
 def _verify_scenario(verifier, race_id, prediction, model_version):
     forecast_rows = _sequence(prediction.get("predictions"), "scenario_forecast_rows")
     _require(len(forecast_rows) >= 2, "scenario_forecast_rows")
@@ -743,6 +1068,9 @@ def verify_release(base_url, output, *, access_code_file=None, timeout=15):
     prediction_payload, prediction = _verify_prediction(
         verifier, archive["race_id"], readiness["model_version"]
     )
+    podium_outcomes = _verify_podium_outcomes(
+        verifier, archive["race_id"], prediction_payload, readiness["model_version"]
+    )
     scenario = _verify_scenario(
         verifier, archive["race_id"], prediction_payload, readiness["model_version"]
     )
@@ -763,6 +1091,7 @@ def verify_release(base_url, output, *, access_code_file=None, timeout=15):
         "readiness": readiness,
         "archive": archive,
         "prediction": prediction,
+        "podium_outcomes": podium_outcomes,
         "scenario": scenario,
         "review": review,
         "model_card": model_card,

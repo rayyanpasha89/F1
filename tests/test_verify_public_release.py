@@ -93,6 +93,75 @@ def _payloads():
             },
             "predictions": predictions,
         },
+        "/api/predictions/1128/podium-outcomes": {
+            "schema_version": "f1-podium-outcomes-v1",
+            "outcome_type": "derived_unordered_podium_set_distribution",
+            "race_id": 1128,
+            "year": 2024,
+            "experiment_id": "EXP-007",
+            "model_version": MODEL_VERSION,
+            "diagnostics": {
+                "method": "maximum_entropy_fixed_size",
+                "driver_count": 4,
+                "podium_size": 3,
+                "combination_count": 4,
+                "probability_sum": 1.0,
+                "reconstructed_marginal_sum": 3.0,
+                "maximum_marginal_error": 0.0,
+                "entropy_bits": 1.8464393446710154,
+                "effective_outcome_count": 3.5961154666243225,
+                "returned_outcome_count": 4,
+                "returned_probability_sum": 1.0,
+            },
+            "outcomes": [
+                {
+                    "rank": rank,
+                    "driver_ids": list(driver_ids),
+                    "probability": probability,
+                    "cumulative_probability": cumulative,
+                }
+                for rank, driver_ids, probability, cumulative in (
+                    (1, (1, 2, 3), 0.4, 0.4),
+                    (2, (1, 2, 4), 0.3, 0.7),
+                    (3, (1, 3, 4), 0.2, 0.9),
+                    (4, (2, 3, 4), 0.1, 1.0),
+                )
+            ],
+            "driver_marginals": [
+                {
+                    "driver_id": row["driver_id"],
+                    "forecast_rank": rank,
+                    "released_probability": row["probability"],
+                    "reconstructed_probability": row["probability"],
+                    "absolute_error": 0.0,
+                }
+                for rank, row in enumerate(predictions, start=1)
+            ],
+            "co_podium_pairs": [
+                {"rank": rank, "driver_ids": list(driver_ids), "probability": probability}
+                for rank, driver_ids, probability in (
+                    (1, (1, 2), 0.7),
+                    (2, (1, 3), 0.6),
+                    (3, (1, 4), 0.5),
+                    (4, (2, 3), 0.5),
+                    (5, (2, 4), 0.4),
+                    (6, (3, 4), 0.3),
+                )
+            ],
+            "evidence_boundary": {
+                "derived_from": "released race-level marginal podium probabilities",
+                "outcome_data_used": False,
+                "separately_trained_joint_model": False,
+                "joint_forecast_validated": False,
+                "causal": False,
+                "ordering": "unordered_podium_set",
+                "statement": (
+                    "This maximum-entropy distribution is derived from released marginals; "
+                    "it is not a separately trained or validated finishing-order forecast."
+                ),
+            },
+            "notes": ["Every outcome contains three distinct drivers."],
+        },
         "/api/predictions/1128/scenario": {
             "schema_version": "f1-grid-scenario-v1",
             "scenario_type": "counterfactual_grid_swap",
@@ -331,6 +400,17 @@ def test_verifier_checks_public_contract_and_writes_allowlisted_report(tmp_path)
     assert report["checks"]["readiness"]["archive_through"] == 2024
     assert report["checks"]["archive"]["race_id"] == 1128
     assert report["checks"]["prediction"]["probability_sum"] == 3.0
+    assert report["checks"]["podium_outcomes"] == {
+        "status": "passed",
+        "race_id": 1128,
+        "driver_count": 4,
+        "combination_count": 4,
+        "returned_outcome_count": 4,
+        "probability_sum": 1.0,
+        "reconstructed_marginal_sum": 3.0,
+        "maximum_marginal_error": 0.0,
+        "ordering": "unordered_podium_set",
+    }
     assert report["checks"]["scenario"] == {
         "status": "passed",
         "race_id": 1128,
@@ -354,6 +434,7 @@ def test_verifier_checks_public_contract_and_writes_allowlisted_report(tmp_path)
         "/api/races",
         "/api/races/1128",
         "/api/predictions/1128",
+        "/api/predictions/1128/podium-outcomes",
         "/api/predictions/1128/scenario",
         "/api/predictions/1128/review",
         "/api/model-card",
@@ -421,3 +502,38 @@ def test_invalid_grid_scenario_contract_fails_closed_without_report(tmp_path):
             verify_release(base_url, output, timeout=2)
     assert not output.exists()
     assert any(request["path"].endswith("/scenario") for request in server.requests)
+
+
+@pytest.mark.parametrize(
+    ("mutate", "error_code"),
+    [
+        (
+            lambda payload: payload["diagnostics"].update(probability_sum=0.99),
+            "podium_outcome_probability_sum",
+        ),
+        (
+            lambda payload: payload["driver_marginals"][0].update(
+                reconstructed_probability=0.85,
+                absolute_error=0.05,
+            ),
+            "podium_outcome_marginal_reconstruction",
+        ),
+        (
+            lambda payload: payload["outcomes"][0].update(driver_ids=[3, 2, 1]),
+            "podium_outcome_driver_order",
+        ),
+        (
+            lambda payload: payload["evidence_boundary"].update(jointly_trained_model=True),
+            "podium_outcome_boundary_fields",
+        ),
+    ],
+)
+def test_invalid_podium_outcome_contract_fails_closed_without_report(tmp_path, mutate, error_code):
+    output = tmp_path / f"invalid-{error_code}.json"
+    with _release_server() as (server, base_url):
+        mutate(server.payloads["/api/predictions/1128/podium-outcomes"])
+        with pytest.raises(VerificationError, match=error_code):
+            verify_release(base_url, output, timeout=2)
+
+    assert not output.exists()
+    assert any(request["path"].endswith("/podium-outcomes") for request in server.requests)
