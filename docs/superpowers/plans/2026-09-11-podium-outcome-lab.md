@@ -18,6 +18,6 @@
 - [x] Update the model card, architecture, evaluation, deployment, demo, README, and chronological worklog documentation.
 - [x] Run focused and full local verification, including the 68-race sweep and PostgreSQL integration.
 - [x] Preserve supplied presentation files byte-for-byte.
-- [ ] Review, merge, push, wait for GitHub Actions, and build the exact merge commit on AWS.
-- [ ] Deploy the immutable image only after guarded account and region checks.
-- [ ] Verify the public API, browser flows, accessibility, performance, logs, and deployed-image provenance.
+- [x] Review, merge, push, wait for GitHub Actions, and build the exact merge commit on AWS.
+- [x] Deploy the immutable image only after guarded account and region checks.
+- [x] Verify the public API, browser flows, accessibility, performance, logs, and deployed-image provenance.

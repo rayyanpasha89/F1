@@ -6,10 +6,11 @@ This guide demonstrates the deployed application and the evidence behind it. The
 
 - Live application: https://f1-strategist-demo.ys85rp5g9ncdj.eu-north-1.cs.amazonlightsail.com/
 - GitHub repository: https://github.com/rayyanpasha89/F1
-- Deployed application commit: `7738da72311a390509d92377ef11b24d8e95a0e1`
-- GitHub Actions: https://github.com/rayyanpasha89/F1/actions/runs/34599337165
-- CodeBuild: `f1-race-strategist-dev:a1c49bad-70f5-4a74-a080-8ec21fdee065` (`SUCCEEDED`)
-- Lightsail: service `f1-strategist-demo`, deployment 17, `RUNNING` / `ACTIVE`
+- Deployed application commit: `74e60f2dcb74e2cab956321f0b1212f3cccfaeb1`
+- GitHub Actions: https://github.com/rayyanpasha89/F1/actions/runs/34659314030
+- CodeBuild: `f1-race-strategist-dev:502ca3f9-8a94-478c-a0b0-6901d5e6b786` (`SUCCEEDED`)
+- ECR digest: `sha256:5efd1bf5722b1a6172b4855f05429ec5c04030b5376e4a61f3e46c42ab6e7109`
+- Lightsail: service `f1-strategist-demo`, deployment 18, `RUNNING` / `ACTIVE`
 - Region and account: `eu-north-1`, F1 account `148356747273`
 
 The demo access code is stored outside Git in `outputs/chat-access-code.txt` in the Codex workspace. Do not put it in slides, screenshots, terminal history, or the repository.
@@ -48,7 +49,7 @@ Use **Build outcome map** in the **Podium Outcome Lab**. Show that all **1,140**
 - Max Verstappen + Charles Leclerc + Oscar Piastri at **10.6%**;
 - Charles Leclerc + Oscar Piastri as the leading co-podium pair at **39.7%**;
 - **79.9%** cumulative mass across the 12 shown sets;
-- maximum marginal reconstruction error of about **1.94e-15**.
+- maximum marginal reconstruction error of about **2.11e-15** in the live response.
 
 Explain that maximum entropy supplies the least-assumptive coherent distribution that preserves every released driver probability and exactly three places. It uses no race outcome and fits no new model. The three drivers within each set are unordered; this is not a learned interaction model or a validated finishing-order forecast.
 
@@ -114,8 +115,8 @@ Open the live Model Lab and GitHub Actions run. The protected final presentation
 - Ruff and both Terraform roots;
 - fixed NL2SQL Run 09: 40/40, 3.651-second mean latency;
 - Agentic Run 01: 22/22, 3.013-second mean latency, 29 provider calls, zero live repair;
-- immutable CodeBuild image and active Lightsail deployment 17;
-- 355 bounded runtime events exported and read back from CloudWatch, including prediction, scenario, review, and chat completion records with no configured credential, database-URL, SQL, or question-text matches; the final deployment window has zero traceback or error-level records;
+- immutable CodeBuild image and active Lightsail deployment 18;
+- 172 bounded deployment-18 runtime events exported and read back from CloudWatch, including prediction, podium-outcome, scenario, review, and chat completion records; every structured event matches its allowlist, with zero protected-value, credential-name, SQL, question-text, outcome-identity, outcome-URL, 5xx, traceback, or error-level matches;
 - live Monaco Lighthouse scores of 100 for performance, accessibility, best practices, and SEO at desktop and mobile sizes, with zero total blocking time.
 
 State that both benchmark suites were used during development and therefore do not estimate unseen generalization. The bounded one-repair path is covered by deterministic tests; no generated query in the reported live runs needed repair.
@@ -141,6 +142,8 @@ State that both benchmark suites were used during development and therefore do n
 | Grid Scenario combined cloud verification | `reports/grid_scenario_cloud_verification.json` |
 | Podium Outcome numerical evaluation | `reports/podium_outcome_local_evaluation.json` |
 | Podium Outcome local public contract | `reports/podium_outcome_local_release.json` |
+| Podium Outcome deployment-18 public release | `reports/podium_outcome_aws_release_v18.json` |
+| Podium Outcome combined cloud verification | `reports/podium_outcome_cloud_verification.json` |
 | Fixed NL2SQL result | `reports/nl2sql_run_09.json` |
 | Agentic result | `reports/agentic_run_01.json` |
 | Screenshots | `docs/presentations/assets/` |
